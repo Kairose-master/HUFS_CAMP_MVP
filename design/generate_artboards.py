@@ -1,29 +1,100 @@
 # -*- coding: utf-8 -*-
 import json, os
 ROOT = os.path.dirname(os.path.abspath(__file__))
-P = os.path.join(ROOT, "project")
+P = ROOT  # 산출물은 design/ 바로 아래에 쓴다
 
-GREEN = "#1F5A3C"; GREEN_T = "#E3EEE5"; ORANGE = "#B85A0C"; ORANGE_T = "#FBEBD9"
-RED = "#B3261E"; RED_T = "#FAE3E0"; INK = "#1E1B16"; MUTED = "#6B655B"; LINE = "#E6DED1"
-CREAM = "#F6F1E8"; CARD = "#FFFDF9"; SOFT = "#EFE9DE"
+# ReBloom 시각 시스템 — landing/app.html 과 같은 토큰(iOS grouped · 라이트)
+BG = "#F2F2F7"; CELL = "#FFFFFF"; INNER = "#F2F2F7"; INK = "#000000"; MUTED = "#6C6C70"; GLYPH = "#8E8E93"
+SEP = "rgba(60,60,67,.2)"; FILL = "rgba(120,120,128,.12)"; FILL2 = "rgba(120,120,128,.2)"
+TINT = "#0066CC"; TINT_FILL = "#0071E3"; TINT_BG = "rgba(0,113,227,.1)"
+RED = "#D70015"; RED_BG = "rgba(215,0,21,.08)"; ORANGE = "#A84A00"; ORANGE_BG = "rgba(201,82,0,.1)"
+GREEN = "#1D7A34"; GREEN_BG = "rgba(29,122,52,.1)"; STAR = "#FF9500"; SWITCH_ON = "#34C759"
+DARK = "#1C1C1E"; DARK_RED = "#FF453A"; DARK_2 = "#AEAEB2"   # 근조 긴급 헤더 전용
+FLOAT = "0 10px 30px rgba(0,0,0,.12),0 1px 3px rgba(0,0,0,.08)"; SEGSH = "0 3px 8px rgba(0,0,0,.12),0 1px 1px rgba(0,0,0,.04)"
+SANS = "-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Pretendard Variable',Pretendard,'Noto Sans KR',system-ui,sans-serif"
 
 CSS = """
-body{margin:0;font-family:'IBM Plex Sans KR',system-ui,-apple-system,sans-serif;background:%(cream)s;color:%(ink)s;-webkit-font-smoothing:antialiased}
-a{color:%(green)s;text-decoration:none}a:hover{color:#143D29}
-button,input{font-family:inherit;color:inherit}
-button{cursor:pointer}
-.mono{font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;letter-spacing:-0.02em}
-.muted{color:%(muted)s}
-.up{color:#C2382B}.down{color:%(green)s}.flat{color:#8A8378}
-.card{background:%(card)s;border:1px solid %(line)s;border-radius:14px}
-.ro{background:%(soft)s;color:#4A4439;border-radius:8px}
-.ed{background:#fff;border:1.5px solid %(green)s;border-radius:8px}
-input[type=range]{accent-color:%(green)s}
+*{box-sizing:border-box}
+body{margin:0;background:$BG;color:$INK;font:400 17px/22px $SANS;letter-spacing:-.01em;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:break-word}
+h1,h2,h3,p{margin:0}a{color:$TINT;text-decoration:none}
+button,input{font:inherit;color:inherit;letter-spacing:inherit}button{cursor:pointer}
 input[type=number]{-moz-appearance:textfield}
 input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-""" % dict(cream=CREAM, ink=INK, green=GREEN, muted=MUTED, card=CARD, line=LINE, soft=SOFT)
+.num,.mono{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+.t-lt{font-size:34px;line-height:41px;font-weight:700;letter-spacing:-.025em}
+.t-t2{font-size:22px;line-height:28px;font-weight:700;letter-spacing:-.02em}.t-t3{font-size:20px;line-height:25px;font-weight:600;letter-spacing:-.02em}
+.t-h{font-size:17px;line-height:22px;font-weight:600}.t-s{font-size:15px;line-height:20px}.t-f{font-size:13px;line-height:18px}.t-c{font-size:12px;line-height:16px}
+.c2,.muted{color:$MUTED}.c-tint{color:$TINT}.c-red{color:$RED}.c-orange{color:$ORANGE}.c-green{color:$GREEN}.b{font-weight:600}
+.grow{flex:1;min-width:0}.r{text-align:right}
+.nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:44px;padding:0 8px;flex-shrink:0}
+.nav-t{font-size:17px;line-height:22px;font-weight:600;text-align:center}.nav-r{justify-self:end;display:flex;align-items:center}
+.backbtn{display:inline-flex;align-items:center;gap:1px;height:44px;padding:0 8px 0 0;font-size:17px;justify-self:start}
+.iconbtn{width:44px;height:44px;border:0;background:none;padding:0;display:flex;align-items:center;justify-content:center;color:$TINT}
+.lt{padding:2px 20px 10px}.lede{padding:0 20px 6px;font-size:15px;line-height:20px;color:$MUTED}
+.note{padding:0 20px 14px;font-size:13px;line-height:18px;color:$MUTED}
+.sec-h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:28px 20px 10px}
+.sec-h.has-n{margin-bottom:2px}.sec-n{margin:0 20px 10px;font-size:13px;line-height:18px;color:$MUTED}
+.sec-l{margin:24px 32px 7px;font-size:13px;line-height:18px;color:$MUTED}.sec-f{margin:8px 32px 0;font-size:13px;line-height:18px;color:$MUTED}
+.cell{background:$CELL;border-radius:20px;overflow:hidden}.group{margin:0 16px;background:$CELL;border-radius:20px;overflow:hidden}.group+.group{margin-top:12px}
+.row{position:relative;display:flex;align-items:center;gap:12px;min-height:52px;padding:10px 16px;color:inherit}
+.row+.row::before,.pad+.row::before,.row+.pad::before,.pad+.pad::before{content:"";position:absolute;top:0;left:16px;right:0;height:1px;background:$SEP}
+.row.in68+.row.in68::before{left:68px}
+.pad{position:relative;padding:14px 16px}
+.kv .v{flex:1;min-width:0;text-align:right;color:$MUTED}
+.tile{width:40px;height:40px;border-radius:10px;background:$FILL;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(#73737A,#5C5C61);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600;flex-shrink:0;letter-spacing:0}
+.avatar.lg{width:60px;height:60px;font-size:26px}
+.inbox{border-radius:12px;background:$INNER;padding:10px 12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:50px;padding:0 22px;border-radius:999px;border:0;background:$TINT_FILL;color:#fff;font-size:17px;line-height:22px;font-weight:600;white-space:nowrap}
+.btn.full{width:100%}.btn.md{min-height:44px;padding:0 18px;font-size:15px}.btn.gray{background:$FILL;color:$TINT}.btn:disabled{background:$FILL;color:$MUTED;cursor:default}
+.cap{position:relative;display:inline-flex;align-items:center;justify-content:center;height:32px;min-width:64px;padding:0 16px;border-radius:999px;border:0;background:$FILL;color:$TINT;font-size:15px;line-height:20px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.cap::after,.chipb::after{content:"";position:absolute;inset:-6px 0}
+.textbtn{border:0;background:none;padding:0;min-height:44px;color:$TINT;font-size:15px;line-height:20px;display:inline-flex;align-items:center;gap:1px;white-space:nowrap}
+.stp{display:inline-flex;align-items:center;height:36px;border-radius:999px;background:$FILL;flex-shrink:0}
+.stp button{position:relative;width:42px;height:36px;border:0;background:none;padding:0;display:flex;align-items:center;justify-content:center}
+.stp button::after{content:"";position:absolute;inset:-4px 0}.stp .n{min-width:26px;text-align:center;font-size:17px;font-weight:600}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;padding:2px;border-radius:999px;background:$FILL;margin:0 16px}
+.seg button{min-width:0;height:40px;border:0;border-radius:999px;background:transparent;font-size:15px;font-weight:500;padding:0 2px;white-space:nowrap}
+.seg button[aria-pressed=true]{background:$CELL;font-weight:600;box-shadow:$SEGSH}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chipb{position:relative;display:inline-flex;align-items:center;gap:2px;height:34px;padding:0 15px;border-radius:999px;border:0;background:$FILL;font-size:15px;line-height:20px;font-weight:500;white-space:nowrap}
+.chipb[aria-pressed=true]{background:$INK;color:#fff;font-weight:600}
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:12px;line-height:16px;font-weight:600;padding:3px 8px;border-radius:999px;background:$FILL;color:$MUTED;white-space:nowrap}
+.badge.green{background:$GREEN_BG;color:$GREEN}.badge.orange{background:$ORANGE_BG;color:$ORANGE}.badge.red{background:$RED_BG;color:$RED}
+.badge.fillred{background:$RED;color:#fff}.badge.ink{color:$INK}
+.badges{display:flex;flex-wrap:wrap;gap:6px}
+.delta{display:inline-flex;align-items:center;gap:2px;font-weight:600;white-space:nowrap}
+.fld{display:block;width:100%;height:40px;border:0;border-radius:10px;background:$FILL;padding:0 10px;text-align:right;font-size:17px;font-weight:600;color:$INK}
+.fld.focus{box-shadow:0 0 0 3px rgba(0,113,227,.55)}
+.ro{height:40px;display:flex;align-items:center;color:$MUTED;font-size:17px}
+.slider{-webkit-appearance:none;appearance:none;display:block;width:100%;height:28px;margin:0;background:transparent}
+.slider::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(to right,$TINT_FILL var(--p,50%),$FILL2 var(--p,50%))}
+.slider::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:-12px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15),0 1px 1px rgba(0,0,0,.16),0 0 0 .5px rgba(0,0,0,.04)}
+.slider::-moz-range-track{height:4px;border-radius:2px;background:$FILL2}.slider::-moz-range-progress{height:4px;border-radius:2px;background:$TINT_FILL}
+.slider::-moz-range-thumb{width:28px;height:28px;border:0;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15),0 1px 1px rgba(0,0,0,.16)}
+.switch{position:relative;width:51px;height:31px;border-radius:999px;border:0;background:$FILL2;padding:0;flex-shrink:0}.switch::before{content:"";position:absolute;inset:-7px 0}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15),0 1px 1px rgba(0,0,0,.16)}
+.switch[aria-checked=true]{background:$SWITCH_ON}.switch[aria-checked=true]::after{transform:translateX(20px)}
+.meter{height:6px;border-radius:3px;background:$FILL2;overflow:hidden}.meter i{display:block;height:100%;border-radius:3px;background:$TINT_FILL}
+.stats{display:flex;text-align:center}.stats>div{flex:1;min-width:0;padding:2px 4px}.stats>div+div{border-left:1px solid $SEP}
+.dock{padding:12px 16px 16px;display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.glass{background:rgba(255,255,255,.78);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);box-shadow:$FLOAT}
+.acc{display:flex;align-items:center;gap:12px;padding:8px 8px 8px 22px;border-radius:999px;min-height:62px}.acc .btn{min-height:46px}
+.tabbar{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;height:62px;padding:4px;border-radius:999px}
+.tabbar a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;height:54px;border-radius:999px;font-size:11px;line-height:13px;font-weight:500;color:$INK}
+.tabbar a[aria-current=page]{color:$TINT;background:$FILL;font-weight:600}
+"""
+_tok = dict(BG=BG, CELL=CELL, INNER=INNER, INK=INK, MUTED=MUTED, GLYPH=GLYPH, SEP=SEP, FILL2=FILL2, FILL=FILL, TINT_FILL=TINT_FILL, TINT_BG=TINT_BG, TINT=TINT,
+            RED_BG=RED_BG, RED=RED, ORANGE_BG=ORANGE_BG, ORANGE=ORANGE, GREEN_BG=GREEN_BG, GREEN=GREEN, SWITCH_ON=SWITCH_ON, FLOAT=FLOAT, SEGSH=SEGSH, SANS=SANS)
+for k in sorted(_tok, key=len, reverse=True): CSS = CSS.replace("$" + k, _tok[k])
 
-FONT = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap">'
+FONT = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">'
+
+# 보드 크기 — 파일 생성과 canvas.json 이 같이 쓴다
+SIZES = {"Main.dc.html": (390,1587), "Builder-Filled.dc.html": (390,1825), "Builder-Detail.dc.html": (390,844),
+         "Owner-Today.dc.html": (390,1320), "Owner-Orders.dc.html": (390,1311), "Owner-OrderDetail.dc.html": (390,1292),
+         "Owner-Prices.dc.html": (390,1502), "Owner-Prices-Tablet.dc.html": (1024,768), "Owner-Customers.dc.html": (390,1013),
+         "Owner-CustomerDetail.dc.html": (390,1134), "Owner-Funeral.dc.html": (390,844)}
 
 def page(title, w, h, body, logic="renderVals(){return {};}", props=None, extra_css=""):
     props = props or {}
@@ -54,8 +125,8 @@ class Component extends DCLogic {{
 """
 
 # ---------- icons (inline stroke svg) ----------
-def ic(path, size=22, color="currentColor", sw=1.8):
-    return f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{path}</svg>'
+def ic(path, size=22, color="currentColor", sw=1.8, st=""):
+    return f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="{sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;{st}">{path}</svg>'
 I = dict(
     back='<path d="M15 5l-7 7 7 7"/>',
     sliders='<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
@@ -84,81 +155,92 @@ I = dict(
     x='<path d="M6 6l12 12M18 6L6 18"/>',
     warn='<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/>',
     filter='<path d="M4 6h16M7 12h10M10 18h4"/>',
-    truck='<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/>',
+    bag='<path d="M5 8h14l-1 12H6z"/><path d="M9 8V7a3 3 0 016 0v1"/>',
 )
+# 유니코드 글리프(▲▼) 대신 쓰는 작은 채움 삼각형
+TRI_UP = "M4 1l3.5 6h-7z"; TRI_DOWN = "M4 7L.5 1h7z"
+def tri(up, s=8): return f'<svg width="{s}" height="{s}" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true" style="flex-shrink:0;"><path d="{TRI_UP if up else TRI_DOWN}"/></svg>'
 
-# ---------- flower placeholder ----------
+# ---------- flower placeholder (꽃만 색을 갖는다) ----------
 def flower(petal, center="#EAD6A8", size=64, stem="#7C8F6A"):
     p = []
     for a in (0, 72, 144, 216, 288):
-        p.append(f'<ellipse cx="32" cy="18" rx="7" ry="11" fill="{petal}" transform="rotate({a} 32 28)"/>')
-    return (f'<svg width="{size}" height="{size}" viewBox="0 0 64 64" aria-hidden="true">'
+        p.append(f'<ellipse cx="32" cy="18" rx="7" ry="11" fill="{petal}" stroke="rgba(0,0,0,.1)" stroke-width=".8" transform="rotate({a} 32 28)"/>')
+    return (f'<svg width="{size}" height="{size}" viewBox="0 0 64 64" aria-hidden="true" style="flex-shrink:0;">'
             f'<path d="M32 40v22" stroke="{stem}" stroke-width="3" stroke-linecap="round"/>'
             f'<path d="M32 52c-6-2-9-6-9-10 5 0 8 4 9 10z" fill="{stem}"/>'
             + "".join(p) + f'<circle cx="32" cy="28" r="5" fill="{center}"/></svg>')
 
 def euca(size=64, col="#7C8F6A"):
-    return (f'<svg width="{size}" height="{size}" viewBox="0 0 64 64" aria-hidden="true">'
+    return (f'<svg width="{size}" height="{size}" viewBox="0 0 64 64" aria-hidden="true" style="flex-shrink:0;">'
             f'<path d="M32 62V8" stroke="{col}" stroke-width="2.5" stroke-linecap="round"/>'
             + "".join(f'<circle cx="{32+(-10 if i%2 else 10)}" cy="{12+i*9}" r="6" fill="{col}" opacity="{0.9-i*0.08}"/>' for i in range(6))
             + '</svg>')
 
-WHITE = "#F3EEE3"; PINK = "#E9C4C0"; REDF = "#B84A45"; YEL = "#E7C86A"; IVORY = "#EFE6D2"
+WHITE = "#F3EEE3"; PINK = "#E9C4C0"; REDF = "#B84A45"; YEL = "#E7C86A"; IVORY = "#EFE6D2"; PHOTO_BG = "#E5E5EA"
 
-def photo(kind, h=120, bg="#ECE5D8"):
+def photo(kind, h=120, bg=PHOTO_BG):
     inner = {"mum": flower(WHITE, size=72), "rose": flower(REDF, "#7D2E2B", 72), "lisi": flower(WHITE, "#D9CBA5", 72),
              "carn": flower(PINK, "#C98A86", 72), "tulip": flower(YEL, "#B89A3E", 72), "euca": euca(72), "ivory": flower(IVORY, "#D9CBA5", 72)}[kind]
     return f'<div style="height:{h}px;background:{bg};display:flex;align-items:center;justify-content:center;">{inner}</div>'
 
 # ---------- shared pieces ----------
-def switch(on, label, big=False):
-    w, h, k = (52, 30, 24) if big else (44, 26, 20)
-    bg = GREEN if on else "#C9C1B3"
-    left = w - k - 3 if on else 3
-    return (f'<button type="button" aria-pressed="{"true" if on else "false"}" aria-label="{label}" '
-            f'style="width:{w}px;height:{h}px;border-radius:999px;border:0;background:{bg};position:relative;padding:0;flex-shrink:0;">'
-            f'<span style="position:absolute;top:3px;left:{left}px;width:{k}px;height:{k}px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);"></span></button>')
+def switch(on, label):
+    return f'<button type="button" role="switch" aria-checked="{"true" if on else "false"}" aria-label="{label}" class="switch"></button>'
 
-def chip(text, on=False, tone=None):
-    if tone == "green": return f'<span style="font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;background:{GREEN_T};color:{GREEN};">{text}</span>'
-    if tone == "orange": return f'<span style="font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;background:{ORANGE_T};color:{ORANGE};">{text}</span>'
-    if tone == "red": return f'<span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;background:{RED};color:#fff;">{text}</span>'
-    if tone == "soft": return f'<span style="font-size:12px;font-weight:500;padding:3px 9px;border-radius:999px;background:{SOFT};color:#4A4439;">{text}</span>'
-    if on: return f'<button type="button" aria-pressed="true" style="height:36px;padding:0 14px;border-radius:999px;border:1.5px solid {GREEN};background:{GREEN};color:#fff;font-size:13px;font-weight:600;white-space:nowrap;">{text}</button>'
-    return f'<button type="button" aria-pressed="false" style="height:36px;padding:0 14px;border-radius:999px;border:1.5px solid {LINE};background:{CARD};color:{INK};font-size:13px;font-weight:500;white-space:nowrap;">{text}</button>'
+def badge(text, tone="", solid=False):
+    # solid: 사진 위에 얹을 때 흰 바탕을 깔아 대비를 지킨다
+    bg = {"green": GREEN_BG, "orange": ORANGE_BG, "red": RED_BG}.get(tone, FILL)
+    st = f' style="background:linear-gradient({bg},{bg}),#fff;"' if solid else ""
+    return f'<span class="badge {tone}"{st}>{text}</span>'
 
-def delta(v):
-    if v is None: return f'<span class="mono flat" style="font-size:12px;font-weight:600;">—</span>'
-    if v > 0: return f'<span class="mono up" style="font-size:12px;font-weight:700;">▲{v}%</span>'
-    return f'<span class="mono down" style="font-size:12px;font-weight:700;">▼{-v}%</span>'
+def chip(text, on=False, icon=None):
+    return f'<button type="button" class="chipb" aria-pressed="{"true" if on else "false"}">{text}{ic(I[icon],16) if icon else ""}</button>'
+
+def delta(v, size=13):
+    if v is None: return f'<span class="num c2" style="font-size:{size}px;">—</span>'
+    up = v > 0
+    return f'<span class="delta num {"c-red" if up else "c-tint"}" style="font-size:{size}px;">{tri(up)}{abs(v)}%</span>'
 
 def caption(text):
-    return (f'<div style="height:36px;background:{GREEN};color:#fff;display:flex;align-items:center;gap:8px;padding:0 16px;font-size:12.5px;font-weight:500;">'
-            f'<span style="font-size:10px;font-weight:700;letter-spacing:.08em;opacity:.75;">해결하는 문제</span><span>{text}</span></div>')
+    # 발표용 맥락 한 줄 — 라지 타이틀(또는 상단 바) 아래 13px 보조 글
+    return f'<p class="note">{text}</p>'
 
 def tabbar(active):
     tabs = [("오늘", "home"), ("주문", "list"), ("시세", "chart"), ("손님", "users"), ("더보기", "more")]
     out = []
     for name, icon in tabs:
         on = name == active
-        col = GREEN if on else MUTED
-        out.append(f'<a href="#" aria-current="{"page" if on else "false"}" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:60px;color:{col};font-size:11px;font-weight:{700 if on else 500};">{ic(I[icon], 24, sw=2 if on else 1.8)}{name}</a>')
-    return f'<nav aria-label="주요 메뉴" style="height:60px;background:{CARD};border-top:1px solid {LINE};display:flex;flex-shrink:0;">{"".join(out)}</nav>'
+        out.append(f'<a href="#" aria-current="{"page" if on else "false"}">{ic(I[icon], 24, sw=2 if on else 1.8)}{name}</a>')
+    return f'<nav class="tabbar glass" aria-label="주요 메뉴">{"".join(out)}</nav>'
 
-def iconbtn(icon, label, size=44):
-    return f'<button type="button" aria-label="{label}" style="width:{size}px;height:{size}px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;border-radius:12px;padding:0;">{ic(I[icon], 24)}</button>'
+def dock(*parts):
+    return f'<div class="dock">{"".join(parts)}</div>'
 
-def topbar(title, right=None, back=True):
-    r = right if right else f'<div style="width:44px;height:44px;"></div>'
-    l = iconbtn("back", "뒤로") if back else '<div style="width:44px;height:44px;"></div>'
-    return (f'<header style="height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 8px;flex-shrink:0;">'
-            f'{l}<h1 style="margin:0;font-size:17px;font-weight:700;">{title}</h1>{r}</header>')
+def iconbtn(icon, label):
+    return f'<button type="button" class="iconbtn" aria-label="{label}">{ic(I[icon], 24)}</button>'
 
-def root(w, h, inner, bg=CREAM):
+def topbar(title, right=None, back="뒤로"):
+    l = f'<a class="backbtn" href="#">{ic(I["back"], 24, sw=2.4)}<span>{back}</span></a>' if back else "<span></span>"
+    return f'<header class="nav">{l}<h1 class="nav-t">{title}</h1><div class="nav-r">{right or ""}</div></header>'
+
+def ohead(title, sub=None, right=None, note=None):
+    # 탭 루트 화면: 44px 바(우측 액션) + 라지 타이틀 + 보조 설명
+    return (f'<header class="nav"><span></span><span></span><div class="nav-r">{right or ""}</div></header>'
+            f'<h1 class="lt t-lt">{title}</h1>' + (f'<p class="lede">{sub}</p>' if sub else "") + (caption(note) if note else ""))
+
+def sec(title, note=None, right=""):
+    cls = "sec-h has-n" if note else "sec-h"
+    return f'<div class="{cls}"><h2 class="t-t2">{title}</h2>{right}</div>' + (f'<p class="sec-n">{note}</p>' if note else "")
+
+def root(w, h, inner, bg=BG):
     return f'<div style="width:{w}px;height:{h}px;box-sizing:border-box;background:{bg};display:flex;flex-direction:column;overflow:hidden;position:relative;">{inner}</div>'
 
-def money(n, size=20, weight=700, unit="원", cls=""):
-    return f'<span class="mono {cls}" style="font-size:{size}px;font-weight:{weight};">{n:,}<span style="font-size:{max(11,int(size*0.6))}px;font-weight:600;margin-left:1px;">{unit}</span></span>'
+def money(n, size=17, weight=600, unit="원", cls=""):
+    return f'<span class="num {cls}" style="font-size:{size}px;font-weight:{weight};">{n:,}{unit}</span>'
+
+def btn(text, kind="", icon=None, extra=""):
+    return f'<button type="button" class="btn full {kind}" style="{extra}">{ic(I[icon],20,sw=2) if icon else ""}{text}</button>'
 
 # =====================================================================
 # CONSUMER BUILDER
@@ -172,263 +254,243 @@ CATALOG = [
     ("유칼립투스", "그린 · 줄기", 1800, None, None, "euca"),
 ]
 
-def catalog_card(name, sub, price, d, badge, kind, in_cart=0):
-    b = ""
-    if badge == "제철": b = f'<div style="position:absolute;top:8px;left:8px;">{chip("제철", tone="green")}</div>'
-    if badge == "오늘만 할인": b = f'<div style="position:absolute;top:8px;left:8px;">{chip("오늘만 할인", tone="orange")}</div>'
-    btn = (f'<div style="height:44px;border-radius:10px;background:{GREEN_T};color:{GREEN};display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:700;">{ic(I["check"],16)}담김 {in_cart}</div>'
-           if in_cart else
-           f'<button type="button" style="height:44px;border-radius:10px;border:1.5px solid {GREEN};background:{CARD};color:{GREEN};font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:4px;">{ic(I["plus"],16)}담기</button>')
-    return (f'<article class="card" style="overflow:hidden;position:relative;display:flex;flex-direction:column;">'
+def catalog_card(name, sub, price, d, bdg, kind, in_cart=0):
+    b = f'<div style="position:absolute;top:10px;left:10px;">{badge(bdg, "green" if bdg == "제철" else "orange", solid=True)}</div>' if bdg else ""
+    btnh = (f'<div class="cap" style="width:100%;gap:4px;background:{GREEN_BG};color:{GREEN};">{ic(I["check"],16,sw=2.4)}<span class="num">담김 {in_cart}</span></div>'
+            if in_cart else f'<button type="button" class="cap" style="width:100%;" aria-label="{name} 담기">담기</button>')
+    return (f'<article class="cell" style="position:relative;display:flex;flex-direction:column;">'
             f'{photo(kind, 124)}{b}'
-            f'<div style="padding:10px 12px 12px;display:flex;flex-direction:column;gap:8px;">'
-            f'<div style="display:flex;flex-direction:column;gap:1px;"><div style="font-size:15px;font-weight:600;">{name}</div><div class="muted" style="font-size:12px;">{sub}</div></div>'
-            f'<div style="display:flex;align-items:baseline;justify-content:space-between;">'
-            f'<div style="display:flex;align-items:baseline;gap:4px;"><span class="muted" style="font-size:11px;">오늘</span>{money(price, 18)}<span class="muted" style="font-size:11px;">/송이</span></div>{delta(d)}</div>'
-            f'{btn}</div></article>')
+            f'<div style="padding:10px 12px 14px;display:flex;flex-direction:column;gap:2px;flex:1;">'
+            f'<div class="t-h">{name}</div>'
+            f'<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;"><span class="t-f c2">{sub}</span>{delta(d)}</div>'
+            f'<div style="display:flex;align-items:baseline;gap:4px;flex-wrap:wrap;margin:4px 0 10px;"><span class="t-f c2">오늘</span>{money(price)}<span class="t-f c2">/송이</span></div>'
+            f'<div style="margin-top:auto;">{btnh}</div></div></article>')
 
 def filters():
-    return (f'<div style="display:flex;gap:8px;padding:0 16px;overflow:hidden;">{chip("전체", True)}{chip("제철")}{chip("5천원 이하")}'
-            f'<button type="button" aria-pressed="false" style="height:36px;padding:0 12px 0 14px;border-radius:999px;border:1.5px solid {LINE};background:{CARD};font-size:13px;font-weight:500;display:flex;align-items:center;gap:2px;white-space:nowrap;">색상별{ic(I["chev"],16)}</button></div>')
+    return f'<div class="chips" style="padding:0 16px 12px;">{chip("전체", True)}{chip("제철")}{chip("5천원 이하")}{chip("색상별", icon="chev")}</div>'
 
 def catalog(in_cart=None):
     in_cart = in_cart or {}
     cards = "".join(catalog_card(*c, in_cart=in_cart.get(c[0], 0)) for c in CATALOG)
-    return (f'<section style="display:flex;flex-direction:column;gap:12px;">'
-            f'<div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 16px;"><h2 style="margin:0;font-size:16px;font-weight:700;">오늘의 꽃</h2><span class="muted" style="font-size:11.5px;">aT 화훼공판장 경매 시세 · 05:00 갱신</span></div>'
+    return (f'<section>{sec("오늘의 꽃", "aT 화훼공판장 경매 시세 · 05:00 갱신")}'
             f'{filters()}<div style="display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:10px;padding:0 16px;">{cards}</div></section>')
 
 def budget_bar(total, budget=50000, over=False):
     pct = min(100, round(total / budget * 100))
-    col = ORANGE if over else GREEN
-    return (f'<section class="card" style="margin:0 16px;padding:12px 16px 14px;display:flex;flex-direction:column;gap:8px;">'
-            f'<div style="display:flex;align-items:baseline;justify-content:space-between;">'
-            f'<div style="display:flex;align-items:baseline;gap:6px;"><span class="muted" style="font-size:12px;">예산</span>{money(budget, 17, 600)}</div>'
-            f'<div style="display:flex;align-items:baseline;gap:6px;"><span class="muted" style="font-size:12px;">현재 합계</span><span style="color:{col};">{money(total, 20)}</span><span class="mono" style="font-size:12px;color:{col};font-weight:600;">{pct}%</span></div></div>'
-            f'<label style="display:flex;flex-direction:column;gap:4px;"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">예산 설정</span>'
-            f'<input type="range" min="10000" max="150000" step="5000" defaultValue="{budget}" style="width:100%;margin:0;height:28px;"></label></section>')
+    col = "c-orange" if over else ""
+    return (f'<section class="group"><div class="pad" style="display:flex;flex-direction:column;gap:8px;">'
+            f'<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;">'
+            f'<div><div class="t-f c2">현재 합계</div><div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;">{money(total, 22, 700, cls=col)}<span class="num t-s c2">예산의 {pct}%</span></div></div>'
+            f'<div class="r"><div class="t-f c2">예산</div>{money(budget, 17, 600)}</div></div>'
+            f'<label style="display:block;"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">예산 설정</span>'
+            f'<input type="range" class="slider" min="10000" max="150000" step="5000" defaultValue="{budget}"></label></div></section>')
 
 def preview_card(filled):
-    toggle = (f'<div style="position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:8px;background:{CARD};border:1px solid {LINE};border-radius:999px;padding:5px 6px 5px 12px;">'
-              f'<span style="font-size:12px;font-weight:600;">플로리스트에게 배치 맡기기</span>{switch(filled, "플로리스트에게 배치 맡기기")}</div>')
     if not filled:
-        body = (f'<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed #D3C9B8;border-radius:10px;margin:52px 14px 14px;">'
-                f'<div style="opacity:.55;">{flower("#DDD3C2", "#CDBF9F", 56)}</div><div style="font-size:15px;font-weight:600;">꽃을 담아보세요</div><div class="muted" style="font-size:12.5px;">아래에서 송이 단위로 고르면 여기에 쌓여요</div></div>')
+        body = (f'<div style="height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:16px 24px;text-align:center;">'
+                f'<div style="margin-bottom:2px;">{flower("#D1D1D6", "#C7C7CC", 52, "#C7C7CC")}</div><div class="t-t3">꽃을 담아보세요</div><div class="t-s c2">아래에서 송이 단위로 고르면 여기에 쌓여요</div></div>')
     else:
         stems = []
-        # mums x10 (white), lisianthus x3, eucalyptus x2 — stacked bouquet
+        # 국화 10 · 리시안셔스 3 · 유칼립투스 2 — 겹쳐 쌓은 다발
         pos = [(120,70,58),(160,54,62),(200,66,58),(140,96,56),(184,98,60),(104,104,52),(222,104,54),(156,124,56),(120,134,50),(196,134,52)]
-        for x,y,s in pos: stems.append(f'<div style="position:absolute;left:{x}px;top:{y}px;">{flower(WHITE, size=s)}</div>')
-        for x,y,s in [(92,70,60),(236,72,58),(164,80,54)]: stems.append(f'<div style="position:absolute;left:{x}px;top:{y}px;">{flower("#F7F3EA","#D9CBA5",s)}</div>')
-        for x,y,s in [(70,90,72),(250,88,70)]: stems.append(f'<div style="position:absolute;left:{x}px;top:{y}px;">{euca(s)}</div>')
-        body = (f'<div style="flex:1;position:relative;overflow:hidden;">{"".join(stems)}'
-                f'<div style="position:absolute;left:0;right:0;bottom:0;height:56px;background:linear-gradient(to top, {CARD}, rgba(255,253,249,0));"></div>'
-                f'<div style="position:absolute;left:14px;bottom:12px;display:flex;gap:6px;">{chip("국화 10", tone="soft")}{chip("리시안셔스 3", tone="soft")}{chip("유칼립투스 2", tone="soft")}</div></div>')
-    return f'<section class="card" style="margin:0 16px;height:230px;position:relative;display:flex;flex-direction:column;overflow:hidden;">{toggle}{body}</section>'
+        for x,y,s in pos: stems.append(f'<div style="position:absolute;left:{x}px;top:{y-40}px;">{flower(WHITE, size=s)}</div>')
+        for x,y,s in [(92,70,60),(236,72,58),(164,80,54)]: stems.append(f'<div style="position:absolute;left:{x}px;top:{y-40}px;">{flower("#F7F3EA","#D9CBA5",s)}</div>')
+        for x,y,s in [(70,90,72),(250,88,70)]: stems.append(f'<div style="position:absolute;left:{x}px;top:{y-40}px;">{euca(s)}</div>')
+        body = (f'<div style="height:200px;position:relative;overflow:hidden;">{"".join(stems)}</div>'
+                f'<div class="badges" style="padding:0 16px 12px;">{badge("국화 10", "ink")}{badge("리시안셔스 3", "ink")}{badge("유칼립투스 2", "ink")}</div>')
+    toggle = f'<div class="row"><span class="grow">플로리스트에게 배치 맡기기</span>{switch(filled, "플로리스트에게 배치 맡기기")}</div>'
+    return f'<section class="group" style="margin-top:12px;"><div>{body}</div>{toggle}</section>'
 
 def stepper(n):
-    return (f'<div style="display:flex;align-items:center;border:1.5px solid {LINE};border-radius:10px;background:{CARD};height:40px;">'
-            f'<button type="button" aria-label="1송이 빼기" style="width:40px;height:40px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;">{ic(I["minus"],18)}</button>'
-            f'<span class="mono" style="width:30px;text-align:center;font-size:16px;font-weight:700;">{n}</span>'
-            f'<button type="button" aria-label="1송이 더하기" style="width:40px;height:40px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;">{ic(I["plus"],18)}</button></div>')
+    return (f'<div class="stp"><button type="button" aria-label="1송이 빼기">{ic(I["minus"],18,sw=2)}</button>'
+            f'<span class="n num">{n}</span>'
+            f'<button type="button" aria-label="1송이 더하기">{ic(I["plus"],18,sw=2)}</button></div>')
 
 def cart_row(name, sub, n, price, unit="송이", swiped=False):
-    row = (f'<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;background:{CARD};min-width:100%;box-sizing:border-box;{"transform:translateX(-84px);" if swiped else ""}">'
-           f'<div style="flex:1;min-width:0;"><div style="font-size:15px;font-weight:600;">{name}</div><div class="muted" style="font-size:12px;">{sub} · {money(price,12,600,"원")}/{unit}</div></div>'
-           f'{stepper(n)}<div class="mono" style="width:72px;text-align:right;font-size:16px;font-weight:700;">{n*price:,}<span style="font-size:11px;">원</span></div></div>')
+    body = (f'<div class="grow" style="display:flex;flex-direction:column;gap:6px;">'
+            f'<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;"><span class="t-h">{name}</span>{money(n*price)}</div>'
+            f'<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;"><span class="t-f c2 num grow">{sub} · {price:,}원/{unit}</span>{stepper(n)}</div></div>')
     if swiped:
-        row = f'<div style="position:relative;overflow:hidden;background:{RED};"><div style="position:absolute;right:0;top:0;bottom:0;width:84px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700;">삭제</div>{row}</div>'
-    return row
+        # 밀어서 삭제 상태: 내용은 잘리지 않게 줄어들고 오른쪽에 삭제가 드러난다
+        return (f'<div class="row" style="padding:0;gap:0;align-items:stretch;"><div style="flex:1;min-width:0;display:flex;padding:10px 12px 10px 16px;">{body}</div>'
+                f'<button type="button" style="width:76px;border:0;background:{RED};color:#fff;font-size:17px;font-weight:600;flex-shrink:0;">삭제</button></div>')
+    return f'<div class="row">{body}</div>'
 
 def cart_list(rows):
+    title = f'담은 꽃 <span class="num c2" style="font-weight:400;">{len(rows)}</span>'
     if not rows:
-        return (f'<section style="padding:0 16px;display:flex;flex-direction:column;gap:8px;"><div style="display:flex;align-items:baseline;gap:6px;"><h2 style="margin:0;font-size:16px;font-weight:700;">담은 꽃</h2><span class="mono muted" style="font-size:14px;">0</span></div>'
-                f'<div class="muted" style="font-size:13px;padding:6px 0 0;">담은 꽃이 여기에 줄로 쌓여요. 옆으로 밀면 뺄 수 있어요.</div></section>')
-    body = "".join(rows)
-    return (f'<section style="display:flex;flex-direction:column;gap:8px;"><div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 16px;"><div style="display:flex;align-items:baseline;gap:6px;"><h2 style="margin:0;font-size:16px;font-weight:700;">담은 꽃</h2><span class="mono muted" style="font-size:14px;">3</span></div><span class="muted" style="font-size:11.5px;">옆으로 밀어 삭제</span></div>'
-            f'<div style="margin:0 16px;border:1px solid {LINE};border-radius:14px;overflow:hidden;display:flex;flex-direction:column;background:{CARD};">{body}</div></section>')
+        return f'<section>{sec(title)}<div class="group"><div class="pad t-s c2">담은 꽃이 여기에 줄로 쌓여요. 옆으로 밀면 뺄 수 있어요.</div></div></section>'
+    head = sec(title, right='<span class="t-f c2">옆으로 밀어 삭제</span>')
+    return f'<section>{head}<div class="group">{"".join(rows)}</div></section>'
 
 def bottom_bar(total, enabled, expanded=False):
-    btn_bg = GREEN if enabled else "#C9C1B3"
-    return (f'<footer style="height:84px;background:{CARD};border-top:1px solid {LINE};display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0;box-shadow:0 -6px 16px rgba(30,27,22,.05);">'
-            f'<div style="display:flex;flex-direction:column;gap:2px;"><span class="muted" style="font-size:11.5px;">합계</span>'
-            f'<button type="button" aria-expanded="{"true" if expanded else "false"}" style="border:0;background:transparent;padding:0;display:flex;align-items:center;gap:4px;height:32px;">{money(total, 22)}<span style="display:flex;align-items:center;gap:1px;color:{GREEN};font-size:12.5px;font-weight:600;margin-left:4px;">상세{ic(I["chev"],16)}</span></button></div>'
-            f'<button type="button" {"" if enabled else "disabled"} style="width:148px;height:52px;border:0;border-radius:14px;background:{btn_bg};color:#fff;font-size:16px;font-weight:700;">주문하기</button></footer>')
+    # 하단 CTA: 플로팅 글래스 캡슐(app.html 의 .acc)
+    return dock(f'<div class="acc glass"><button type="button" class="grow" aria-expanded="{"true" if expanded else "false"}" style="border:0;background:none;padding:0;text-align:left;min-height:44px;">'
+                f'<div class="t-c c2">합계</div><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span class="t-t3 num">{total:,}원</span>'
+                f'<span class="t-s c-tint" style="display:inline-flex;align-items:center;gap:1px;">상세{ic(I["chev"],16,sw=2)}</span></div></button>'
+                f'<button type="button" class="btn" {"" if enabled else "disabled"}>주문하기</button></div>')
 
-def builder(filled, h):
+def builder_top():
+    return topbar("나만의 꽃다발", iconbtn("sliders", "예산 설정"), back="홈")
+
+def builder(filled, name):
+    w, h = SIZES[name]
     rows = [] if not filled else [
         cart_row("국화", "백선 · 특", 10, 1200),
-        f'<div style="height:1px;background:{LINE};margin:0 16px;"></div>',
         cart_row("리시안셔스", "화이트 · 특", 3, 3500),
-        f'<div style="height:1px;background:{LINE};margin:0 16px;"></div>',
         cart_row("유칼립투스", "그린", 2, 1800, "줄기", swiped=True),
     ]
     total = 37100 if filled else 0
-    inner = (topbar("나만의 꽃다발", iconbtn("sliders", "예산 설정"))
-             + f'<div style="flex:1;display:flex;flex-direction:column;gap:16px;padding-bottom:20px;">'
+    inner = (builder_top()
+             + f'<div style="flex:1;padding:8px 0 12px;">'
              + budget_bar(total) + preview_card(filled) + cart_list(rows)
              + catalog({"국화":10,"리시안셔스":3,"유칼립투스":2} if filled else None) + '</div>'
              + bottom_bar(total, filled))
-    return page("꽃다발 빌더 — " + ("담긴 상태" if filled else "빈 상태"), 390, h, root(390, h, inner))
+    return page("ReBloom 꽃다발 빌더 — " + ("담긴 상태" if filled else "빈 상태"), w, h, root(w, h, inner), extra_css=".slider{--p:28.6%}")
 
 def builder_detail():
-    h = 844
-    # dimmed background: top of the filled screen
-    back = (topbar("나만의 꽃다발", iconbtn("sliders", "예산 설정")) + f'<div style="display:flex;flex-direction:column;gap:16px;">' + budget_bar(37100) + preview_card(True) + '</div>')
-    sheet_rows = [("꽃값", "국화 10 · 리시안셔스 3 · 유칼립투스 2", "26,100"), ("부자재", "포장지 · 리본", "3,000"), ("디자인비", "플로리스트 배치", "8,000"), ("배송비", "3만원 이상 무료", "0")]
-    rows_html = "".join(
-        f'<div style="display:flex;align-items:baseline;justify-content:space-between;padding:10px 0;"><div><div style="font-size:14.5px;font-weight:500;">{a}</div><div class="muted" style="font-size:12px;">{b}</div></div><span class="mono" style="font-size:16px;font-weight:600;">{c}<span style="font-size:11px;">원</span></span></div>'
-        for a, b, c in sheet_rows)
-    sheet = (f'<div style="position:absolute;left:0;right:0;bottom:0;background:{CARD};border-radius:22px 22px 0 0;box-shadow:0 -10px 30px rgba(30,27,22,.18);display:flex;flex-direction:column;">'
-             f'<div style="display:flex;justify-content:center;padding:10px 0 2px;"><div style="width:40px;height:4px;border-radius:2px;background:#D3C9B8;"></div></div>'
-             f'<div style="padding:6px 20px 0;display:flex;align-items:center;justify-content:space-between;"><h2 style="margin:0;font-size:17px;font-weight:700;">가격 상세</h2><span class="muted" style="font-size:11.5px;">오늘 시세 기준 · 05:00</span></div>'
-             f'<div style="padding:4px 20px 0;display:flex;flex-direction:column;">{rows_html}</div>'
-             f'<div style="margin:6px 20px 0;border-top:1.5px solid {INK};padding:12px 0 0;display:flex;align-items:baseline;justify-content:space-between;"><span style="font-size:15px;font-weight:700;">합계</span>{money(37100, 26)}</div>'
-             f'<div style="margin:8px 20px 0;display:flex;align-items:center;gap:10px;"><div style="flex:1;height:6px;border-radius:3px;background:{SOFT};overflow:hidden;"><div style="width:74%;height:100%;background:{GREEN};"></div></div><span class="mono muted" style="font-size:12px;font-weight:600;">예산 50,000원의 74%</span></div>'
-             f'<div style="margin:14px 20px 0;padding:12px 14px;border-radius:12px;background:{GREEN_T};display:flex;flex-direction:column;gap:3px;">'
-             f'<div style="display:flex;align-items:center;gap:6px;font-size:14.5px;font-weight:700;color:{GREEN};">이 조합, 어제보다 <span class="mono up">▲4%</span></div>'
-             f'<div style="font-size:12px;color:#3C5A48;">국화 ▲8%가 올렸어요 · 어제였다면 꽃값 25,000원 · 지금이 오늘 최저가 기준입니다</div></div>'
-             f'<div style="padding:16px 20px 24px;">'
-             f'<button type="button" style="width:100%;height:56px;border:0;border-radius:14px;background:{GREEN};color:#fff;font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;">주문하기 <span class="mono" style="font-weight:700;">37,100원</span></button></div></div>')
-    inner = (f'<div style="flex:1;display:flex;flex-direction:column;">{back}</div>'
-             f'<div style="position:absolute;inset:0;background:rgba(30,27,22,.42);"></div>{sheet}')
-    return page("꽃다발 빌더 — 가격 상세 펼침", 390, h, root(390, h, inner))
+    w, h = SIZES["Builder-Detail.dc.html"]
+    # 어두워진 배경: 담긴 상태 화면의 윗부분
+    back = builder_top() + f'<div style="padding:8px 0 0;">' + budget_bar(37100) + preview_card(True) + '</div>'
+    # 픽업 전용 — 꽃값 + 부자재 + 디자인비 = 합계
+    sheet_rows = [("꽃값", "국화 10 · 리시안셔스 3 · 유칼립투스 2", 26100), ("부자재", "포장지 · 리본", 3000), ("디자인비", "플로리스트 배치", 8000)]
+    total = sum(r[2] for r in sheet_rows)
+    rows_html = "".join(f'<div class="row"><div class="grow"><div>{a}</div><div class="t-f c2 num">{b}</div></div>{money(c, 17, 400)}</div>' for a, b, c in sheet_rows)
+    sheet = (f'<div style="position:absolute;left:0;right:0;bottom:0;background:{BG};border-radius:28px 28px 0 0;display:flex;flex-direction:column;padding-bottom:20px;">'
+             f'<div style="display:flex;justify-content:center;padding:6px 0 0;"><div style="width:36px;height:5px;border-radius:3px;background:#C7C7CC;"></div></div>'
+             f'<div class="nav" style="height:50px;padding:0 8px 0 16px;"><span></span><h2 class="nav-t">가격 상세</h2><div class="nav-r"><button type="button" class="textbtn" style="padding:0 8px;font-size:17px;font-weight:600;">완료</button></div></div>'
+             f'<p class="sec-l" style="margin-top:4px;">오늘 시세 기준 · 05:00 갱신</p>'
+             f'<div class="group">{rows_html}'
+             f'<div class="pad" style="display:flex;flex-direction:column;gap:10px;"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;"><span class="t-h">합계</span>{money(total, 22, 700)}</div>'
+             f'<div class="meter"><i style="width:{round(total/500)}%;"></i></div><div class="t-f c2 num">예산 50,000원의 {round(total/500)}%</div></div></div>'
+             f'<div class="group"><div class="pad"><div class="t-h" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">이 조합, 어제보다 {delta(4, 17)}</div>'
+             f'<div class="t-f c2 num" style="margin-top:4px;">국화 {delta(8)}가 올렸어요 · 어제였다면 꽃값 25,000원 · 지금이 오늘 최저가 기준입니다</div></div></div>'
+             f'<div style="padding:16px 16px 0;"><button type="button" class="btn full">주문하기 <span class="num">{total:,}원</span></button></div></div>')
+    inner = (f'<div style="flex:1;">{back}</div>'
+             f'<div style="position:absolute;inset:0;background:rgba(0,0,0,.36);"></div>{sheet}')
+    return page("ReBloom 꽃다발 빌더 — 가격 상세 펼침", w, h, root(w, h, inner), extra_css=".slider{--p:28.6%}")
 
 # =====================================================================
 # OWNER APP
 # =====================================================================
-def ohead(title, sub=None, right=None):
-    r = right or ""
-    subhtml = f'<div class="muted" style="font-size:12.5px;margin-top:2px;">{sub}</div>' if sub else ""
-    return (f'<header style="display:flex;align-items:flex-end;justify-content:space-between;padding:14px 16px 10px;">'
-            f'<div><h1 style="margin:0;font-size:22px;font-weight:700;">{title}</h1>{subhtml}</div>{r}</header>')
-
-def stat(label, n, unit="", tone=None, size=40):
+def stat(label, n, unit="", tone=None, size=28):
     col = {"red": RED, "orange": ORANGE, None: INK}[tone]
-    return (f'<div style="display:flex;flex-direction:column;gap:2px;"><span class="muted" style="font-size:12px;">{label}</span>'
-            f'<span class="mono" style="font-size:{size}px;font-weight:700;line-height:1;color:{col};">{n}<span style="font-size:14px;font-weight:600;margin-left:2px;">{unit}</span></span></div>')
-
-def big_btn(text, primary=True, icon=None, h=52, w="100%"):
-    st = (f'background:{GREEN};color:#fff;border:0;' if primary else f'background:{CARD};color:{GREEN};border:1.5px solid {GREEN};')
-    return f'<button type="button" style="width:{w};height:{h}px;border-radius:14px;{st}font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;">{ic(I[icon],20) if icon else ""}{text}</button>'
+    return (f'<div><div class="t-f c2">{label}</div>'
+            f'<div class="num" style="font-size:{size}px;line-height:{size+6}px;font-weight:700;letter-spacing:-.02em;color:{col};">{n}<span style="font-size:17px;font-weight:400;margin-left:1px;">{unit}</span></div></div>')
 
 def home():
-    h = 1120
-    todo = (f'<section class="card" style="margin:0 16px;padding:16px;display:flex;flex-direction:column;gap:14px;">'
-            f'<div style="display:flex;align-items:center;justify-content:space-between;"><h2 style="margin:0;font-size:15px;font-weight:700;">오늘 할 일</h2><a href="#" style="font-size:13px;font-weight:600;display:flex;align-items:center;">주문 보기{ic(I["chevr"],16)}</a></div>'
-            f'<div style="display:flex;align-items:flex-end;gap:24px;">{stat("제작할 주문", 7, "건", size=52)}'
-            f'<div style="display:flex;flex-direction:column;gap:8px;flex:1;">'
-            f'<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:10px;background:{RED_T};"><div style="display:flex;align-items:center;gap:6px;">{chip("근조", tone="red")}<span class="mono" style="font-size:15px;font-weight:700;color:{RED};">2</span></div><span class="mono" style="font-size:12px;font-weight:700;color:{RED};">13:00 배송 마감</span></div>'
-            f'<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:10px;background:{SOFT};"><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;font-weight:600;">예약 발송</span><span class="mono" style="font-size:15px;font-weight:700;">3</span></div><span class="mono muted" style="font-size:12px;font-weight:600;">내일 09:00</span></div>'
-            f'<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:10px;background:{SOFT};"><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;font-weight:600;">일반 · 픽업</span><span class="mono" style="font-size:15px;font-weight:700;">2</span></div><span class="mono muted" style="font-size:12px;font-weight:600;">15:00 · 18:00</span></div>'
-            f'</div></div></section>')
+    w, h = SIZES["Owner-Today.dc.html"]
+    def line(left, cnt, right, red=False):
+        c = "c-red" if red else ""
+        return (f'<div class="row">{left}<span class="num t-h {c}">{cnt}건</span><span class="grow r t-s num {c if red else "c2"}" style="font-weight:{600 if red else 400};">{right}</span></div>')
+    more = f'<a href="#" class="textbtn">주문 보기{ic(I["chevr"],16,sw=2)}</a>'
+    todo = (f'<section>{sec("오늘 할 일", right=more)}'
+            f'<div class="group"><div class="pad">{stat("제작할 주문", 7, "건", size=34)}</div>'
+            + line(badge("근조", "fillred"), 2, "13:00 픽업 마감", red=True)
+            + line('<span>예약 주문</span>', 3, "내일 09:00")
+            + line('<span>일반 · 픽업</span>', 2, "15:00 · 18:00")
+            + '</div></section>')
     rows = [("국화 백선 특", "확정 80 · 예약 30 · 구독 10", 120, 60, 60), ("장미 레드나오미 상", "확정 25 · 예약 15", 40, 30, 10),
             ("리시안셔스 화이트 특", "확정 12", 12, 15, 0), ("카네이션 핑크 상", "확정 20", 20, 40, 0)]
+    grid = "display:grid;grid-template-columns:minmax(0,1fr) 40px 40px 44px;gap:8px;align-items:center;"
     trs = ""
     for name, src, need, stock, short in rows:
-        sh = f'<span class="mono" style="font-size:18px;font-weight:700;color:{ORANGE};">{short}</span>' if short else f'<span class="mono flat" style="font-size:14px;">충분</span>'
-        trs += (f'<div style="display:grid;grid-template-columns:1fr 56px 56px 56px;align-items:center;gap:6px;padding:10px 0;border-top:1px solid {LINE};">'
-                f'<div><div style="font-size:14px;font-weight:600;">{name}</div><div class="muted" style="font-size:11.5px;">{src}</div></div>'
-                f'<span class="mono" style="text-align:right;font-size:15px;font-weight:600;">{need}</span><span class="mono muted" style="text-align:right;font-size:15px;">{stock}</span><span style="text-align:right;">{sh}</span></div>')
-    order = (f'<section class="card" style="margin:0 16px;padding:16px;display:flex;flex-direction:column;gap:10px;">'
-             f'<div style="display:flex;align-items:baseline;justify-content:space-between;"><h2 style="margin:0;font-size:15px;font-weight:700;">내일 새벽 발주 제안</h2><span class="muted" style="font-size:11.5px;">9/19 (토) 새벽 기준</span></div>'
-             f'<div style="display:grid;grid-template-columns:1fr 56px 56px 56px;gap:6px;font-size:11px;font-weight:600;color:{MUTED};"><span>품목 · 필요 근거</span><span style="text-align:right;">필요</span><span style="text-align:right;">재고</span><span style="text-align:right;">부족</span></div>'
-             f'<div style="display:flex;flex-direction:column;">{trs}</div>'
-             f'<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;background:{ORANGE_T};"><span style="font-size:13px;font-weight:600;color:{ORANGE};">부족 2품목</span><span class="mono" style="font-size:13px;font-weight:700;color:{ORANGE};">국화 3속 · 장미 1속</span></div>'
-             f'{big_btn("발주 메모로 복사", icon="copy")}</section>')
+        sh = f'<span class="num c-orange" style="font-weight:700;">{short}</span>' if short else f'<span class="t-s c2">충분</span>'
+        trs += (f'<div class="row" style="{grid}">'
+                f'<div><div class="t-s b">{name}</div><div class="t-f c2 num">{src}</div></div>'
+                f'<span class="num r">{need}</span><span class="num r c2">{stock}</span><span class="r">{sh}</span></div>')
+    order = (f'<section>{sec("내일 새벽 발주 제안", "9/19 (토) 새벽 기준")}'
+             f'<div class="group"><div class="row t-f c2" style="{grid}min-height:36px;padding-top:8px;padding-bottom:8px;"><span>품목 · 필요 근거</span><span class="r">필요</span><span class="r">재고</span><span class="r">부족</span></div>'
+             f'{trs}'
+             f'<div class="pad" style="display:flex;flex-direction:column;gap:12px;">'
+             f'<div class="inbox t-s b c-orange" style="background:{ORANGE_BG};display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;"><span>부족 2품목</span><span class="num">국화 3속 · 장미 1속</span></div>'
+             f'{btn("발주 메모로 복사", icon="copy")}</div></div></section>')
     stock_rows = [("카네이션 핑크 상", 1, 40, True, "2,900원"), ("튤립 옐로우 특", 2, 8, False, None), ("장미 레드나오미 상", 2, 12, False, None)]
     srs = ""
     for name, days, qty, on, disc in stock_rows:
-        dcol = ORANGE if days <= 1 else INK
-        dischtml = f'<span class="mono" style="color:{ORANGE};font-weight:600;">할인가 {disc}</span>' if disc else ""
-        srs += (f'<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid {LINE};">'
-                f'<div style="flex:1;"><div style="font-size:14px;font-weight:600;">{name}</div><div style="font-size:12px;display:flex;gap:8px;"><span class="mono" style="font-weight:700;color:{dcol};">{days}일 남음</span><span class="mono muted">{qty}송이</span>{dischtml}</div></div>'
-                f'<span style="font-size:11.5px;font-weight:600;color:{MUTED};">오늘만 할인</span>{switch(on, name + " 오늘만 할인")}</div>')
-    stock = (f'<section class="card" style="margin:0 16px;padding:16px 16px 6px;display:flex;flex-direction:column;gap:8px;">'
-             f'<div style="display:flex;align-items:center;justify-content:space-between;"><h2 style="margin:0;font-size:15px;font-weight:700;display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:{ORANGE};"></span>신선기간 임박</h2><span class="muted" style="font-size:11.5px;">할인 켜면 소비자 앱에 즉시 노출</span></div>'
-             f'<div style="display:flex;flex-direction:column;">{srs}</div></section>')
-    inner = (caption("문제 1·5 · 새벽 발주를 도박에서 계산으로")
-             + ohead("오늘", "9월 18일 금요일 · 시세 05:00 갱신됨", iconbtn("bell", "알림"))
-             + f'<div style="flex:1;display:flex;flex-direction:column;gap:14px;padding-bottom:16px;">{todo}{order}{stock}</div>'
-             + tabbar("오늘"))
-    return page("사장님 — 오늘", 390, h, root(390, h, inner))
+        dischtml = f'<span class="c-orange b">할인가 {disc}</span>' if disc else ""
+        srs += (f'<div class="row"><div class="grow"><div class="t-h">{name}</div>'
+                f'<div class="t-f num" style="display:flex;gap:2px 8px;flex-wrap:wrap;"><span class="b {"c-orange" if days <= 1 else ""}">{days}일 남음</span><span class="c2">{qty}송이</span>{dischtml}</div></div>'
+                f'{switch(on, name + " 오늘만 할인")}</div>')
+    stock = f'<section>{sec("신선기간 임박", "오늘만 할인 · 켜면 소비자 앱에 즉시 노출")}<div class="group">{srs}</div></section>'
+    inner = (ohead("오늘", "9월 18일 금요일 · 시세 05:00 갱신됨", iconbtn("bell", "알림"), "문제 1·5 · 새벽 발주를 도박에서 계산으로")
+             + f'<div style="flex:1;margin-top:-18px;padding-bottom:12px;">{todo}{order}{stock}</div>'
+             + dock(tabbar("오늘")))
+    return page("ReBloom 사장님 — 오늘", w, h, root(w, h, inner))
 
 def order_card(kind, title, who, where, budget, comp, colors, delegated, when, msg, urgent=False, status="대기"):
-    icon = {"funeral": ("ribbon", RED, RED_T), "birthday": ("cake", GREEN, GREEN_T), "sub": ("repeat", GREEN, GREEN_T)}[kind]
-    tcol = RED if urgent else INK
-    return (f'<article class="card" style="padding:14px;display:flex;flex-direction:column;gap:10px;{"border-color:" + RED + ";" if urgent else ""}">'
-            f'<div style="display:flex;align-items:center;gap:10px;"><div style="width:40px;height:40px;border-radius:10px;background:{icon[2]};color:{icon[1]};display:flex;align-items:center;justify-content:center;">{ic(I[icon[0]],22)}</div>'
-            f'<div style="flex:1;"><div style="font-size:15px;font-weight:700;color:{tcol};">{title}</div><div class="muted" style="font-size:12px;">{who} · {where}</div></div>'
-            f'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;"><span class="mono" style="font-size:15px;font-weight:700;color:{tcol};">{when}</span>{chip(status, tone="orange" if status=="제작 중" else "soft")}</div></div>'
-            f'<div style="display:grid;grid-template-columns:52px 1fr;gap:4px 8px;font-size:13px;">'
-            f'<span class="muted">예산</span><span class="mono" style="font-weight:700;">{budget}</span>'
-            f'<span class="muted">구성</span><span>{comp}</span>'
-            f'<span class="muted">색감</span><span style="display:flex;gap:6px;align-items:center;">{colors}</span>'
-            f'<span class="muted">배치</span><span>{chip("플로리스트 맡김", tone="green") if delegated else chip("소비자 배치 그대로", tone="soft")}</span>'
-            f'<span class="muted">카드</span><span style="font-style:italic;">“{msg}”</span></div></article>')
+    icon = {"funeral": "ribbon", "birthday": "cake", "sub": "repeat"}[kind]
+    tile = f'background:{RED_BG};color:{RED};' if urgent else ""
+    tcol = "c-red" if urgent else ""
+    return (f'<article class="group">'
+            f'<div class="row" style="align-items:flex-start;"><div class="tile" style="{tile}">{ic(I[icon],22)}</div>'
+            f'<div class="grow"><div class="t-h {tcol}">{title}</div><div class="t-f c2">{who} · {where}</div></div>'
+            f'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;"><span class="num t-s b {tcol}">{when}</span>{badge(status, "orange" if status=="제작 중" else "")}</div></div>'
+            f'<div class="pad t-s" style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:6px 10px;">'
+            f'<span class="c2">예산</span><span class="num b">{budget}</span>'
+            f'<span class="c2">구성</span><span class="num">{comp}</span>'
+            f'<span class="c2">색감</span><span style="display:flex;gap:4px 10px;align-items:center;flex-wrap:wrap;">{colors}</span>'
+            f'<span class="c2">배치</span><span>{badge("플로리스트 맡김", "green") if delegated else badge("소비자 배치 그대로")}</span>'
+            f'<span class="c2">카드</span><span>“{msg}”</span></div></article>')
 
 def swatch(col, name):
-    return f'<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;"><span style="width:14px;height:14px;border-radius:50%;background:{col};border:1px solid rgba(0,0,0,.12);"></span>{name}</span>'
+    return f'<span class="t-s" style="display:inline-flex;align-items:center;gap:5px;"><span style="width:14px;height:14px;border-radius:50%;background:{col};box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);flex-shrink:0;"></span>{name}</span>'
 
 def orders():
-    h = 1080
-    seg = (f'<div style="margin:0 16px;display:flex;background:{SOFT};border-radius:12px;padding:3px;">'
-           f'<button type="button" aria-pressed="true" style="flex:1;height:38px;border:0;border-radius:10px;background:{CARD};font-size:13.5px;font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.08);">오늘 7</button>'
-           f'<button type="button" aria-pressed="false" style="flex:1;height:38px;border:0;border-radius:10px;background:transparent;font-size:13.5px;font-weight:500;color:{MUTED};">예약 3</button>'
-           f'<button type="button" aria-pressed="false" style="flex:1;height:38px;border:0;border-radius:10px;background:transparent;font-size:13.5px;font-weight:500;color:{MUTED};">완료 12</button></div>')
+    w, h = SIZES["Owner-Orders.dc.html"]
+    seg = (f'<div class="seg">'
+           f'<button type="button" aria-pressed="true" class="num">오늘 7</button>'
+           f'<button type="button" aria-pressed="false" class="num">예약 3</button>'
+           f'<button type="button" aria-pressed="false" class="num">완료 12</button></div>')
     cards = "".join([
-        order_card("funeral", "근조 화환 · 마감 2시간 10분 전", "김민준", "서울성모병원 장례식장 3호", "150,000원", "국화 백선 60 · 리시안셔스 화이트 10 · 유칼립투스 5",
-                   swatch("#F3EEE3", "화이트") + swatch("#7C8F6A", "그린"), True, "13:00 배송", "삼가 고인의 명복을 빕니다", urgent=True, status="제작 중"),
-        order_card("birthday", "생일 · 직접 만든 꽃다발", "이서연", "본인 · 강남구 역삼동", "50,000원", "국화 백선 10 · 리시안셔스 화이트 3 · 유칼립투스 2",
-                   swatch("#F3EEE3", "화이트") + swatch("#7C8F6A", "그린"), False, "15:00 배송", "서른 살 축하해, 나."),
-        order_card("birthday", "생일 · 어머니께", "최유진", "송파구 잠실동", "80,000원", "리시안셔스 화이트 20 · 장미 레드나오미 5 · 유칼립투스 3",
-                   swatch("#F3EEE3", "화이트") + swatch("#B84A45", "레드"), True, "16:00 배송", "엄마, 올해도 고마워요", status="대기"),
+        order_card("funeral", '근조 화환 · <span style="white-space:nowrap;">마감 2시간 10분 전</span>', "김민준", "매장 픽업", "150,000원", "국화 백선 60 · 리시안셔스 화이트 10 · 유칼립투스 5",
+                   swatch("#F3EEE3", "화이트") + swatch("#7C8F6A", "그린"), True, "13:00 픽업", "삼가 고인의 명복을 빕니다", urgent=True, status="제작 중"),
+        order_card("birthday", "생일 · 직접 만든 꽃다발", "이서연", "본인 · 매장 픽업", "50,000원", "국화 백선 10 · 리시안셔스 화이트 3 · 유칼립투스 2",
+                   swatch("#F3EEE3", "화이트") + swatch("#7C8F6A", "그린"), False, "15:00 픽업", "서른 살 축하해, 나."),
+        order_card("birthday", "생일 · 어머니께", "최유진", "매장 픽업", "80,000원", "리시안셔스 화이트 20 · 장미 레드나오미 5 · 유칼립투스 3",
+                   swatch("#F3EEE3", "화이트") + swatch("#B84A45", "레드"), True, "16:00 픽업", "엄마, 올해도 고마워요", status="대기"),
         order_card("sub", "구독 · 매주 금요일", "박지훈", "매장 픽업", "30,000원", "사장님 추천 · 계절꽃 위주", swatch("#E7C86A", "옐로우") + swatch("#E9C4C0", "핑크"), True, "18:00 픽업", "카드 없음"),
     ])
-    inner = (caption("문제 2·7 · 카톡 30분 상담을 구조화된 주문서 한 장으로")
-             + ohead("주문", "오늘 7건 · 카드만 보고 만들면 됩니다", iconbtn("search", "주문 검색"))
-             + seg + f'<div style="flex:1;display:flex;flex-direction:column;gap:10px;padding:12px 16px 16px;">{cards}</div>' + tabbar("주문"))
-    return page("사장님 — 주문 목록", 390, h, root(390, h, inner))
+    inner = (ohead("주문", "오늘 7건 · 카드만 보고 만들면 됩니다", iconbtn("search", "주문 검색"), "문제 2·7 · 카톡 30분 상담을 구조화된 주문서 한 장으로")
+             + seg + f'<div style="flex:1;padding:14px 0 12px;">{cards}</div>' + dock(tabbar("주문")))
+    return page("ReBloom 사장님 — 주문 목록", w, h, root(w, h, inner))
 
 def order_detail():
-    h = 1140
-    prev = (f'<section class="card" style="margin:0 16px;height:170px;position:relative;overflow:hidden;">'
-            f'<div style="position:absolute;top:10px;left:12px;">{chip("소비자가 만든 프리뷰", tone="soft")}</div>'
+    w, h = SIZES["Owner-OrderDetail.dc.html"]
+    prev = (f'<section class="group" style="height:180px;position:relative;">'
+            f'<div style="position:absolute;top:12px;left:12px;z-index:1;">{badge("소비자가 만든 프리뷰", "ink", solid=True)}</div>'
             + "".join(f'<div style="position:absolute;left:{x}px;top:{y}px;">{flower(WHITE,"#D9CBA5",s)}</div>' for x,y,s in [(96,52,56),(140,40,60),(184,50,58),(120,80,52),(164,84,54),(208,80,50),(228,48,52),(76,84,48)])
             + "".join(f'<div style="position:absolute;left:{x}px;top:{y}px;">{flower(REDF,"#7D2E2B",s)}</div>' for x,y,s in [(60,54,52),(250,60,54),(150,110,50)])
             + "".join(f'<div style="position:absolute;left:{x}px;top:{y}px;">{euca(s)}</div>' for x,y,s in [(40,80,64),(270,86,64),(110,100,58)])
-            + f'<div style="position:absolute;right:12px;bottom:10px;display:flex;gap:6px;">{chip("플로리스트 맡김", tone="green")}</div></section>')
+            + f'<div style="position:absolute;right:12px;bottom:12px;">{badge("플로리스트 맡김", "green", solid=True)}</div></section>')
     comp = [("리시안셔스 화이트 특", 20, 15, True), ("장미 레드나오미 상", 5, 30, False), ("유칼립투스 그린", 3, 40, False)]
     crs = ""
     for name, need, stock, short in comp:
-        st = (f'<span class="mono" style="font-size:12px;font-weight:700;color:{ORANGE};">재고 {stock} · 부족 {need-stock}</span>' if short
-              else f'<span class="mono" style="font-size:12px;font-weight:600;color:{GREEN};display:inline-flex;align-items:center;gap:2px;">{ic(I["check"],14)}재고 {stock}</span>')
-        crs += (f'<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid {LINE};">'
-                f'<div style="font-size:14.5px;font-weight:600;">{name}</div><div style="display:flex;align-items:baseline;gap:12px;"><span class="mono" style="font-size:18px;font-weight:700;">{need}<span style="font-size:11px;">송이</span></span>{st}</div></div>')
-    sub = (f'<div style="margin-top:4px;padding:12px;border-radius:12px;background:{ORANGE_T};display:flex;flex-direction:column;gap:10px;">'
-           f'<div style="display:flex;align-items:center;gap:8px;font-size:13.5px;"><span style="font-weight:700;color:{ORANGE};">대체 제안</span><span>리시안셔스 화이트 → <b>아이보리</b> (재고 25 · 같은 가격)</span></div>'
-           f'<div style="display:flex;align-items:center;gap:8px;"><button type="button" style="flex:1;height:44px;border:0;border-radius:10px;background:{ORANGE};color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;">{ic(I["send"],18)}대체 제안 보내기</button>'
-           f'<span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:{ORANGE};padding:0 6px;">{ic(I["clock"],16)}소비자 승인 대기</span></div></div>')
-    info = (f'<section class="card" style="margin:0 16px;padding:14px 16px;display:flex;flex-direction:column;gap:2px;">'
-            f'<div style="display:grid;grid-template-columns:64px 1fr;gap:6px 8px;font-size:13.5px;">'
-            f'<span class="muted">받는 분</span><span>어머니 · 송파구 잠실동 (배송)</span>'
-            f'<span class="muted">배송</span><span class="mono" style="font-weight:700;">오늘 16:00</span>'
-            f'<span class="muted">예산</span><span class="mono" style="font-weight:700;">80,000원 <span class="muted" style="font-weight:500;font-size:12px;">· 소비자 합계 78,400원</span></span>'
-            f'<span class="muted">메시지 카드</span><span style="font-style:italic;">“엄마, 올해도 고마워요”</span></div></section>')
-    complete = (f'<section class="card" style="margin:0 16px;padding:16px;display:flex;flex-direction:column;gap:12px;">'
-                f'<div><h2 style="margin:0;font-size:15px;font-weight:700;">제작 완료</h2><div class="muted" style="font-size:12.5px;">한 번 찍으면 세 가지가 됩니다</div></div>'
-                f'<button type="button" style="height:64px;border:0;border-radius:16px;background:{GREEN};color:#fff;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;">{ic(I["camera"],26)}완성 사진 찍기</button>'
-                f'<div style="display:flex;justify-content:center;height:18px;"><svg width="240" height="18" viewBox="0 0 240 18" fill="none" stroke="{GREEN}" stroke-width="1.5" aria-hidden="true"><path d="M120 0v6M120 6H24v12M120 6v12M120 6h96v12"/></svg></div>'
-                f'<div style="display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:8px;">'
-                + "".join(f'<div style="padding:10px 8px;border-radius:10px;background:{GREEN_T};display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;"><span style="color:{GREEN};">{ic(I[i],20)}</span><span style="font-size:12.5px;font-weight:700;color:{GREEN};">{t}</span><span style="font-size:11px;color:#3C5A48;">{s}</span></div>'
-                          for i, t, s in [("send", "손님 알림", "사진과 함께 완성 알림"), ("heart", "포트폴리오", "매장 페이지에 자동 등록"), ("users", "손님 이력", "최유진 · 어머니 생일에 저장")])
-                + '</div></section>')
-    inner = (caption("문제 2·7 · 대화 없이 만들고, 한 번 찍어 세 가지 일을 끝내기")
-             + topbar("주문 #1043 · 생일", f'<div style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;">{chip("대기", tone="soft")}</div>')
-             + f'<div style="flex:1;display:flex;flex-direction:column;gap:14px;padding:4px 0 16px;">{prev}{info}'
-             + f'<section class="card" style="margin:0 16px;padding:14px 16px;display:flex;flex-direction:column;"><h2 style="margin:0 0 4px;font-size:15px;font-weight:700;">꽃 구성 · 재고 대조</h2>{crs}{sub}</section>'
-             + f'{complete}</div>' + tabbar("주문"))
-    return page("사장님 — 주문 상세", 390, h, root(390, h, inner))
+        st = (f'<span class="num t-f b c-orange">재고 {stock} · 부족 {need-stock}</span>' if short
+              else f'<span class="num t-f b c-green" style="display:inline-flex;align-items:center;gap:2px;">{ic(I["check"],14,sw=2.4)}재고 {stock}</span>')
+        crs += (f'<div class="row"><div class="grow t-h">{name}</div>'
+                f'<div style="display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;"><span class="num t-h">{need}송이</span>{st}</div></div>')
+    sub = (f'<div class="pad"><div class="inbox" style="background:{ORANGE_BG};padding:12px;display:flex;flex-direction:column;gap:10px;">'
+           f'<div class="t-s"><span class="b c-orange">대체 제안</span> · 리시안셔스 화이트 {ic(I["chevr"],14,sw=2.4,st="vertical-align:-2px;")} <b>아이보리</b> <span class="num">(재고 25 · 같은 가격)</span></div>'
+           f'<div style="display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;"><button type="button" class="btn md">{ic(I["send"],18,sw=2)}대체 제안 보내기</button>'
+           f'<span class="t-f b c-orange" style="display:inline-flex;align-items:center;gap:4px;">{ic(I["clock"],16)}소비자 승인 대기</span></div></div></div>')
+    info = (f'<section class="group">'
+            f'<div class="row kv"><span>받는 분</span><span class="v">어머니 · 최유진 님이 픽업</span></div>'
+            f'<div class="row kv"><span>픽업 시간</span><span class="v num">오늘 16:00</span></div>'
+            f'<div class="row kv"><span>예산</span><span class="v num"><span style="color:{INK};font-weight:600;">80,000원</span><br><span class="t-f">소비자 합계 78,400원</span></span></div>'
+            f'<div class="row kv"><span>메시지 카드</span><span class="v">“엄마, 올해도 고마워요”</span></div></section>')
+    tiles = "".join(f'<div class="inbox" style="padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;"><span class="c-tint" style="display:flex;">{ic(I[i],22)}</span><span class="t-f b">{t}</span><span class="t-c c2">{s}</span></div>'
+                    for i, t, s in [("send", "손님 알림", "사진과 함께 완성 알림"), ("heart", "포트폴리오", "매장 페이지에 자동 등록"), ("users", "손님 이력", "최유진 · 어머니 생일에 저장")])
+    complete = (f'<section>{sec("제작 완료", "한 번 찍으면 세 가지가 됩니다")}<div class="group"><div class="pad" style="display:flex;flex-direction:column;gap:10px;">'
+                f'<button type="button" class="btn full" style="min-height:56px;">{ic(I["camera"],24,sw=2)}완성 사진 찍기</button>'
+                f'<div style="display:flex;justify-content:center;height:18px;"><svg width="240" height="18" viewBox="0 0 240 18" fill="none" stroke="{GLYPH}" stroke-width="1.5" aria-hidden="true"><path d="M120 0v6M120 6H24v12M120 6v12M120 6h96v12"/></svg></div>'
+                f'<div style="display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:8px;">{tiles}</div></div></div></section>')
+    inner = (topbar("주문 #1043 · 생일", f'<span style="padding-right:8px;display:flex;">{badge("대기", "ink", solid=True)}</span>', back="주문")
+             + caption("문제 2·7 · 대화 없이 만들고, 한 번 찍어 세 가지 일을 끝내기")
+             + f'<div style="flex:1;padding-bottom:12px;">{prev}{info}'
+             + f'<section>{sec("꽃 구성 · 재고 대조")}<div class="group">{crs}{sub}</div></section>'
+             + f'{complete}</div>' + dock(tabbar("주문")))
+    return page("ReBloom 사장님 — 주문 상세", w, h, root(w, h, inner))
 
 # ---- 시세 data ----
 ITEMS = [
@@ -444,204 +506,201 @@ ITEMS = [
          hist=[18000,18000,19000,19000,18500,19000,19000,20000,19500,19000,19000,19500,19100,22000]),
 ]
 
-def chart_svg(hist, w, h, color=GREEN):
+def chart_svg(hist, w, h, color=TINT_FILL):
     lo, hi = min(hist)*0.92, max(hist)*1.04
     pts = []
     for i, v in enumerate(hist):
-        x = 8 + i*(w-16)/(len(hist)-1); y = h-14 - (v-lo)/(hi-lo)*(h-28)
+        x = 8 + i*(w-16)/(len(hist)-1); y = h-18 - (v-lo)/(hi-lo)*(h-32)
         pts.append((round(x,1), round(y,1)))
     d = "M" + " L".join(f"{x} {y}" for x,y in pts)
-    area = d + f" L{pts[-1][0]} {h-14} L{pts[0][0]} {h-14} Z"
-    grid = "".join(f'<line x1="8" x2="{w-8}" y1="{h-14-(h-28)*k/3:.1f}" y2="{h-14-(h-28)*k/3:.1f}" stroke="{LINE}" stroke-dasharray="2 4"/>' for k in range(4))
-    return (f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="14일 시세 추이">{grid}'
-            f'<path d="{area}" fill="{color}" opacity=".08"/><path d="{d}" fill="none" stroke="{color}" stroke-width="2" stroke-linejoin="round"/>'
+    area = d + f" L{pts[-1][0]} {h-18} L{pts[0][0]} {h-18} Z"
+    grid = "".join(f'<line x1="8" x2="{w-8}" y1="{h-18-(h-32)*k/3:.1f}" y2="{h-18-(h-32)*k/3:.1f}" stroke="{SEP}"/>' for k in range(4))
+    return (f'<svg width="100%" viewBox="0 0 {w} {h}" role="img" aria-label="14일 시세 추이" style="display:block;">{grid}'
+            f'<path d="{area}" fill="{color}" opacity=".1"/><path d="{d}" fill="none" stroke="{color}" stroke-width="2" stroke-linejoin="round"/>'
             f'<circle cx="{pts[-1][0]}" cy="{pts[-1][1]}" r="4" fill="{color}"/>'
-            f'<text x="8" y="{h-2}" font-size="10" fill="{MUTED}" font-family="IBM Plex Mono">9/5</text><text x="{w-8}" y="{h-2}" font-size="10" fill="{MUTED}" text-anchor="end" font-family="IBM Plex Mono">오늘</text></svg>')
+            f'<text x="8" y="{h-2}" font-size="12" fill="{MUTED}">9/5</text><text x="{w-8}" y="{h-2}" font-size="12" fill="{MUTED}" text-anchor="end">오늘</text></svg>')
 
-def price_item_mobile(it, editing=False, selected=False):
+def price_item_mobile(it, editing=False):
     sale = round(it["box"]/it["per"]*it["margin"], -1)
     off = not it["on"]
-    op = "opacity:.5;" if off else ""
-    border = f"border:1.5px solid {GREEN};" if selected else ""
-    margin_cell = (f'<label style="display:flex;flex-direction:column;gap:3px;"><span class="muted" style="font-size:10.5px;">마진계수 <span style="color:{GREEN};font-weight:700;">편집</span></span>'
-                   f'<input type="number" step="0.1" defaultValue="{3.0 if editing else it["margin"]}" class="ed mono" style="height:40px;width:100%;box-sizing:border-box;padding:0 10px;font-size:18px;font-weight:700;{"box-shadow:0 0 0 3px " + GREEN_T + ";" if editing else ""}"></label>')
+    lab = lambda t: f'<span class="t-c c2">{t}</span>'
+    margin_cell = (f'<label style="display:flex;flex-direction:column;gap:3px;">{lab("마진계수")}'
+                   f'<input type="number" step="0.1" aria-label="마진계수" defaultValue="{3.0 if editing else it["margin"]}" class="fld num{" focus" if editing else ""}"></label>')
     new_sale = round(it["box"]/it["per"]*3.0, -1)
-    sale_cell = (f'<div style="display:flex;flex-direction:column;gap:3px;"><span class="muted" style="font-size:10.5px;">송이 판매가 <span style="font-weight:600;">자동</span></span>'
-                 + (f'<div style="height:40px;display:flex;align-items:center;gap:6px;"><span class="mono" style="font-size:20px;font-weight:700;color:{GREEN};">{new_sale:,.0f}</span><span class="mono muted" style="font-size:11px;text-decoration:line-through;">{sale:,.0f}</span></div>' if editing
-                    else (f'<div style="height:40px;display:flex;align-items:center;gap:6px;"><span class="mono" style="font-size:20px;font-weight:700;color:{ORANGE};">{it["discPrice"]:,}</span><span class="mono muted" style="font-size:11px;text-decoration:line-through;">{sale:,.0f}</span></div>' if it["disc"]
-                          else f'<div class="mono" style="height:40px;display:flex;align-items:center;font-size:20px;font-weight:700;">{sale:,.0f}</div>')) + '</div>')
+    struck = f'<span class="num t-c c2" style="text-decoration:line-through;">{sale:,.0f}</span>'
+    sale_cell = (f'<div style="display:flex;flex-direction:column;gap:3px;">{lab("송이 판매가")}<div style="height:40px;display:flex;flex-direction:column;justify-content:center;">'
+                 + (f'<span class="num t-h">{new_sale:,.0f}</span>{struck}' if editing
+                    else (f'<span class="num t-h c-orange">{it["discPrice"]:,}</span>{struck}' if it["disc"] else f'<span class="num t-h">{sale:,.0f}</span>')) + '</div></div>')
     m = 3.0 if editing else it["margin"]
-    expl = f'시세 {it["box"]:,}원/속 ÷ {it["per"]}송이 × 마진 {m} = <b>{(new_sale if editing else sale):,.0f}원</b>'
-    return (f'<article class="card" style="padding:12px 14px;display:flex;flex-direction:column;gap:10px;{border}">'
-            f'<div style="display:flex;align-items:center;gap:10px;{op}">{switch(it["on"], it["name"] + " 취급")}'
-            f'<div style="flex:1;"><div style="font-size:15px;font-weight:700;">{it["name"]} <span style="font-weight:500;">{it["var"]}</span> <span class="muted" style="font-size:12px;">· {it["grade"]}</span></div>'
-            f'<div style="font-size:12px;display:flex;gap:8px;align-items:center;"><span class="muted">어제 대비</span>{delta(it["delta"])}<span class="muted">·</span><span class="muted">재고</span><span class="mono" style="font-weight:600;">{it["stock"]}송이</span></div></div>'
-            + (f'<span style="font-size:11px;font-weight:600;color:{MUTED};">취급 안 함</span>' if off else f'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;"><span class="muted" style="font-size:10.5px;">오늘만 할인</span>{switch(it["disc"], it["name"] + " 오늘만 할인")}</div>')
+    expl = f'시세 {it["box"]:,}원/속 ÷ {it["per"]}송이 × 마진 {m} = <b style="color:{INK};">{(new_sale if editing else sale):,.0f}원</b>'
+    return (f'<article class="group">'
+            f'<div class="row">{switch(it["on"], it["name"] + " 취급")}'
+            f'<div class="grow {"c2" if off else ""}"><div class="t-h">{it["name"]} <span style="font-weight:400;">{it["var"]} · {it["grade"]}</span></div>'
+            f'<div class="t-f num" style="display:flex;gap:2px 6px;align-items:center;flex-wrap:wrap;"><span class="c2">어제 대비</span>{delta(it["delta"])}<span class="c2">· 재고 {it["stock"]}송이</span></div></div>'
+            + (f'<span class="t-f c2" style="flex-shrink:0;">취급 안 함</span>' if off else f'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;"><span class="t-c c2">오늘만 할인</span>{switch(it["disc"], it["name"] + " 오늘만 할인")}</div>')
             + '</div>'
             + ("" if off else
-               f'<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1.1fr;gap:8px;">'
-               f'<div style="display:flex;flex-direction:column;gap:3px;"><span class="muted" style="font-size:10.5px;">속 단가 <span style="font-weight:600;">시세</span></span><div class="ro mono" style="height:40px;display:flex;align-items:center;padding:0 8px;font-size:15px;font-weight:600;">{it["box"]:,}</div></div>'
-               f'<div style="display:flex;flex-direction:column;gap:3px;"><span class="muted" style="font-size:10.5px;">송이수/속</span><div class="ro mono" style="height:40px;display:flex;align-items:center;padding:0 8px;font-size:15px;font-weight:600;">{it["per"]}</div></div>'
+               f'<div class="pad" style="display:grid;grid-template-columns:repeat(4, minmax(0, 1fr));gap:8px;padding-top:10px;padding-bottom:10px;">'
+               f'<div style="display:flex;flex-direction:column;gap:3px;">{lab("속 단가")}<div class="ro num">{it["box"]:,}</div></div>'
+               f'<div style="display:flex;flex-direction:column;gap:3px;">{lab("송이수/속")}<div class="ro num">{it["per"]}</div></div>'
                f'{margin_cell}{sale_cell}</div>'
-               f'<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border-radius:10px;background:{GREEN_T};">'
-               f'<div style="font-size:12px;color:#2E4A3A;"><span style="font-weight:700;color:{GREEN};">손님에게 보이는 설명</span> · {expl}</div>'
-               f'<button type="button" style="height:32px;padding:0 10px;border:0;border-radius:8px;background:{GREEN};color:#fff;font-size:12px;font-weight:700;white-space:nowrap;">보여주기</button></div>')
+               f'<div class="row" style="align-items:center;"><div class="grow t-f c2 num"><div class="b" style="color:{INK};">손님에게 보이는 설명</div>{expl}</div>'
+               f'<button type="button" class="cap">보여주기</button></div>')
             + '</article>')
 
 def prices_mobile():
-    h = 1280
-    cards = "".join(price_item_mobile(it, editing=(i == 0), selected=(i == 0)) for i, it in enumerate(ITEMS))
-    chart = (f'<section class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:8px;">'
-             f'<div style="display:flex;align-items:baseline;justify-content:space-between;"><h2 style="margin:0;font-size:14px;font-weight:700;">국화 백선 특 · 14일 시세</h2><span class="mono muted" style="font-size:11.5px;">속 단가 · 원</span></div>'
-             f'{chart_svg(ITEMS[0]["hist"], 326, 120)}'
-             f'<div style="display:flex;gap:14px;font-size:12px;"><span><span class="muted">14일 최저</span> <span class="mono" style="font-weight:600;">20,000</span></span><span><span class="muted">최고</span> <span class="mono" style="font-weight:600;">24,000</span></span><span><span class="muted">오늘</span> <span class="mono up" style="font-weight:700;">24,000 ▲8%</span></span></div></section>')
-    inner = (caption("문제 3·4 · “시세가 올라서요” 대신 계산식을 보여주기")
-             + ohead("시세 · 품목", "aT 공판장 시세 · 오늘 05:00 갱신", f'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-size:10.5px;color:{MUTED};"><span class="ro" style="padding:2px 6px;">읽기전용 = 시세</span><span class="ed" style="padding:2px 6px;color:{GREEN};font-weight:600;">편집 = 마진 · 재고</span></div>')
-             + f'<div style="flex:1;display:flex;flex-direction:column;gap:10px;padding:4px 16px 16px;">{cards}{chart}</div>' + tabbar("시세"))
-    return page("사장님 — 시세·품목 (모바일)", 390, h, root(390, h, inner))
+    w, h = SIZES["Owner-Prices.dc.html"]
+    cards = "".join(price_item_mobile(it, editing=(i == 0)) for i, it in enumerate(ITEMS))
+    chart = (f'<section class="group"><div class="pad" style="display:flex;flex-direction:column;gap:8px;">'
+             f'<div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;"><h2 class="t-h">국화 백선 특 · 14일 시세</h2><span class="t-f c2">속 단가 · 원</span></div>'
+             f'{chart_svg(ITEMS[0]["hist"], 326, 124)}'
+             f'<div class="t-f num" style="display:flex;gap:2px 14px;flex-wrap:wrap;"><span><span class="c2">14일 최저</span> <span class="b">20,000</span></span><span><span class="c2">최고</span> <span class="b">24,000</span></span><span style="display:inline-flex;align-items:center;gap:4px;"><span class="c2">오늘</span> <span class="b c-red">24,000</span>{delta(8)}</span></div></div></section>')
+    inner = (ohead("시세 · 품목", "aT 공판장 시세 · 오늘 05:00 갱신", None, "문제 3·4 · “시세가 올라서요” 대신 계산식을 보여주기")
+             + f'<p class="sec-l" style="margin-top:0;">회색 글자 = 시세 · 읽기전용 / 회색 칸 = 마진 · 편집</p>'
+             + f'<div style="flex:1;padding-bottom:12px;">{cards}{chart}</div>' + dock(tabbar("시세")))
+    return page("ReBloom 사장님 — 시세·품목 (모바일)", w, h, root(w, h, inner))
 
 def prices_tablet():
-    w, h = 1024, 768
+    w, h = SIZES["Owner-Prices-Tablet.dc.html"]
     hdr = "".join(f'<span style="text-align:{a};">{t}</span>' for t, a in [("취급", "left"), ("품목 · 품종 · 등급", "left"), ("속 단가", "right"), ("송이/속", "right"), ("마진계수", "right"), ("송이 판매가", "right"), ("어제 대비", "right"), ("재고", "right"), ("오늘만 할인", "center")])
-    cols = "48px 1.4fr 88px 64px 84px 104px 76px 84px 78px"
+    # 표 안쪽 폭 672px 에 맞춘 열 — 고정 열 472 + 간격 48 + 품목 열
+    cols = "51px minmax(0,1fr) 62px 48px 64px 76px 58px 62px 51px"
+    ro = "height:40px;display:flex;align-items:center;justify-content:flex-end;font-size:17px;"
     row = (f'<sc-for list="{{{{items}}}}" as="it" hint-placeholder-count="5">'
-           f'<div style="{{{{it.rowStyle}}}}">'
+           f'<div style="{{{{it.rowStyle}}}}"><span style="position:absolute;top:0;left:16px;right:0;height:1px;background:{SEP};"></span>'
            f'<button type="button" aria-pressed="{{{{it.on}}}}" aria-label="취급" onClick="{{{{it.toggleOn}}}}" style="{{{{it.onStyle}}}}"><span style="{{{{it.onKnob}}}}"></span></button>'
-           f'<button type="button" onClick="{{{{it.select}}}}" style="border:0;background:transparent;text-align:left;padding:0;display:flex;flex-direction:column;gap:1px;height:44px;justify-content:center;"><span style="font-size:15px;font-weight:700;">{{{{it.name}}}} <span style="font-weight:500;">{{{{it.var}}}}</span></span><span class="muted" style="font-size:12px;">{{{{it.grade}}}}등급</span></button>'
-           f'<div class="ro mono" style="height:40px;display:flex;align-items:center;justify-content:flex-end;padding:0 10px;font-size:15px;font-weight:600;">{{{{it.boxFmt}}}}</div>'
-           f'<div class="ro mono" style="height:40px;display:flex;align-items:center;justify-content:flex-end;padding:0 10px;font-size:15px;font-weight:600;">{{{{it.per}}}}</div>'
-           f'<input type="number" step="0.1" min="1" max="6" aria-label="마진계수" value="{{{{it.margin}}}}" onChange="{{{{it.onMargin}}}}" class="ed mono" style="height:40px;width:100%;box-sizing:border-box;padding:0 10px;text-align:right;font-size:16px;font-weight:700;">'
-           f'<div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:center;height:44px;"><span class="mono" style="{{{{it.saleStyle}}}}">{{{{it.saleFmt}}}}</span><sc-if value="{{{{it.disc}}}}" hint-placeholder-val="{{{{false}}}}"><span class="mono muted" style="font-size:11px;text-decoration:line-through;">{{{{it.baseFmt}}}}</span></sc-if></div>'
-           f'<span class="mono" style="{{{{it.deltaStyle}}}}">{{{{it.deltaFmt}}}}</span>'
-           f'<input type="number" step="1" min="0" aria-label="재고" value="{{{{it.stock}}}}" onChange="{{{{it.onStock}}}}" class="ed mono" style="height:40px;width:100%;box-sizing:border-box;padding:0 10px;text-align:right;font-size:16px;font-weight:700;">'
+           f'<button type="button" onClick="{{{{it.select}}}}" style="border:0;background:transparent;text-align:left;padding:0;display:flex;flex-direction:column;min-height:44px;min-width:0;justify-content:center;"><span class="t-s b">{{{{it.name}}}} <span style="font-weight:400;">{{{{it.var}}}}</span></span><span class="t-c" style="color:{MUTED};">{{{{it.grade}}}}등급</span></button>'
+           f'<div class="num" style="{ro}color:{MUTED};">{{{{it.boxFmt}}}}</div>'
+           f'<div class="num" style="{ro}color:{MUTED};">{{{{it.per}}}}</div>'
+           f'<input type="number" step="0.1" min="1" max="6" aria-label="마진계수" value="{{{{it.margin}}}}" onChange="{{{{it.onMargin}}}}" class="fld num" style="padding:0 8px;">'
+           f'<div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:center;min-height:44px;"><span class="num" style="{{{{it.saleStyle}}}}">{{{{it.saleFmt}}}}</span><sc-if value="{{{{it.disc}}}}" hint-placeholder-val="{{{{false}}}}"><span class="num t-c" style="color:{MUTED};text-decoration:line-through;">{{{{it.baseFmt}}}}</span></sc-if></div>'
+           f'<span class="num" style="{{{{it.deltaStyle}}}}"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{{{it.deltaPath}}}}"></path></svg>{{{{it.deltaFmt}}}}</span>'
+           f'<input type="number" step="1" min="0" aria-label="재고" value="{{{{it.stock}}}}" onChange="{{{{it.onStock}}}}" class="fld num" style="padding:0 8px;">'
            f'<div style="display:flex;justify-content:center;"><button type="button" aria-pressed="{{{{it.disc}}}}" aria-label="오늘만 할인" onClick="{{{{it.toggleDisc}}}}" style="{{{{it.discStyle}}}}"><span style="{{{{it.discKnob}}}}"></span></button></div>'
            f'</div></sc-for>')
-    table = (f'<section class="card" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">'
-             f'<div style="display:grid;grid-template-columns:{cols};gap:10px;padding:10px 16px;font-size:11.5px;font-weight:600;color:{MUTED};border-bottom:1px solid {LINE};background:{SOFT};">{hdr}</div>'
+    table = (f'<section class="cell" style="flex:1;min-width:0;display:flex;flex-direction:column;">'
+             f'<div class="t-c" style="display:grid;grid-template-columns:{cols};gap:6px;align-items:end;padding:12px 16px 8px;color:{MUTED};">{hdr}</div>'
              f'<div style="display:flex;flex-direction:column;">{row}</div>'
-             f'<div style="margin-top:auto;padding:10px 16px;border-top:1px solid {LINE};display:flex;gap:16px;font-size:12px;color:{MUTED};align-items:center;"><span class="ro" style="padding:3px 8px;">회색 = 시세 · 읽기전용</span><span class="ed" style="padding:3px 8px;color:{GREEN};font-weight:600;">초록 테두리 = 편집 가능</span><span>마진계수를 고치면 판매가가 바로 바뀝니다</span></div></section>')
-    side = (f'<aside style="width:300px;display:flex;flex-direction:column;gap:12px;">'
-            f'<section class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:8px;">'
-            f'<div style="display:flex;align-items:baseline;justify-content:space-between;"><h2 style="margin:0;font-size:14px;font-weight:700;">{{{{sel.name}}}} {{{{sel.var}}}} {{{{sel.grade}}}} · 14일 시세</h2></div>'
-            f'<svg width="268" height="150" viewBox="0 0 268 150" role="img" aria-label="14일 시세 추이"><path d="{{{{chartArea}}}}" fill="{GREEN}" opacity=".08"></path><path d="{{{{chartD}}}}" fill="none" stroke="{GREEN}" stroke-width="2" stroke-linejoin="round"></path><circle cx="{{{{lastX}}}}" cy="{{{{lastY}}}}" r="4" fill="{GREEN}"></circle><text x="8" y="148" font-size="10" fill="{MUTED}" font-family="IBM Plex Mono">9/5</text><text x="260" y="148" font-size="10" fill="{MUTED}" text-anchor="end" font-family="IBM Plex Mono">오늘</text></svg>'
-            f'<div style="display:flex;gap:12px;font-size:12px;"><span><span class="muted">최저</span> <span class="mono" style="font-weight:600;">{{{{loFmt}}}}</span></span><span><span class="muted">최고</span> <span class="mono" style="font-weight:600;">{{{{hiFmt}}}}</span></span><span><span class="muted">오늘</span> <span class="mono" style="{{{{sel.deltaStyle}}}}">{{{{sel.boxFmt}}}} {{{{sel.deltaFmt}}}}</span></span></div></section>'
-            f'<section style="padding:14px 16px;border-radius:14px;background:{GREEN_T};display:flex;flex-direction:column;gap:8px;">'
-            f'<div style="font-size:12px;font-weight:700;color:{GREEN};">손님에게 보이는 가격 설명</div>'
-            f'<div style="font-size:14px;line-height:1.5;color:#2E4A3A;">시세 <span class="mono" style="font-weight:700;">{{{{sel.boxFmt}}}}원</span>/속 ÷ <span class="mono" style="font-weight:700;">{{{{sel.per}}}}</span>송이 × 마진 <span class="mono" style="font-weight:700;">{{{{sel.margin}}}}</span> = <span class="mono" style="font-size:18px;font-weight:700;color:{GREEN};">{{{{sel.baseFmt}}}}원</span></div>'
-            f'<div style="font-size:11.5px;color:#3C5A48;">마진에는 폐기·포장·인건비가 들어 있어요. 손님 화면과 매장 안내판에 이 문구 그대로 표시됩니다.</div>'
-            f'<button type="button" style="height:44px;border:0;border-radius:10px;background:{GREEN};color:#fff;font-size:14px;font-weight:700;">손님 화면에 보여주기</button></section></aside>')
-    inner = (caption("문제 3·4 · “시세가 올라서요” 대신 계산식을 보여주기 (태블릿)")
-             + f'<header style="display:flex;align-items:flex-end;justify-content:space-between;padding:16px 24px 12px;"><div><h1 style="margin:0;font-size:24px;font-weight:700;">시세 · 품목</h1><div class="muted" style="font-size:13px;margin-top:2px;">aT 화훼공판장 경매 시세 · 오늘 05:00 갱신 · 마진·재고는 바로 고쳐집니다</div></div>'
-             f'<div style="display:flex;gap:8px;">{chip("전체", True)}{chip("취급 중")}{chip("재고 임박")}</div></header>'
-             f'<div style="flex:1;display:flex;gap:16px;padding:0 24px 20px;min-height:0;">{table}{side}</div>')
+             f'<div class="t-f" style="margin-top:auto;padding:12px 16px;border-top:1px solid {SEP};display:flex;gap:4px 16px;flex-wrap:wrap;color:{MUTED};align-items:center;"><span>회색 글자 = 시세 · 읽기전용</span><span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:28px;height:16px;border-radius:5px;background:{FILL};"></span>회색 칸 = 편집 가능</span><span>마진계수를 고치면 판매가가 바로 바뀝니다</span></div></section>')
+    side = (f'<aside style="width:264px;flex-shrink:0;display:flex;flex-direction:column;gap:12px;">'
+            f'<section class="cell" style="padding:14px 16px;display:flex;flex-direction:column;gap:8px;">'
+            f'<h2 class="t-h">{{{{sel.name}}}} {{{{sel.var}}}} {{{{sel.grade}}}} · 14일 시세</h2>'
+            f'<svg width="232" height="150" viewBox="0 0 232 150" role="img" aria-label="14일 시세 추이"><path d="{{{{chartArea}}}}" fill="{TINT_FILL}" opacity=".1"></path><path d="{{{{chartD}}}}" fill="none" stroke="{TINT_FILL}" stroke-width="2" stroke-linejoin="round"></path><circle cx="{{{{lastX}}}}" cy="{{{{lastY}}}}" r="4" fill="{TINT_FILL}"></circle><text x="8" y="148" font-size="12" fill="{MUTED}">9/5</text><text x="224" y="148" font-size="12" fill="{MUTED}" text-anchor="end">오늘</text></svg>'
+            f'<div class="t-f num" style="display:flex;gap:2px 12px;flex-wrap:wrap;"><span><span class="c2">최저</span> <span class="b">{{{{loFmt}}}}</span></span><span><span class="c2">최고</span> <span class="b">{{{{hiFmt}}}}</span></span><span style="display:inline-flex;align-items:center;gap:4px;"><span class="c2">오늘</span><span class="b">{{{{sel.boxFmt}}}}</span><span style="{{{{sel.deltaStyle}}}}"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{{{sel.deltaPath}}}}"></path></svg>{{{{sel.deltaFmt}}}}</span></span></div></section>'
+            f'<section class="cell" style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;">'
+            f'<h2 class="t-h">손님에게 보이는 가격 설명</h2>'
+            f'<div class="num">시세 <b>{{{{sel.boxFmt}}}}원</b>/속 ÷ <b>{{{{sel.per}}}}</b>송이 × 마진 <b>{{{{sel.margin}}}}</b> = <span class="t-t3" style="white-space:nowrap;">{{{{sel.baseFmt}}}}원</span></div>'
+            f'<div class="t-f c2">마진에는 폐기·포장·인건비가 들어 있어요. 손님 화면과 매장 안내판에 이 문구 그대로 표시됩니다.</div>'
+            f'<button type="button" class="btn full" style="margin-top:4px;padding:0 12px;">손님 화면에 보여주기</button></section></aside>')
+    inner = (f'<header style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding:20px 24px 14px;"><div style="min-width:0;"><h1 class="t-lt">시세 · 품목</h1><p class="t-s c2" style="margin-top:4px;">aT 화훼공판장 경매 시세 · 오늘 05:00 갱신 · 마진·재고는 바로 고쳐집니다</p>'
+             f'<p class="t-f c2" style="margin-top:4px;">문제 3·4 · “시세가 올라서요” 대신 계산식을 보여주기 (태블릿)</p></div>'
+             f'<div class="chips" style="flex-shrink:0;">{chip("전체", True)}{chip("취급 중")}{chip("재고 임박")}</div></header>'
+             f'<div style="flex:1;display:flex;gap:16px;padding:0 20px 20px;min-height:0;">{table}{side}</div>')
     logic = """
 constructor(p){super(p);this.state={sel:'mum',items:%s};}
 fmt(n){return Math.round(n).toLocaleString('ko-KR');}
 renderVals(){
-  const G='%s',O='%s',R='#C2382B',ink='%s',line='%s';
-  const sw=(on,c)=>'width:44px;height:26px;border-radius:999px;border:0;padding:0;position:relative;flex-shrink:0;background:'+(on?c:'#C9C1B3')+';';
-  const knob=(on)=>'position:absolute;top:3px;left:'+(on?21:3)+'px;width:20px;height:20px;border-radius:50%%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);';
+  const ON='%s',O='%s',R='%s',T='%s',ink='%s',mut='%s',off='%s';
+  const sw=(on)=>'width:51px;height:31px;border-radius:999px;border:0;padding:0;position:relative;flex-shrink:0;background:'+(on?ON:off)+';';
+  const knob=(on)=>'position:absolute;top:2px;left:'+(on?22:2)+'px;width:27px;height:27px;border-radius:50%%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15),0 1px 1px rgba(0,0,0,.16);';
   const upd=(id,patch)=>this.setState({items:this.state.items.map(x=>x.id===id?{...x,...patch}:x)});
   const items=this.state.items.map(it=>{
     const base=Math.round(it.box/it.per*(parseFloat(it.margin)||0)/10)*10;
     const sale=it.disc&&it.discPrice?it.discPrice:base;
     const selected=it.id===this.state.sel;
+    const flat=it.delta===0||it.delta==null;
     return {...it,
       boxFmt:this.fmt(it.box),baseFmt:this.fmt(base),saleFmt:this.fmt(sale),
-      saleStyle:'font-size:18px;font-weight:700;color:'+(it.disc?O:ink)+';',
-      deltaFmt:it.delta===0||it.delta==null?'—':(it.delta>0?'▲'+it.delta+'%%':'▼'+(-it.delta)+'%%'),
-      deltaStyle:'text-align:right;font-size:14px;font-weight:700;color:'+(it.delta>0?R:(it.delta<0?G:'#8A8378'))+';',
-      rowStyle:'display:grid;grid-template-columns:%s;gap:10px;align-items:center;padding:8px 16px;border-bottom:1px solid '+line+';'+(selected?'background:'+'%s'+';':'')+(it.on?'':'opacity:.45;'),
-      onStyle:sw(it.on,G),onKnob:knob(it.on),discStyle:sw(it.disc,O),discKnob:knob(it.disc),
+      saleStyle:'font-size:17px;line-height:22px;font-weight:600;color:'+(it.disc?O:(it.on?ink:mut))+';',
+      deltaFmt:flat?'—':Math.abs(it.delta)+'%%',
+      deltaPath:flat?'':(it.delta>0?'%s':'%s'),
+      deltaStyle:'display:inline-flex;align-items:center;justify-content:flex-end;gap:2px;font-size:15px;font-weight:600;white-space:nowrap;color:'+(flat?mut:(it.delta>0?R:T))+';',
+      rowStyle:'position:relative;display:grid;grid-template-columns:%s;gap:6px;align-items:center;padding:8px 16px;'+(selected?'background:%s;':'')+(it.on?'':'color:'+mut+';'),
+      onStyle:sw(it.on),onKnob:knob(it.on),discStyle:sw(it.disc),discKnob:knob(it.disc),
       toggleOn:()=>upd(it.id,{on:!it.on}),toggleDisc:()=>upd(it.id,{disc:!it.disc,discPrice:it.discPrice||Math.round(base*0.7/100)*100}),
       onMargin:(e)=>upd(it.id,{margin:e.target.value}),
       onStock:(e)=>upd(it.id,{stock:e.target.value}),
       select:()=>this.setState({sel:it.id})};
   });
   const sel=items.find(x=>x.id===this.state.sel)||items[0];
-  const h=sel.hist,w=268,hh=150,lo=Math.min(...h)*0.92,hi=Math.max(...h)*1.04;
-  const pts=h.map((v,i)=>[8+i*(w-16)/(h.length-1),hh-14-(v-lo)/(hi-lo)*(hh-28)]);
+  const h=sel.hist,w=232,hh=150,lo=Math.min(...h)*0.92,hi=Math.max(...h)*1.04;
+  const pts=h.map((v,i)=>[8+i*(w-16)/(h.length-1),hh-18-(v-lo)/(hi-lo)*(hh-32)]);
   const d='M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L');
-  const area=d+' L'+pts[pts.length-1][0].toFixed(1)+' '+(hh-14)+' L'+pts[0][0].toFixed(1)+' '+(hh-14)+' Z';
+  const area=d+' L'+pts[pts.length-1][0].toFixed(1)+' '+(hh-18)+' L'+pts[0][0].toFixed(1)+' '+(hh-18)+' Z';
   return {items,sel,chartD:d,chartArea:area,lastX:pts[pts.length-1][0].toFixed(1),lastY:pts[pts.length-1][1].toFixed(1),loFmt:this.fmt(Math.min(...h)),hiFmt:this.fmt(Math.max(...h))};
-}""" % (json.dumps(ITEMS, ensure_ascii=False), GREEN, ORANGE, INK, LINE, cols, GREEN_T)
-    return page("사장님 — 시세·품목 (태블릿)", w, h, root(w, h, inner), logic)
+}""" % (json.dumps(ITEMS, ensure_ascii=False), SWITCH_ON, ORANGE, RED, TINT, INK, MUTED, FILL2, TRI_UP, TRI_DOWN, cols, TINT_BG)
+    return page("ReBloom 사장님 — 시세·품목 (태블릿)", w, h, root(w, h, inner), logic)
 
 def customers():
-    h = 920
-    alert = (f'<section style="margin:0 16px;padding:14px 16px;border-radius:14px;background:{GREEN};color:#fff;display:flex;flex-direction:column;gap:10px;">'
-             f'<div style="display:flex;align-items:center;justify-content:space-between;"><div style="font-size:15px;font-weight:700;">이번 주 경조사 있는 손님 <span class="mono" style="font-size:20px;">3</span>명</div><span style="font-size:11.5px;opacity:.85;">제안 보내면 미리 발주에 반영</span></div>'
-             f'<div style="display:flex;flex-direction:column;gap:6px;">'
-             + "".join(f'<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.12);"><div style="font-size:13.5px;"><b>{n}</b> · {e}</div><div style="display:flex;align-items:center;gap:8px;"><span class="mono" style="font-size:12.5px;font-weight:700;">{d}</span><button type="button" style="height:32px;padding:0 10px;border:0;border-radius:8px;background:#fff;color:{GREEN};font-size:12px;font-weight:700;">제안 보내기</button></div></div>'
-                       for n, e, d in [("박지훈", "아버지 생신", "9/21 월"), ("이서연", "결혼기념일", "9/23 수"), ("최유진", "어머니 생신", "9/24 목")])
-             + '</div></section>')
+    w, h = SIZES["Owner-Customers.dc.html"]
+    soon = "".join(f'<div class="row"><div class="grow"><div class="t-h">{n}</div><div class="t-s c2 num">{e} · {d}</div></div><button type="button" class="cap">제안 보내기</button></div>'
+                   for n, e, d in [("박지훈", "아버지 생신", "9/21 월"), ("이서연", "결혼기념일", "9/23 수"), ("최유진", "어머니 생신", "9/24 목")])
+    alert = f'<section>{sec("이번 주 경조사 있는 손님 <span class=num>3</span>명", "제안 보내면 미리 발주에 반영")}<div class="group">{soon}</div></section>'
     people = [("이서연", "9/18 오늘", 6, "결혼기념일 9/23", True), ("박지훈", "9/11", 24, "아버지 생신 9/21", True), ("최유진", "9/18 오늘", 3, "어머니 생신 9/24", True),
               ("김민준", "9/18 오늘", 1, None, False), ("정하늘", "6/2", 2, "어머니 생신 10/3", False), ("오세훈", "3/14", 4, "화이트데이 매년 3/14", False), ("한소희", "2025/12/24", 1, None, False)]
     rows = ""
-    for n, last, cnt, ev, soon in people:
-        rows += (f'<a href="#" style="display:grid;grid-template-columns:1fr 90px 44px;align-items:center;gap:8px;padding:12px 16px;border-top:1px solid {LINE};color:{INK};">'
-                 f'<div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:{SOFT};display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:{GREEN};">{n[0]}</div>'
-                 f'<div><div style="font-size:15px;font-weight:600;">{n}</div><div style="font-size:12px;">' + (f'<span style="color:{GREEN if soon else MUTED};font-weight:{700 if soon else 500};">{ev}</span>' if ev else f'<span class="muted">등록된 경조사 없음</span>') + '</div></div></div>'
-                 f'<div style="text-align:right;"><div class="mono" style="font-size:13px;font-weight:600;">{last}</div><div class="muted" style="font-size:11px;">마지막 주문</div></div>'
-                 f'<div style="text-align:right;"><div class="mono" style="font-size:16px;font-weight:700;">{cnt}</div><div class="muted" style="font-size:11px;">회</div></div></a>')
-    inner = (caption("문제 6 · 단골을 단골로 알아보기")
-             + ohead("손님", "128명 · 사진 찍을 때마다 이력이 쌓입니다", iconbtn("search", "손님 검색"))
-             + f'<div style="flex:1;display:flex;flex-direction:column;gap:14px;padding:4px 0 16px;">{alert}'
-             + f'<section style="display:flex;flex-direction:column;"><div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 16px 8px;"><h2 style="margin:0;font-size:15px;font-weight:700;">전체 손님</h2><span class="muted" style="font-size:12px;display:flex;align-items:center;gap:2px;">최근 주문순{ic(I["chev"],14)}</span></div><div style="margin:0 16px;border:1px solid {LINE};border-radius:14px;overflow:hidden;background:{CARD};">{rows}</div></section></div>'
-             + tabbar("손님"))
-    return page("사장님 — 손님 목록", 390, h, root(390, h, inner))
+    for n, last, cnt, ev, near in people:
+        evh = (f'<span class="num {"b" if near else "c2"}">{ev}</span>' if ev else '<span class="c2">등록된 경조사 없음</span>')
+        rows += (f'<a href="#" class="row in68" style="color:{INK};"><div class="avatar">{n[0]}</div>'
+                 f'<div class="grow"><div class="t-h">{n}</div><div class="t-f">{evh}</div></div>'
+                 f'<div class="r" style="flex-shrink:0;"><div class="num t-s">{last}</div><div class="t-c c2">마지막 주문</div></div>'
+                 f'<div class="r" style="width:34px;flex-shrink:0;"><div class="num t-h">{cnt}</div><div class="t-c c2">회</div></div></a>')
+    sort = f'<button type="button" class="textbtn">최근 주문순{ic(I["chev"],16,sw=2)}</button>'
+    inner = (ohead("손님", "128명 · 사진 찍을 때마다 이력이 쌓입니다", iconbtn("search", "손님 검색"), "문제 6 · 단골을 단골로 알아보기")
+             + f'<div style="flex:1;margin-top:-18px;padding-bottom:12px;">{alert}'
+             + f'<section>{sec("전체 손님", right=sort)}<div class="group">{rows}</div></section></div>'
+             + dock(tabbar("손님")))
+    return page("ReBloom 사장님 — 손님 목록", w, h, root(w, h, inner))
 
 def customer_detail():
-    h = 1080
-    head = (f'<section style="padding:4px 16px 0;display:flex;align-items:center;gap:14px;"><div style="width:56px;height:56px;border-radius:50%;background:{GREEN_T};display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:{GREEN};">이</div>'
-            f'<div style="flex:1;"><div style="font-size:20px;font-weight:700;">이서연</div><div class="muted" style="font-size:12.5px;">첫 주문 2024.05 · <span class="mono">6</span>회 · 누적 <span class="mono" style="font-weight:600;">312,000원</span></div></div>'
-            f'<button type="button" aria-label="전화" style="width:44px;height:44px;border-radius:12px;border:1.5px solid {LINE};background:{CARD};display:flex;align-items:center;justify-content:center;">{ic(I["send"],20)}</button></section>')
-    upcoming = (f'<section class="card" style="margin:0 16px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;border-color:{GREEN};">'
-                f'<div style="display:flex;align-items:center;justify-content:space-between;"><div style="font-size:15px;font-weight:700;">결혼기념일 · 9/23 (수)</div><span class="mono" style="font-size:13px;font-weight:700;color:{GREEN};">5일 남음</span></div>'
-                f'<div style="display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;background:{SOFT};"><div style="width:44px;height:44px;border-radius:8px;background:#E4DCCB;display:flex;align-items:center;justify-content:center;">{flower(WHITE,"#D9CBA5",36)}</div><div style="flex:1;font-size:12.5px;"><div style="font-weight:600;">작년 구성</div><div class="muted">리시안셔스 화이트 10 · 장미 5 · 유칼립투스 3 · <span class="mono">52,000원</span></div></div></div>'
-                f'{big_btn("지난번 구성으로 제안 보내기", icon="send", h=48)}<div class="muted" style="font-size:11.5px;text-align:center;">오늘 시세로 다시 계산해 <span class="mono">54,100원</span>으로 보냅니다</div></section>')
-    pref = (f'<section class="card" style="margin:0 16px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;"><h2 style="margin:0;font-size:15px;font-weight:700;">취향 프로필</h2>'
-            f'<div style="display:grid;grid-template-columns:64px 1fr;gap:8px;align-items:center;font-size:13px;">'
-            f'<span class="muted">선호 색감</span><span style="display:flex;gap:8px;flex-wrap:wrap;">{swatch("#F3EEE3","화이트")}{swatch("#7C8F6A","그린")}{swatch("#E9C4C0","연핑크")}</span>'
-            f'<span class="muted">피하는 꽃</span><span style="display:flex;gap:6px;"><span style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;background:{RED_T};color:{RED};font-size:12px;font-weight:600;">{ic(I["ban"],14)}백합 · 향이 강함</span></span>'
-            f'<span class="muted">분위기</span><span style="display:flex;gap:6px;">{chip("내추럴", tone="soft")}{chip("볼륨 적게", tone="soft")}{chip("크라프트 포장", tone="soft")}</span></div></section>')
+    w, h = SIZES["Owner-CustomerDetail.dc.html"]
+    head = (f'<section style="padding:4px 16px 16px;display:flex;align-items:center;gap:14px;"><div class="avatar lg">이</div>'
+            f'<div class="grow"><div class="t-t2">이서연</div><div class="t-f c2 num">첫 주문 2024.05 · 6회 · 누적 312,000원</div></div>'
+            f'<button type="button" aria-label="전화" style="width:44px;height:44px;border-radius:50%;border:0;background:{CELL};color:{TINT};display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;">{ic(I["send"],20)}</button></section>')
+    upcoming = (f'<section class="group"><div class="pad" style="display:flex;flex-direction:column;gap:12px;">'
+                f'<div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;"><div class="t-h num">결혼기념일 · 9/23 (수)</div><span class="num t-s b">5일 남음</span></div>'
+                f'<div class="inbox" style="display:flex;gap:10px;align-items:center;"><div style="width:44px;height:44px;border-radius:10px;background:{PHOTO_BG};display:flex;align-items:center;justify-content:center;flex-shrink:0;">{flower(WHITE,"#D9CBA5",36)}</div><div class="grow"><div class="t-s b">작년 구성</div><div class="t-f c2 num">리시안셔스 화이트 10 · 장미 5 · 유칼립투스 3 · 52,000원</div></div></div>'
+                f'{btn("지난번 구성으로 제안 보내기", icon="send", extra="padding:0 12px;")}<div class="t-f c2 num" style="text-align:center;">오늘 시세로 다시 계산해 54,100원으로 보냅니다</div></div></section>')
+    pref = (f'<section>{sec("취향 프로필")}<div class="group">'
+            f'<div class="row"><span style="flex-shrink:0;">선호 색감</span><span class="grow" style="display:flex;gap:4px 10px;flex-wrap:wrap;justify-content:flex-end;">{swatch("#F3EEE3","화이트")}{swatch("#7C8F6A","그린")}{swatch("#E9C4C0","연핑크")}</span></div>'
+            f'<div class="row"><span style="flex-shrink:0;">피하는 꽃</span><span class="grow badges" style="justify-content:flex-end;"><span class="badge red">{ic(I["ban"],14,sw=2)}백합 · 향이 강함</span></span></div>'
+            f'<div class="row"><span style="flex-shrink:0;">분위기</span><span class="grow badges" style="justify-content:flex-end;">{badge("내추럴")}{badge("볼륨 적게")}{badge("크라프트 포장")}</span></div></div></section>')
     hist = [("2026.09.18", "생일 · 본인", 37100, WHITE), ("2025.09.23", "결혼기념일", 52000, WHITE), ("2025.05.08", "어버이날", 45000, PINK), ("2024.12.24", "크리스마스", 38000, REDF), ("2024.05.02", "첫 주문 · 집들이", 30000, YEL)]
     trs = ""
     for i, (d, u, amt, col) in enumerate(hist):
-        linehtml = "" if i == len(hist)-1 else f'<span style="width:2px;height:54px;background:{LINE};"></span>'
+        linehtml = "" if i == len(hist)-1 else f'<span style="width:2px;height:54px;background:{FILL2};"></span>'
         trs += (f'<div style="display:flex;gap:12px;align-items:center;">'
-                f'<div style="display:flex;flex-direction:column;align-items:center;width:12px;"><span style="width:10px;height:10px;border-radius:50%;background:{GREEN if i==0 else "#C9C1B3"};"></span>{linehtml}</div>'
-                f'<div style="width:52px;height:52px;border-radius:8px;background:#E4DCCB;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{flower(col,"#D9CBA5",40)}</div>'
-                f'<div style="flex:1;padding-bottom:12px;"><div style="font-size:14px;font-weight:600;">{u}</div><div class="mono muted" style="font-size:12px;">{d}</div></div><span class="mono" style="font-size:15px;font-weight:700;padding-bottom:12px;">{amt:,}<span style="font-size:11px;">원</span></span></div>')
-    timeline = f'<section class="card" style="margin:0 16px;padding:14px 16px 4px;display:flex;flex-direction:column;gap:8px;"><h2 style="margin:0 0 4px;font-size:15px;font-weight:700;">발송 이력</h2>{trs}</section>'
-    inner = (caption("문제 6 · 작년에 뭘 보냈는지 앱이 기억한다")
-             + topbar("손님", iconbtn("more", "더보기"))
-             + f'<div style="flex:1;display:flex;flex-direction:column;gap:14px;padding:0 0 16px;">{head}{upcoming}{pref}{timeline}</div>' + tabbar("손님"))
-    return page("사장님 — 손님 상세", 390, h, root(390, h, inner))
+                f'<div style="display:flex;flex-direction:column;align-items:center;width:12px;flex-shrink:0;"><span style="width:10px;height:10px;border-radius:50%;background:{TINT_FILL if i==0 else "#C7C7CC"};"></span>{linehtml}</div>'
+                f'<div style="width:52px;height:52px;border-radius:12px;background:{PHOTO_BG};display:flex;align-items:center;justify-content:center;flex-shrink:0;">{flower(col,"#D9CBA5",40)}</div>'
+                f'<div class="grow" style="padding-bottom:12px;"><div class="t-h">{u}</div><div class="num t-f c2">{d}</div></div><span style="padding-bottom:12px;flex-shrink:0;">{money(amt, 17, 400)}</span></div>')
+    timeline = f'<section>{sec("주문 이력")}<div class="group"><div class="pad" style="padding-bottom:4px;display:flex;flex-direction:column;gap:8px;">{trs}</div></div></section>'
+    inner = (topbar("손님 정보", iconbtn("more", "더보기"), back="손님")
+             + caption("문제 6 · 작년에 뭘 보냈는지 앱이 기억한다")
+             + f'<div style="flex:1;padding-bottom:12px;">{head}{upcoming}{pref}{timeline}</div>' + dock(tabbar("손님")))
+    return page("ReBloom 사장님 — 손님 상세", w, h, root(w, h, inner))
 
 def funeral():
-    h = 844
+    w, h = SIZES["Owner-Funeral.dc.html"]
     shops = [("화양플라워", 0.8, 120), ("반포꽃집", 1.4, 40), ("서초플라워", 2.6, 200)]
-    srs = "".join(f'<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid {LINE};"><div style="flex:1;"><div style="font-size:14px;font-weight:600;">{n}</div><div class="mono muted" style="font-size:12px;">{d}km</div></div><span class="mono" style="font-size:16px;font-weight:700;">{q}<span style="font-size:11px;">송이</span></span><button type="button" style="height:40px;padding:0 14px;border:1.5px solid {GREEN};border-radius:10px;background:{CARD};color:{GREEN};font-size:13px;font-weight:700;">20송이 요청</button></div>'
+    srs = "".join(f'<div class="row"><div class="grow"><div class="t-h">{n}</div><div class="num t-f c2">{d}km · 보유 {q}송이</div></div><button type="button" class="cap num">20송이 요청</button></div>'
                   for n, d, q in shops)
-    inner = (f'<div style="background:{INK};color:#fff;padding:16px 16px 14px;display:flex;flex-direction:column;gap:10px;">'
-             f'<div style="display:flex;align-items:center;justify-content:space-between;"><div style="display:flex;align-items:center;gap:8px;">{chip("근조", tone="red")}<span style="font-size:15px;font-weight:700;">근조 주문 도착</span></div><button type="button" aria-label="닫기" style="width:44px;height:44px;border:0;background:transparent;color:#fff;display:flex;align-items:center;justify-content:center;">{ic(I["x"],22)}</button></div>'
-             f'<div style="display:flex;align-items:flex-end;justify-content:space-between;"><div><div style="font-size:12px;opacity:.7;">배송 마감까지</div><div class="mono" style="font-size:48px;font-weight:700;line-height:1;color:#FFB4AB;">02:10:35</div></div><div style="text-align:right;"><div style="font-size:12px;opacity:.7;">마감</div><div class="mono" style="font-size:22px;font-weight:700;">오늘 13:00</div></div></div>'
-             f'<div style="display:flex;gap:8px;align-items:flex-start;font-size:13.5px;padding-top:4px;">{ic(I["pin"],18)}<div><div style="font-weight:600;">서울성모병원 장례식장 3호실</div><div style="opacity:.75;font-size:12.5px;">서초구 반포대로 222 · 매장에서 2.1km · 근조 화환 · 150,000원</div></div></div></div>'
-             f'<div style="flex:1;display:flex;flex-direction:column;gap:12px;padding:14px 16px 0;">'
-             f'<section class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:8px;"><div style="display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:8px;">'
-             f'{stat("필요 국화", 80, "송이", size=34)}{stat("내 재고", 60, "송이", size=34)}{stat("부족", 20, "송이", tone="orange", size=34)}</div>'
-             f'<div style="padding:8px 10px;border-radius:10px;background:{ORANGE_T};font-size:12.5px;color:{ORANGE};font-weight:600;">국화 백선 특 기준 · 리시안셔스 10, 유칼립투스 5는 재고 충분</div></section>'
-             f'<section class="card" style="padding:14px 16px 4px;display:flex;flex-direction:column;"><div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;"><h2 style="margin:0;font-size:15px;font-weight:700;">근처 꽃집 재고 요청</h2><span class="muted" style="font-size:11.5px;">반경 3km 제휴 · 국화 백선</span></div>{srs}</section>'
-             f'<div style="margin-top:auto;"></div></div>'
-             f'<div style="padding:12px 16px 24px;display:flex;flex-direction:column;gap:10px;background:{CARD};border-top:1px solid {LINE};">'
-             f'{big_btn("수락 · 제작 시작", icon="check", h=60)}{big_btn("다른 꽃집에 넘기기", primary=False, h=52)}</div>')
-    return page("사장님 — 근조 긴급", 390, h, root(390, h, inner))
+    stats = "".join(f'<div>{s}</div>' for s in [stat("필요 국화", 80, "송이"), stat("내 재고", 60, "송이"), stat("부족", 20, "송이", tone="orange")])
+    # 전체 화면 경보 — 헤더만 어둡게 유지한다
+    inner = (f'<div style="background:{DARK};color:#fff;padding:8px 16px 18px;display:flex;flex-direction:column;gap:12px;">'
+             f'<div style="display:flex;align-items:center;justify-content:space-between;"><div style="display:flex;align-items:center;gap:8px;">{badge("근조", "fillred")}<span class="t-h">근조 주문 도착</span></div><button type="button" aria-label="닫기" style="width:44px;height:44px;border:0;background:transparent;color:#fff;display:flex;align-items:center;justify-content:center;padding:0;">{ic(I["x"],22,sw=2)}</button></div>'
+             f'<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;"><div><div class="t-f" style="color:{DARK_2};">픽업 마감까지</div><div class="num" style="font-size:48px;line-height:52px;font-weight:700;letter-spacing:-.02em;color:{DARK_RED};">02:10:35</div></div><div class="r"><div class="t-f" style="color:{DARK_2};">마감</div><div class="num t-t2">오늘 13:00</div></div></div>'
+             f'<div style="display:flex;gap:8px;align-items:flex-start;">{ic(I["bag"],20)}<div class="grow"><div class="t-s b">매장 픽업 · 김민준 님</div><div class="t-f num" style="color:{DARK_2};">서울성모병원 장례식장 3호실 조문용 · 근조 화환 · 150,000원</div></div></div></div>'
+             f'<div style="flex:1;padding:16px 0 0;">'
+             f'<section class="group"><div class="pad" style="display:flex;flex-direction:column;gap:12px;"><div class="stats">{stats}</div>'
+             f'<div class="inbox t-f b c-orange num" style="background:{ORANGE_BG};">국화 백선 특 기준 · 리시안셔스 10, 유칼립투스 5는 재고 충분</div></div></section>'
+             f'<section>{sec("근처 꽃집 재고 요청", "반경 3km 제휴 · 국화 백선 · 직접 가져오기")}<div class="group">{srs}</div></section></div>'
+             + dock(f'<div class="glass" style="border-radius:34px;padding:9px;display:flex;flex-direction:column;gap:8px;">{btn("수락 · 제작 시작", icon="check")}{btn("다른 꽃집에 넘기기", "gray")}</div>'))
+    return page("ReBloom 사장님 — 근조 긴급", w, h, root(w, h, inner))
 
 # =====================================================================
 files = {
-    "Main.dc.html": builder(False, 1460),
-    "Builder-Filled.dc.html": builder(True, 1600),
+    "Main.dc.html": builder(False, "Main.dc.html"),
+    "Builder-Filled.dc.html": builder(True, "Builder-Filled.dc.html"),
     "Builder-Detail.dc.html": builder_detail(),
     "Owner-Today.dc.html": home(),
     "Owner-Orders.dc.html": orders(),
@@ -655,30 +714,28 @@ files = {
 for name, html in files.items():
     with open(os.path.join(P, name), "w", encoding="utf-8") as f: f.write(html)
 
-sizes = {"Main.dc.html": (390,1460), "Builder-Filled.dc.html": (390,1600), "Builder-Detail.dc.html": (390,844),
-         "Owner-Today.dc.html": (390,1120), "Owner-Orders.dc.html": (390,1080), "Owner-OrderDetail.dc.html": (390,1140),
-         "Owner-Prices.dc.html": (390,1280), "Owner-Prices-Tablet.dc.html": (1024,768), "Owner-Customers.dc.html": (390,920),
-         "Owner-CustomerDetail.dc.html": (390,1080), "Owner-Funeral.dc.html": (390,844)}
+sizes = SIZES
 titles = {"Main.dc.html": "빌더 · 빈 상태", "Builder-Filled.dc.html": "빌더 · 담긴 상태", "Builder-Detail.dc.html": "빌더 · 가격 상세 펼침",
           "Owner-Today.dc.html": "1 오늘", "Owner-Orders.dc.html": "2 주문 목록", "Owner-OrderDetail.dc.html": "2 주문 상세 · 제작 완료",
           "Owner-Prices.dc.html": "3 시세·품목", "Owner-Prices-Tablet.dc.html": "3 시세·품목 · 태블릿", "Owner-Customers.dc.html": "4 손님",
           "Owner-CustomerDetail.dc.html": "4 손님 상세", "Owner-Funeral.dc.html": "5 근조 긴급"}
 boards = {}
 x = 0
-for n in ["Main.dc.html", "Builder-Filled.dc.html", "Builder-Detail.dc.html"]:
+row1 = ["Main.dc.html", "Builder-Filled.dc.html", "Builder-Detail.dc.html"]
+for n in row1:
     w, h = sizes[n]; boards[n] = {"x": x, "y": 0, "w": w, "h": h, "title": titles[n]}; x += w + 80
-ROW2 = 1600 + 120 + 240
+ROW2 = max(sizes[n][1] for n in row1) + 120 + 240
 x = 0
 row2 = ["Owner-Today.dc.html", "Owner-Orders.dc.html", "Owner-OrderDetail.dc.html", "Owner-Prices.dc.html", "Owner-Customers.dc.html", "Owner-CustomerDetail.dc.html", "Owner-Funeral.dc.html", "Owner-Prices-Tablet.dc.html"]
 for n in row2:
     w, h = sizes[n]; boards[n] = {"x": x, "y": ROW2, "w": w, "h": h, "title": titles[n]}
     if n == "Owner-Prices-Tablet.dc.html": boards[n]["is_interactive"] = True
     x += w + 80
-canvas = {"v": 3, "createdOnFiles": {"v": 1, "at": "2026-09-18T03:00:00Z"}, "title": "꽃다발 빌더 · 꽃집 사장님 앱",
+canvas = {"v": 3, "createdOnFiles": {"v": 1, "at": "2026-09-18T03:00:00Z"}, "title": "ReBloom · 꽃다발 빌더 · 꽃집 앱",
           "launch": {"view": "canvas"}, "pages": [], "boards": boards,
-          "order": ["Main.dc.html", "Builder-Filled.dc.html", "Builder-Detail.dc.html"] + row2,
-          "notes": {"t1": {"x": 0, "y": -300, "text": "꽃다발 빌더 — 소비자 · 모바일 390", "kind": "title1", "maxW": 1330},
-                    "t2": {"x": 0, "y": ROW2 - 300, "text": "꽃집 사장님 운영 앱 — 모바일 390 · 시세는 태블릿 1024 포함", "kind": "title1", "maxW": 4400}},
+          "order": row1 + row2,
+          "notes": {"t1": {"x": 0, "y": -300, "text": "ReBloom 꽃다발 빌더 — 소비자 · 모바일 390", "kind": "title1", "maxW": 1330},
+                    "t2": {"x": 0, "y": ROW2 - 300, "text": "ReBloom 꽃집 사장님 운영 앱 — 모바일 390 · 시세는 태블릿 1024 포함", "kind": "title1", "maxW": 4400}},
           "designSystems": []}
 with open(os.path.join(P, "canvas.json"), "w", encoding="utf-8") as f: json.dump(canvas, f, ensure_ascii=False, indent=1)
 print("wrote", len(files) + 1, "files")
