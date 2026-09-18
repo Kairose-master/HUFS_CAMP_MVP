@@ -167,10 +167,10 @@
     var wrap = new THREE.Group(); pivot.add(wrap);
     var paper = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshStandardMaterial({ color: hex('#C9A878'), roughness: 0.95, metalness: 0, side: THREE.DoubleSide }));
     var tissue = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshStandardMaterial({ color: hex('#F3EBDD'), roughness: 0.95, metalness: 0, side: THREE.DoubleSide }));
-    var ribbon = new THREE.Mesh(new THREE.TorusGeometry(0.0315, 0.0045, 8, 40), new THREE.MeshStandardMaterial({ color: hex('#1F5A3C'), roughness: 0.55, metalness: 0 }));
+    var ribbon = new THREE.Mesh(new THREE.TorusGeometry(0.0315, 0.0045, 8, 40), new THREE.MeshStandardMaterial({ color: hex('#F2EEE6'), roughness: 0.55, metalness: 0 }));
     var RIB_T = 0.14; ribbon.rotation.x = Math.PI / 2; ribbon.position.y = PAPER_Y0 + RIB_T * PAPER_H;
     wrap.add(paper, tissue, ribbon);
-    var st = { scene: scene, cam: cam, pivot: pivot, meshes: [], born: {}, radius: 0.1, token: 0 }, matCache = {};
+    var st = { scene: scene, cam: cam, pivot: pivot, wrap: wrap, meshes: [], born: {}, radius: 0.1, token: 0 }, matCache = {};
 
     function material(part, line) {
       var c = part.name === 'petal' && line.color ? line.color : null;
@@ -303,9 +303,9 @@
     return (thumbCache[sig] = thumbQueue = thumbQueue.then(function () {
       try {
         if (!thumbRenderer) {
-          thumbRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, preserveDrawingBuffer: true });
+          thumbRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
           thumbRenderer.outputEncoding = THREE.sRGBEncoding;
-          thumbRenderer.setClearColor(hex('#ECE5D8'), 1);
+          thumbRenderer.setClearColor(0x000000, 0);   // 배경은 투명: 라이트/다크 셀 색이 그대로 비친다
           thumbStage = createStage();
         }
         thumbRenderer.setPixelRatio(1); thumbRenderer.setSize(size, size, false);
@@ -313,11 +313,38 @@
           thumbStage.frame(size, size);
           thumbStage.pivot.rotation.y = 0.6;
           thumbRenderer.render(thumbStage.scene, thumbStage.cam);
-          return thumbRenderer.domElement.toDataURL('image/jpeg', 0.86);
+          return thumbRenderer.domElement.toDataURL('image/png');
         });
       } catch (e) { return null; }
     }).catch(function () { return null; }));
   }
 
-  window.Bouquet3D = { mount: mount, thumb: thumb };
+  // ---------- 한 송이 아이콘: 포장 없이 꽃머리를 가까이에서(목록의 품목 아이콘) ----------
+  function stem(line, size) {
+    size = size || 96;
+    var sig = 'stem' + size + line.key + (line.color || '');
+    if (thumbCache[sig]) return thumbCache[sig];
+    if (!window.THREE || !THREE.GLTFLoader || !webglOk()) return Promise.resolve(null);
+    return (thumbCache[sig] = thumbQueue = thumbQueue.then(function () {
+      try {
+        if (!thumbRenderer) {
+          thumbRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+          thumbRenderer.outputEncoding = THREE.sRGBEncoding;
+          thumbRenderer.setClearColor(0x000000, 0);
+          thumbStage = createStage();
+        }
+        thumbRenderer.setPixelRatio(1); thumbRenderer.setSize(size, size, false);
+        return thumbStage.setLines([{ key: line.key, model: line.model, color: line.color, qty: 1, green: false }], false).then(function () {
+          var cam = thumbStage.cam, far = !!line.green;
+          thumbStage.wrap.visible = false;
+          cam.aspect = 1; cam.position.set(0, far ? 0.30 : 0.50, far ? 0.62 : 0.25); cam.lookAt(0, far ? 0.21 : 0.335, 0); cam.updateProjectionMatrix();
+          thumbStage.pivot.rotation.y = 0.6;
+          thumbRenderer.render(thumbStage.scene, cam);
+          return thumbRenderer.domElement.toDataURL('image/png');
+        });
+      } catch (e) { return null; }
+    }).catch(function () { return null; }));
+  }
+
+  window.Bouquet3D = { mount: mount, thumb: thumb, stem: stem };
 })();

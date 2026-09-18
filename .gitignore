@@ -6,3 +6,6 @@ landing/dist/
 # git 이전에 쓰던 수동 백업
 landing/_backup/
 *.blend1
+
+# impeccable 검수용 캡처(용량이 커서 올리지 않는다)
+.impeccable/review/

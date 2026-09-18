@@ -1,5 +1,6 @@
 // 헤드리스 Chrome에서 페이지를 열고 시나리오(JS 파일, async 함수 본문)를 실행해 결과를 출력한다.
 //   node tools/run-in-page.mjs <url> <scenario.js> [shot.png] [width] [height]
+//   환경변수: DARK=1 다크 / DARK=0 라이트로 고정(없으면 시스템 설정) · FULL=1 스크린샷을 페이지 전체로 찍는다
 // file:// 도 열린다(localStorage·해시 라우팅 동작). Browser pane의 data: 미리보기로는 앱을 검증할 수 없어서 만든 도구.
 import { spawn } from 'node:child_process'; import { readFileSync, writeFileSync, rmSync } from 'node:fs'; import { tmpdir } from 'node:os'; import { join } from 'node:path';
 const [url, scenario, shot, W = '480', H = '900'] = process.argv.slice(2);
@@ -14,6 +15,7 @@ await new Promise(r => ws.onopen = r);
 const send = (method, params = {}) => new Promise(res => { const i = ++id; pend.set(i, res); ws.send(JSON.stringify({ id: i, method, params })); });
 await send('Page.enable'); await send('Runtime.enable');
 await send('Emulation.setDeviceMetricsOverride', { width: +W, height: +H, deviceScaleFactor: 2, mobile: +W < 700 });
+if (process.env.DARK) await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: process.env.DARK === '1' ? 'dark' : 'light' }] });
 await send('Page.navigate', { url }); await sleep(2500);
 const body = readFileSync(scenario, 'utf8');
 const r = await send('Runtime.evaluate', { expression: `(async()=>{const W=ms=>new Promise(r=>setTimeout(r,ms)),q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];
@@ -26,5 +28,5 @@ const r = await send('Runtime.evaluate', { expression: `(async()=>{const W=ms=>n
 if (r.result?.exceptionDetails) { console.log('시나리오 실패:', r.result.exceptionDetails.exception?.description || r.result.exceptionDetails.text); }
 else console.log(typeof r.result?.result?.value === 'string' ? r.result.result.value : JSON.stringify(r.result?.result?.value, null, 1));
 if (errs.length) console.log('페이지 오류:\n' + errs.join('\n'));
-if (shot) { await sleep(800); const p = await send('Page.captureScreenshot', { format: 'png' }); writeFileSync(shot, Buffer.from(p.result.data, 'base64')); }
+if (shot) { await sleep(800); const p = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: !!process.env.FULL }); writeFileSync(shot, Buffer.from(p.result.data, 'base64')); }
 done(r.result?.exceptionDetails || errs.length ? 1 : 0);

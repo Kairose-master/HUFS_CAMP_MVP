@@ -1,0 +1,244 @@
+{
+ "schemaVersion": 2,
+ "generatedAt": "2026-09-18T00:00:00+09:00",
+ "title": "Design System: ReBloom",
+ "extensions": {
+  "colorMeta": {
+   "tint-fill": {
+    "role": "primary",
+    "displayName": "System Blue Fill",
+    "canonical": "#0071E3"
+   },
+   "tint-text": {
+    "role": "primary",
+    "displayName": "System Blue Text",
+    "canonical": "#0066CC"
+   },
+   "grouped-bg": {
+    "role": "neutral",
+    "displayName": "Grouped Background",
+    "canonical": "#F2F2F7"
+   },
+   "cell": {
+    "role": "neutral",
+    "displayName": "Cell White",
+    "canonical": "#FFFFFF"
+   },
+   "label-secondary": {
+    "role": "neutral",
+    "displayName": "Secondary Label",
+    "canonical": "#6C6C70"
+   },
+   "discount-red": {
+    "role": "semantic",
+    "displayName": "Discount Red",
+    "canonical": "#D70015"
+   },
+   "warning-orange": {
+    "role": "semantic",
+    "displayName": "Warning Orange",
+    "canonical": "#A84A00"
+   },
+   "success-green": {
+    "role": "semantic",
+    "displayName": "Success Green",
+    "canonical": "#1D7A34"
+   },
+   "rose-pine-base": {
+    "role": "neutral",
+    "displayName": "Rosé Pine Base (dark bg)",
+    "canonical": "#191724"
+   },
+   "rose-pine-surface": {
+    "role": "neutral",
+    "displayName": "Rosé Pine Surface (dark cell)",
+    "canonical": "#1F1D2E"
+   },
+   "rose-pine-overlay": {
+    "role": "neutral",
+    "displayName": "Rosé Pine Overlay",
+    "canonical": "#26233A"
+   }
+  },
+  "typographyMeta": {
+   "large-title": {
+    "displayName": "Large Title",
+    "purpose": "탭 루트 화면 제목"
+   },
+   "title2": {
+    "displayName": "Title 2",
+    "purpose": "화면 안 섹션 제목"
+   },
+   "headline": {
+    "displayName": "Headline",
+    "purpose": "행 제목, 버튼"
+   },
+   "footnote": {
+    "displayName": "Footnote",
+    "purpose": "그룹 라벨·각주·메타"
+   },
+   "page-display": {
+    "displayName": "Page Display",
+    "purpose": "소개 페이지 h1"
+   }
+  },
+  "shadows": [
+   {
+    "name": "float",
+    "value": "0 10px 30px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.08)",
+    "purpose": "탭바, 액세서리, HUD, 알림"
+   },
+   {
+    "name": "segment",
+    "value": "0 3px 8px rgba(0,0,0,.12), 0 1px 1px rgba(0,0,0,.04)",
+    "purpose": "세그먼트 선택 조각, 슬라이더·스위치 손잡이"
+   },
+   {
+    "name": "icon-lift",
+    "value": "0 8px 28px rgba(0,0,0,.12), 0 0 0 .5px rgba(0,0,0,.08)",
+    "purpose": "앱 아이콘 타일"
+   }
+  ],
+  "motion": [
+   {
+    "name": "ease",
+    "value": "cubic-bezier(.2,.8,.2,1)",
+    "purpose": "화면 push/pop(.38s), 시트(.4s), HUD(.35s), 미터"
+   },
+   {
+    "name": "press",
+    "value": "transform scale(.97) + opacity .75, .12s",
+    "purpose": "버튼·칩·타일 눌림"
+   },
+   {
+    "name": "reduced",
+    "value": "prefers-reduced-motion: 모든 애니메이션·전환 제거",
+    "purpose": "접근성"
+   }
+  ],
+  "breakpoints": [
+   {
+    "name": "app-column",
+    "value": "480px"
+   },
+   {
+    "name": "page-nav-links",
+    "value": "760px"
+   },
+   {
+    "name": "page-build-two-col",
+    "value": "900px"
+   }
+  ],
+  "materials": [
+   {
+    "name": "bar",
+    "value": "rgba(242,242,247,.82) + saturate(180%) blur(20px)",
+    "purpose": "내비게이션 바"
+   },
+   {
+    "name": "glass",
+    "value": "rgba(255,255,255,.78) + saturate(180%) blur(24px)",
+    "purpose": "탭바, 액세서리, HUD, 알림"
+   }
+  ]
+ },
+ "components": [
+  {
+   "name": "Primary Button",
+   "kind": "button",
+   "refersTo": "button-primary",
+   "description": "화면의 주 동작. 액세서리나 폼 끝에 하나.",
+   "html": "<button class=\"ds-btn\">입찰 요청</button>",
+   "css": ".ds-btn{min-height:50px;padding:0 22px;border-radius:999px;border:0;background:#0071E3;color:#fff;font:600 17px -apple-system,'Apple SD Gothic Neo',sans-serif}.ds-btn:hover{background:#0062C4}"
+  },
+  {
+   "name": "Cap Button",
+   "kind": "button",
+   "refersTo": "button-cap",
+   "description": "행 끝의 작은 동작(담기, 내리기, 픽업 완료).",
+   "html": "<button class=\"ds-cap\">담기</button>",
+   "css": ".ds-cap{height:32px;min-width:64px;padding:0 16px;border-radius:999px;border:0;background:rgba(120,120,128,.12);color:#0066CC;font:700 15px -apple-system,'Apple SD Gothic Neo',sans-serif}"
+  },
+  {
+   "name": "Filter Chip",
+   "kind": "chip",
+   "refersTo": "chip-filter",
+   "description": "줄바꿈되는 선택 칩. 선택은 검정 채움.",
+   "html": "<span class=\"ds-chips\"><button class=\"ds-chip on\">생일</button><button class=\"ds-chip\">감사</button></span>",
+   "css": ".ds-chips{display:flex;flex-wrap:wrap;gap:8px}.ds-chip{height:34px;padding:0 15px;border-radius:999px;border:0;background:rgba(120,120,128,.12);font:500 15px -apple-system,'Apple SD Gothic Neo',sans-serif}.ds-chip.on{background:#000;color:#fff;font-weight:600}"
+  },
+  {
+   "name": "Grouped Row",
+   "kind": "card",
+   "refersTo": "group",
+   "description": "inset grouped 리스트의 셀과 행.",
+   "html": "<div class=\"ds-group\"><div class=\"ds-row\"><span>픽업 시간</span><span class=\"v\">내일 오전</span></div><div class=\"ds-row\"><span>예산</span><span class=\"v\">50,000원</span></div></div>",
+   "css": ".ds-group{background:#fff;border-radius:20px;overflow:hidden;font:400 17px -apple-system,'Apple SD Gothic Neo',sans-serif}.ds-row{position:relative;display:flex;justify-content:space-between;align-items:center;min-height:52px;padding:10px 16px}.ds-row+.ds-row::before{content:'';position:absolute;top:0;left:16px;right:0;height:1px;background:rgba(60,60,67,.2)}.ds-row .v{color:#6C6C70}"
+  },
+  {
+   "name": "Stepper",
+   "kind": "input",
+   "description": "수량 − n +.",
+   "html": "<span class=\"ds-stp\"><button aria-label=\"줄이기\">−</button><b>3</b><button aria-label=\"늘리기\">+</button></span>",
+   "css": ".ds-stp{display:inline-flex;align-items:center;height:36px;border-radius:999px;background:rgba(120,120,128,.12);font:600 17px -apple-system,sans-serif}.ds-stp button{width:42px;height:36px;border:0;background:none;font-size:20px}.ds-stp b{min-width:26px;text-align:center}"
+  }
+ ],
+ "narrative": {
+  "northStar": "시스템 앱처럼 물러나고, 꽃만 색을 갖는다",
+  "overview": "ReBloom은 Apple HIG의 방식을 그대로 따른다. 앱은 iOS 시스템 앱 문법, 소개 페이지는 apple.com 제품 페이지 문법. 회색 바탕·흰 셀·시스템 서체·시스템 블루 하나로만 인터페이스를 만들고 색은 꽃과 로고에서만 나온다. 다크는 순검정 대신 Rosé Pine 배경.",
+  "keyCharacteristics": [
+   "inset grouped 리스트",
+   "라지 타이틀 → 블러 내비게이션",
+   "플로팅 글래스 탭바와 액세서리",
+   "전부 캡슐",
+   "가로 넘침 없음",
+   "tabular sans 숫자"
+  ],
+  "rules": [
+   {
+    "name": "The One Tint Rule",
+    "body": "인터랙티브한 것은 블루, 나머지는 중립. 색은 꽃이 낸다.",
+    "section": "colors"
+   },
+   {
+    "name": "The Never Black Rule",
+    "body": "다크 배경에 #000을 쓰지 않는다. Rosé Pine base/surface/overlay.",
+    "section": "colors"
+   },
+   {
+    "name": "The Up-Is-Red Rule",
+    "body": "오르면 빨강·내리면 파랑, 항상 삼각형과 함께.",
+    "section": "colors"
+   },
+   {
+    "name": "The Tabular Sans Rule",
+    "body": "숫자는 tabular-nums 산세리프. 모노 없음.",
+    "section": "typography"
+   },
+   {
+    "name": "The No Overflow Rule",
+    "body": "320px부터 가로 넘침·잘린 글자 없음. 줄바꿈 칩과 종류 타일.",
+    "section": "layout"
+   },
+   {
+    "name": "The Material-For-Bars Rule",
+    "body": "블러 머티리얼은 떠서 겹치는 바·HUD에만.",
+    "section": "elevation"
+   }
+  ],
+  "dos": [
+   "라지 타이틀 + inset grouped 그룹으로 짓는다",
+   "주 동작 하나를 액세서리에 올린다",
+   "320px 넘침 검사를 통과시킨다",
+   "다크는 Rosé Pine 토큰만"
+  ],
+  "donts": [
+   "크림·딥그린·IBM Plex·모노 숫자로 돌아가지 않는다",
+   "가로 스크롤 줄을 만들지 않는다",
+   "eyebrow·티커·지표 보드를 두지 않는다",
+   "글리프·이모지를 아이콘으로 쓰지 않는다",
+   "배송을 다시 들이지 않는다"
+  ]
+ }
+}
