@@ -250,7 +250,7 @@ function seed(){
     if(!(f.id in D.fresh[fid])) D.fresh[fid][f.id]=1+(h%6)})});
   return D;
 }
-var S, session=null, ui={sort:'price',cmp:false,view:'proposal',bid:{},review:{},lform:null,confirm:null,tag:null,leftTab:'bq',buy:{},want:null,sell:null,grp:'전체',occ:'전체',stemGrp:'전체',photoOcc:'전체',upOcc:'생일'};
+var S, session=null, ui={sort:'price',cmp:false,view:'proposal',bid:{},review:{},lform:null,confirm:null,tag:null,leftTab:'bq',buy:{},want:null,sell:null,mine:null,grp:'전체',occ:'전체',stemGrp:'전체',photoOcc:'전체',upOcc:'생일'};
 var PICKUP=['오늘 마감 전','내일 오전'];
 function load(){try{var r=JSON.parse(localStorage.getItem(KEY));if(r&&r.v===5) return r}catch(e){} return seed()}
 var canStore=(function(){try{localStorage.setItem(KEY+'.t','1');localStorage.removeItem(KEY+'.t');return true}catch(e){return false}})();   // 막힌 환경에서는 메모리로만 동작
@@ -332,7 +332,7 @@ function designThumb(lines){return '<img class="thumb" alt="소비자가 디자�
 function route(){return (location.hash||'#/').slice(2).split('/')}
 function go(h){if(location.hash===h) render(); else location.hash=h}
 var TABS={consumer:[['c/build','만들기',I.flower],['c/left','남는 꽃',I.tag],['c/requests','내 주문',I.list],['c/florists','꽃집',I.users]],
-          florist:[['f/open','입찰 요청',I.gavel],['f/bids','내 입찰',I.list],['f/stock','재고·남는 꽃',I.box],['f/profile','프로필',I.user]]};
+          florist:[['f/open','입찰 요청',I.gavel],['f/bids','내 입찰·판매',I.list],['f/stock','재고·남는 꽃',I.box],['f/profile','프로필',I.user]]};
 function render(){
   var r=route(), u=me(), bar=document.getElementById('appbar'), tabs=document.getElementById('tabs'), view=document.getElementById('view');
   if(!u){ if(r[0]) {location.hash='#/';return}
@@ -347,7 +347,7 @@ function render(){
   var pend=sup?S.orders.filter(function(o){return o.fid===u.id&&o.status==='reserved'}).length:0;
   var won_=sup?S.requests.filter(function(q){return q.status==='awarded'&&bidOf(q,q.award).by===u.id}).length:0;
   tabs.hidden=false;
-  tabs.innerHTML=TABS[u.role].map(function(t){var n=t[0]==='f/stock'?pend:t[0]==='f/bids'?won_:0;
+  tabs.innerHTML=TABS[u.role].map(function(t){var n=t[0]==='f/bids'?won_+pend:0;
     return '<a href="#/'+t[0]+'"'+((r[0]+'/'+r[1])===t[0]?' aria-current="page"':'')+'>'+ic(t[2],22)+t[1]+(n?'<span class="dot">'+n+'</span>':'')+'</a>'}).join('');
   var key=r[0]+'/'+r[1], lines=[];
   var out = key==='c/build'?vBuild(): key==='c/left'?(r[2]?vLeftItem(+r[2]):vLeft()): key==='c/requests'?(r[2]?(vRequest(+r[2])||vOrder(+r[2])):vRequests()): key==='c/florists'?(r[2]?vFlorist(r[2]):vFlorists()):
@@ -568,8 +568,25 @@ function vBidForm(id){
 }
 function vMyBids(){
   var mine=S.requests.filter(function(r){return myBid(r)}).sort(function(a,b){return b.at-a.at});
-  if(!mine.length) return {html:'<div class="card stack" style="align-items:flex-start"><p class="h">아직 입찰한 요청이 없어요</p><a class="btn sm" href="#/f/open">입찰 요청 보기</a></div>'};
-  return {html:'<p class="ttl">내 입찰</p>'+mine.map(function(r){var b=myBid(r), wonIt=r.award===b.id, lost=r.award&&!wonIt, lines=applySub(r.lines,b.sub);
+  var myOff=S.offers.filter(function(o){return o.fid===session}).sort(function(a,b){return b.at-a.at});
+  var mineL=S.listings.filter(function(L){return L.fid===session}).sort(function(a,b){return b.at-a.at});
+  var todo=S.orders.filter(function(o){return o.fid===session&&o.status==='reserved'}).sort(function(a,b){return a.at-b.at});
+  var doneO=S.orders.filter(function(o){return o.fid===session&&o.status==='done'}).sort(function(a,b){return b.at-a.at});
+  var tab=ui.mine||(todo.length?'pickup':'bids');
+  var head='<p class="ttl">내 입찰·판매</p><p class="sub">손님 요청에 낸 입찰, 송이로 내놓은 매도, 남는 꽃 꽃다발, 픽업 예약을 여기서 모두 봅니다.</p>'+
+    '<div class="seg" role="group" aria-label="내가 내놓은 것">'+[['bids','입찰',mine.length],['offers','송이 매도',myOff.filter(function(o){return o.status==='on'}).length],['listings','꽃다발',mineL.filter(function(L){return L.status==='on'}).length],['pickup','픽업 예약',todo.length]].map(function(t){return '<button type="button" aria-pressed="'+(tab===t[0])+'" data-act="mine-tab" data-v="'+t[0]+'">'+t[1]+' '+t[2]+'</button>'}).join('')+'</div>';
+  if(tab==='offers') return {html:head+(myOff.length?myOff.map(function(o){var f=fl(o.flower),left=offerLeft(o),fresh=Date.now()-o.at<90e3;
+      return '<div class="card stack tight'+(o.status!=='on'?' dim':fresh?' win':'')+'"><div class="row"><span class="ico">'+flowerSvg(f,28)+'</span><div class="grow"><div class="nm">'+short(f)+(fresh?' <span class="chip green">방금 올림</span>':'')+'</div><div class="sub">'+esc(o.pickup)+' 픽업 · '+ago(o.at)+'</div></div><div style="text-align:right">'+won(o.price,'warn',17)+'<div class="sub">/'+f.unit+' · 시세 '+fmt(price(f))+'</div></div></div>'+
+        '<div class="row between"><span class="sub">체결 <b class="num" style="color:var(--ink)">'+o.sold+'</b> / '+o.qty+f.unit+' · 남은 '+left+f.unit+'</span>'+(o.status==='on'?(left?'<button type="button" class="btn danger sm" data-act="sell-off" data-id="'+o.id+'">내리기</button>':'<span class="chip solid">매진</span>'):'<span class="chip">내림</span>')+'</div></div>'}).join('')
+      :'<div class="card stack" style="align-items:flex-start"><p class="h">아직 올린 송이 매도가 없어요</p><p class="sub">남는 꽃을 수량과 송이당 가격만 적어 손님에게 팔 수 있습니다.</p><a class="btn sm" href="#/f/stock">송이로 팔러 가기</a></div>')};
+  if(tab==='listings') return {html:head+(mineL.length?mineL.map(function(L){var left=L.sets-L.sold,fresh=Date.now()-L.at<90e3;
+      return '<div class="card stack tight'+(L.status!=='on'?' dim':fresh?' win':'')+'"><div class="row">'+(L.photo?img(L.photo,'thumb','올린 사진'):designThumb(L.lines))+'<div class="grow stack tight"><div class="row between"><span class="h">'+esc(L.title)+(fresh?' <span class="chip green">방금 올림</span>':'')+'</span><span class="chip orange">−'+L.off+'%</span></div><span class="sub">'+(L.occ?esc(L.occ)+' · ':'')+esc(summary(L.lines))+'</span><div class="row between sub"><span>예약 '+L.sold+' / '+L.sets+'세트 · '+esc(L.pickup)+'</span>'+won(L.price,'warn',15)+'</div></div></div>'+
+        (L.status==='on'?(left>0?'<button type="button" class="btn danger sm" data-act="lf-off-sale" data-id="'+L.id+'">판매 내리기</button>':'<span class="chip solid" style="align-self:flex-start">매진</span>'):'<span class="chip" style="align-self:flex-start">내림</span>')+'</div>'}).join('')
+      :'<div class="card stack" style="align-items:flex-start"><p class="h">아직 올린 꽃다발이 없어요</p><a class="btn sm" href="#/f/stock">남는 꽃으로 꽃다발 만들기</a></div>')};
+  if(tab==='pickup') return {html:head+(todo.length?todo.map(function(o){return '<div class="card win stack tight"><div class="row between"><span class="h">#'+o.id+' · '+esc(acc(o.by).name)+'</span><span class="chip solid">'+(o.kind==='stems'?'송이':'꽃다발')+' 예약</span></div><span class="sub">'+esc(summary(o.lines))+' · '+esc(o.pickup)+'</span><div class="row between">'+won(o.price,'',16)+'<button type="button" class="btn sm" data-act="pickup-done" data-id="'+o.id+'">픽업 완료</button></div></div>'}).join(''):'<div class="card"><p class="h">기다리는 픽업이 없어요</p><p class="sub">손님이 송이를 사거나 남는 꽃 꽃다발을 예약하면 여기에 뜹니다.</p></div>')+
+      (doneO.length?'<p class="sub" style="font-weight:700;margin-top:4px">픽업 완료 '+doneO.length+'건</p>'+doneO.slice(0,5).map(function(o){return '<div class="card dim"><div class="row between"><span style="font-size:14px;font-weight:600">#'+o.id+' · '+esc(acc(o.by).name)+'</span>'+won(o.price,'',14)+'</div><span class="sub">'+esc(summary(o.lines))+'</span></div>'}).join(''):'')};
+  if(!mine.length) return {html:head+'<div class="card stack" style="align-items:flex-start"><p class="h">아직 입찰한 요청이 없어요</p><a class="btn sm" href="#/f/open">입찰 요청 보기</a></div>'};
+  return {html:head+mine.map(function(r){var b=myBid(r), wonIt=r.award===b.id, lost=r.award&&!wonIt, lines=applySub(r.lines,b.sub);
     var state=r.status==='done'&&wonIt?'<span class="chip">제작 완료</span>':wonIt?'<span class="chip solid">낙찰</span>':lost?'<span class="chip red">미선정</span>':'<span class="chip green">결과 대기</span>';
     var lack=wonIt&&r.status==='awarded'?lines.filter(function(l){return l.qty>stockOf(session,l.id)}):[];
     return '<div class="card stack'+(wonIt&&r.status==='awarded'?' win':lost?' dim':'')+'"><div class="row">'+designThumb(lines)+'<div class="grow stack tight"><div class="row between"><span class="h">#'+r.id+' · '+esc(r.purpose)+'</span>'+state+'</div><span class="sub">'+esc(summary(lines))+'</span><div class="row between sub"><span>'+esc(b.ready)+' · '+esc(r.method)+'</span>'+won(b.price,'',15)+'</div></div></div>'+
@@ -587,10 +604,9 @@ function vStock(){
   var need={}; FLOWERS.forEach(function(f){need[f.id]=reserved(session,f.id)});
   var lacks=FLOWERS.filter(function(f){return need[f.id]>stockOf(session,f.id)});
   var pool=FLOWERS.filter(function(f){return leftQty(session,f.id)>0}), lines=lformLines(), stems=lines.reduce(function(a,l){return a+l.qty},0), list=listPriceOf(lines), sale=Math.round(list*(1-F.off/100)/100)*100;
-  var todo=S.orders.filter(function(o){return o.fid===session&&o.status==='reserved'}).sort(function(a,b){return a.at-b.at});
-  var mineL=S.listings.filter(function(L){return L.fid===session}).sort(function(a,b){return b.at-a.at});
+  var todoN=S.orders.filter(function(o){return o.fid===session&&o.status==='reserved'}).length, offN=S.offers.filter(function(o){return o.fid===session&&o.status==='on'}).length, listN=S.listings.filter(function(L){return L.fid===session&&L.status==='on'}).length;
   var h='<p class="ttl">재고 · 남는 꽃</p>';
-  if(todo.length) h+='<div class="card win stack"><p class="h">픽업 예약 '+todo.length+'건</p>'+todo.map(function(o){return '<div class="row between" style="padding-top:8px;border-top:1px solid var(--line)"><div><div style="font-size:14px;font-weight:600">#'+o.id+' · '+esc(acc(o.by).name)+'</div><div class="sub">'+esc(summary(o.lines))+' · '+esc(o.pickup)+' · '+fmt(o.price)+'원</div></div><button type="button" class="btn sm" data-act="pickup-done" data-id="'+o.id+'">픽업 완료</button></div>'}).join('')+'</div>';
+  if(todoN||offN||listN) h+='<a class="card tap" href="#/f/bids" data-act="mine-tab" data-v="'+(todoN?'pickup':offN?'offers':'listings')+'"><div class="row between"><div><p class="h">내가 내놓은 것</p><p class="sub">픽업 예약 '+todoN+' · 송이 매도 '+offN+' · 꽃다발 '+listN+'</p></div><span class="chip solid">내 입찰·판매에서 보기</span></div></a>';
   if(lacks.length) h+='<div class="card stack" style="border-color:var(--orange)"><p class="h warn">낙찰 주문에 모자란 꽃</p>'+lacks.map(function(f){var n=need[f.id]-stockOf(session,f.id);return '<div class="row between"><span class="nm">'+short(f)+' <small>필요 '+need[f.id]+' · 재고 '+stockOf(session,f.id)+'</small></span><span class="num warn">'+n+f.unit+' → '+Math.ceil(n/f.per)+'속</span></div>'}).join('')+
     '<button type="button" class="btn ghost sm" data-act="po-copy">새벽 발주 메모로 복사</button></div>';
   h+='<div class="stack"><div><p class="h">남는 꽃으로 꽃다발 만들기</p><p class="sub">신선기간이 임박했고 주문에 묶이지 않은 꽃만 담을 수 있습니다. 손님에게 바로 팔기 때문에 중간 유통이 없습니다.</p></div>';
@@ -618,12 +634,9 @@ function vStock(){
     '<div class="chips">'+[20,30,40,50].map(function(n){var pv=Math.round(price(sf)*(1-n/100)/100)*100;return '<button type="button" class="pick" aria-pressed="'+(SL.price===pv)+'" data-act="sell-price" data-v="'+pv+'">−'+n+'% '+fmt(pv)+'</button>'}).join('')+'</div>'+
     '<div class="stack tight"><span class="sub" style="font-weight:600">픽업</span><div class="chips">'+PICKUP.map(function(x){return '<button type="button" class="pick" aria-pressed="'+(x===SL.pickup)+'" data-act="sell-pickup" data-v="'+x+'">'+x+'</button>'}).join('')+'</div></div>'+
     '<p class="sub">시세 '+fmt(price(sf))+'원 · 다 팔리면 <b class="num">'+fmt(SL.qty*SL.price)+'원</b></p><button type="button" class="btn full" data-act="sell-post"'+(smax>0?'':' disabled')+'>매도 올리기</button></div>';
-  var myOff=S.offers.filter(function(o){return o.fid===session}).sort(function(a,b){return b.at-a.at});
-  if(myOff.length) h+='<div class="card stack tight"><p class="h">내 매도</p>'+myOff.map(function(o){var f=fl(o.flower),left=offerLeft(o);return '<div class="row between" style="padding-top:8px;border-top:1px solid var(--line)"><div><div style="font-size:14px;font-weight:600">'+short(f)+' · <span class="num warn">'+fmt(o.price)+'원</span>/'+f.unit+'</div><div class="sub">체결 '+o.sold+' / '+o.qty+f.unit+' · '+esc(o.pickup)+'</div></div>'+(o.status==='on'?(left?'<button type="button" class="btn danger sm" data-act="sell-off" data-id="'+o.id+'">내리기</button>':'<span class="chip solid">매진</span>'):'<span class="chip">내림</span>')+'</div>'}).join('')+'</div>';
   var wants=S.wants.filter(function(w){return w.status==='open'&&w.filled<w.qty}).sort(function(a,b){return b.at-a.at});
   if(wants.length) h+='<div class="card stack tight"><div><p class="h">손님 매수 희망</p><p class="sub">남는 꽃으로만 응할 수 있습니다. 손님이 적은 가격 그대로 체결됩니다.</p></div>'+wants.map(function(w){var f=fl(w.flower),rem=w.qty-w.filled,can=Math.min(rem,leftQty(session,w.flower)),d=pctOff(f,w.price);
     return '<div class="row between" style="padding-top:8px;border-top:1px solid var(--line)"><div><div style="font-size:14px;font-weight:600">'+short(f)+' '+rem+f.unit+' · <span class="num">'+fmt(w.price)+'원</span>/'+f.unit+'</div><div class="sub">'+esc(acc(w.by).name)+' · '+esc(w.pickup)+' · 시세보다 '+(d>=0?'−'+d:'+'+(-d))+'% · 내 남는 수량 '+leftQty(session,w.flower)+'</div></div><button type="button" class="btn sm" data-act="want-fill" data-id="'+w.id+'"'+(can>0?'':' disabled')+'>'+(can>0?can+f.unit+' 팔기':'남는 꽃 없음')+'</button></div>'}).join('')+'</div>';
-  if(mineL.length) h+='<div class="card stack tight"><p class="h">내 판매</p>'+mineL.map(function(L){var left=L.sets-L.sold;return '<div class="row between" style="padding-top:8px;border-top:1px solid var(--line)"><div class="grow"><div style="font-size:14px;font-weight:600">'+esc(L.title)+' <span class="num warn">'+fmt(L.price)+'원</span></div><div class="sub">'+esc(summary(L.lines))+' · 예약 '+L.sold+' / '+L.sets+'세트</div></div>'+(L.status==='on'?(left>0?'<button type="button" class="btn danger sm" data-act="lf-off-sale" data-id="'+L.id+'">내리기</button>':'<span class="chip solid">매진</span>'):'<span class="chip">내림</span>')+'</div>'}).join('')+'</div>';
   h+='<div class="card" style="padding-block:6px"><p class="h" style="padding:8px 0 2px">내 재고</p>'+FLOWERS.map(function(f){var st=stockOf(session,f.id),n=need[f.id]||0,d=(S.fresh[session]||{})[f.id],c=committed(session,f.id);
     return '<div class="line" style="flex-wrap:wrap"><span class="ico">'+flowerSvg(f,28)+'</span><div class="grow"><div class="nm">'+f.name+'<small>'+f.v+'</small></div><div class="sub"><b class="num '+(d<=1?'warn':'')+'">'+d+'일</b> 남음'+(n?' · 낙찰 주문 '+n:'')+(c?' · 판매 중 '+c:'')+'</div></div>'+
       '<div class="qty"><button type="button" aria-label="'+esc(short(f))+' 1 빼기" data-act="s-dec" data-id="'+f.id+'">'+ic(I.minus,16,2)+'</button><input id="st-'+f.id+'" type="number" inputmode="numeric" min="0" max="999" value="'+st+'" aria-label="'+esc(short(f))+' 재고" data-stock="'+f.id+'"><button type="button" aria-label="'+esc(short(f))+' 1 더하기" data-act="s-inc" data-id="'+f.id+'">'+ic(I.plus,16,2)+'</button></div><button type="button" class="boxbtn" data-act="s-box" data-id="'+f.id+'" aria-label="'+esc(short(f))+' 1속 입고">+1속</button>'+
@@ -673,7 +686,7 @@ document.addEventListener('click',function(e){
   var b=e.target.closest('[data-act]'); if(!b||b.disabled) return;
   var act=b.getAttribute('data-act'), id=b.getAttribute('data-id'), v=b.getAttribute('data-v'), rid=+b.getAttribute('data-req'), req=rid&&job(rid);
   if(act!=='award') ui.confirm=null;
-  if(act==='login'){session=id;try{localStorage.setItem(SKEY,id)}catch(err){} ui.viewBid=null;bqSig=null;go('#/'+TABS[acc(id).role][0][0]);toast(acc(id).name+' 계정으로 들어왔어요');return}
+  if(act==='login'){ui.mine=null;session=id;try{localStorage.setItem(SKEY,id)}catch(err){} ui.viewBid=null;bqSig=null;go('#/'+TABS[acc(id).role][0][0]);toast(acc(id).name+' 계정으로 들어왔어요');return}
   if(act==='logout'){session=null;try{localStorage.removeItem(SKEY)}catch(err){} go('#/');return}
   if(act==='reset'){S=seed();save();ui.bid={};ui.review={};ui.lform=null;ui.buy={};ui.want=null;ui.sell=null;toast('데모 데이터를 처음 상태로 돌렸어요');render();return}
   if(act==='zoom'){var d=document.createElement('div');d.className='lightbox';d.setAttribute('role','dialog');d.setAttribute('aria-label','사진 크게 보기');d.innerHTML='<img src="'+esc(b.getAttribute('data-src'))+'" alt=""><p>'+esc(b.getAttribute('data-cap'))+' · 아무 곳이나 누르면 닫힙니다</p>';document.body.appendChild(d);return}
@@ -717,11 +730,12 @@ document.addEventListener('click',function(e){
   else if(act==='lf-sets'){var ns=Math.max(1,ui.lform.sets+(+v));if(!lformLines().every(function(l){return l.qty*ns<=leftQty(session,l.id)})){toast('남는 꽃으로는 '+ui.lform.sets+'세트까지 만들 수 있어요');return}ui.lform.sets=ns}
   else if(act==='lf-publish'){var F=ui.lform,ll=lformLines();if(!ll.length) return;var li=listPriceOf(ll);
     S.listings.push({id:++S.seq,fid:session,title:(F.title||'').trim()||((F.occ||suggestOccasion(ll))+' 남는 꽃 한 다발'),lines:ll,list:li,off:F.off,price:Math.round(li*(1-F.off/100)/100)*100,sets:F.sets,sold:0,pickup:F.pickup,photo:F.photo,occ:F.occ||suggestOccasion(ll),status:'on',at:Date.now()});
-    if(!save()){S.listings[S.listings.length-1].photo=null;save()} ui.lform=null;toast('손님 앱 “남는 꽃” 탭에 올렸어요')}
+    if(!save()){S.listings[S.listings.length-1].photo=null;save()} ui.lform=null;ui.mine='listings';toast('손님 앱 “남는 꽃” 탭에 올렸어요');go('#/f/bids');return}
   else if(act==='lf-off-sale'){S.listings.filter(function(L){return L.id===+id})[0].status='off';toast('판매를 내렸어요. 남은 꽃은 다시 남는 꽃으로 돌아옵니다.')}
   else if(act==='pickup-done'){var od=S.orders.filter(function(o){return o.id===+id})[0];od.status='done';od.doneAt=Date.now();toast('픽업 완료로 표시했어요')}
   else if(act==='po-copy'){var memo=FLOWERS.filter(function(f){return reserved(session,f.id)>stockOf(session,f.id)}).map(function(f){return f.name+' '+f.v+' '+(f.grade==='줄기'?'':f.grade+' ')+Math.ceil((reserved(session,f.id)-stockOf(session,f.id))/f.per)+'속'}).join('\n');
     try{navigator.clipboard.writeText(memo).then(function(){toast('발주 메모를 복사했어요')},function(){toast(memo.replace(/\n/g,' · '))})}catch(err){toast(memo.replace(/\n/g,' · '))} return}
+  else if(act==='mine-tab'){ui.mine=v;if(b.tagName==='A'){save();go('#/f/bids');return}}
   else if(act==='left-tab'){ui.leftTab=v}
   else if(act==='buy-q'){var of=S.offers.filter(function(o){return o.id===+id})[0],lf=offerLeft(of);ui.buy[id]=Math.max(1,Math.min(lf,(Number(ui.buy[id])||Math.min(5,lf))+(+v)))}
   else if(act==='buy'){var of2=S.offers.filter(function(o){return o.id===+id})[0],lf2=offerLeft(of2),bq_=Math.round(Number(ui.buy[id])||Math.min(5,lf2));
@@ -736,11 +750,11 @@ document.addEventListener('click',function(e){
   else if(act==='want-fill'){var w=S.wants.filter(function(x){return x.id===+id})[0],fq=Math.min(w.qty-w.filled,leftQty(session,w.flower));if(!(fq>0)){toast('남는 꽃이 없어요');return}
     w.filled+=fq;if(w.filled>=w.qty) w.status='done';S.stock[session][w.flower]=Math.max(0,stockOf(session,w.flower)-fq);
     S.orders.push({id:++S.seq,kind:'stems',want:w.id,by:w.by,fid:session,lines:[{id:w.flower,qty:fq}],unit:w.price,price:fq*w.price,pickup:w.pickup,status:'reserved',at:Date.now()});
-    toast(short(fl(w.flower))+' '+fq+fl(w.flower).unit+'를 '+fmt(w.price)+'원에 팔았어요 · 픽업 예약에 추가')}
+    toast(short(fl(w.flower))+' '+fq+fl(w.flower).unit+'를 '+fmt(w.price)+'원에 팔았어요 · 픽업 예약에 추가');ui.mine='pickup';save();go('#/f/bids');return}
   else if(act==='sell-price'){ui.sell.price=+v}
   else if(act==='sell-pickup'){ui.sell.pickup=v}
   else if(act==='sell-post'){var SL=ui.sell,sq=Math.round(Number(SL.qty)),sp=Math.round(Number(SL.price)),mx=leftQty(session,SL.flower);if(!(sq>=1)||!(sp>=100)){toast('수량과 가격을 확인해 주세요');return} if(sq>mx){toast('남는 수량은 '+mx+fl(SL.flower).unit+'까지예요');return}
-    S.offers.push({id:++S.seq,fid:session,flower:SL.flower,qty:sq,sold:0,price:sp,pickup:SL.pickup,status:'on',at:Date.now()});ui.sell=null;toast('매도를 올렸어요. 손님 앱 “송이로 사기”에 보입니다.')}
+    S.offers.push({id:++S.seq,fid:session,flower:SL.flower,qty:sq,sold:0,price:sp,pickup:SL.pickup,status:'on',at:Date.now()});ui.sell=null;ui.mine='offers';save();toast('매도를 올렸어요. 손님 앱 “송이로 사기”에도 보입니다.');go('#/f/bids');return}
   else if(act==='sell-off'){S.offers.filter(function(o){return o.id===+id})[0].status='off';toast('매도를 내렸어요. 남은 꽃은 다시 남는 꽃으로 돌아옵니다.')}
   else if(act==='reserve'){var L=S.listings.filter(function(x){return x.id===+id})[0];if(!L||L.status!=='on'||L.sets-L.sold<1){toast('방금 품절됐어요');render();return}
     L.sold++;L.lines.forEach(function(l){S.stock[L.fid][l.id]=Math.max(0,stockOf(L.fid,l.id)-l.qty)});
