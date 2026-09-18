@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>꽃다발 입찰</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap">
+<style>
+:root{color-scheme:light;--bg:#F6F1E8;--card:#FFFDF9;--soft:#EFE9DE;--line:#E6DED1;--ink:#1E1B16;--muted:#6B655B;--green:#1F5A3C;--green-dark:#143D29;--green-tint:#E3EEE5;--orange:#B85A0C;--orange-tint:#FBEBD9;--up:#C2382B;--danger:#B3261E;--danger-tint:#FAE3E0;--photo:#ECE5D8;--off:#C9C1B3;--star:#C98A1B;
+--sans:'IBM Plex Sans KR',system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:#E9E2D5;color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;word-break:keep-all}
+h1,h2,h3,p,ul,dl,dd{margin:0}ul{padding:0;list-style:none}
+button,input,select,textarea{font-family:inherit;color:inherit;font-size:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed}
+a{color:var(--green)}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:6px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em;font-weight:700}
+.unit{font-size:.6em;font-weight:600;margin-left:1px;font-family:var(--sans);letter-spacing:0}
+.muted{color:var(--muted)}.warn{color:var(--orange)}.down{color:var(--green)}.up{color:var(--up)}
+/* 핸드오프: 컨텐츠 최대 폭 480px 중앙 정렬 */
+.shell{max-width:480px;min-height:100%;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;box-shadow:0 0 0 1px var(--line)}
+.appbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;gap:10px;height:56px;padding:0 12px 0 16px;background:var(--card);border-bottom:1px solid var(--line)}
+.appbar.supplier{background:var(--ink);color:#fff;border-bottom-color:var(--ink)}
+.appbar h1{font-size:16px;font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appbar .who{font-size:12px;opacity:.8;white-space:nowrap}
+.iconbtn{width:44px;height:44px;border:0;background:transparent;border-radius:10px;display:flex;align-items:center;justify-content:center;color:inherit}
+.rolechip{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;background:var(--green-tint);color:var(--green);white-space:nowrap}
+.supplier .rolechip{background:#fff;color:var(--ink)}
+main{flex:1;padding:14px 16px 24px;display:flex;flex-direction:column;gap:12px}
+.tabbar{position:sticky;bottom:0;z-index:20;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabbar a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 7px;font-size:11px;font-weight:500;color:var(--muted);text-decoration:none;position:relative}
+.tabbar a[aria-current=page]{color:var(--green);font-weight:700}
+.dot{position:absolute;top:6px;left:calc(50% + 8px);min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:var(--danger);color:#fff;font:700 10px/16px var(--mono);text-align:center}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.card.tap{display:block;text-decoration:none;color:inherit}
+.card.tap:hover{border-color:var(--green)}
+.card.win{border:1.5px solid var(--green);background:#FBFDF9}
+.card.dim{opacity:.55}
+.h{font-size:15px;font-weight:700}.sub{font-size:12.5px;color:var(--muted)}
+.ttl{font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.3}
+.row{display:flex;align-items:center;gap:10px}.row.between{justify-content:space-between}.wrap{flex-wrap:wrap}.grow{flex:1;min-width:0}
+.stack{display:flex;flex-direction:column;gap:10px}.stack.tight{gap:6px}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--soft);color:#4A4439;white-space:nowrap}
+.chip.green{background:var(--green-tint);color:var(--green)}.chip.orange{background:var(--orange-tint);color:var(--orange)}.chip.red{background:var(--danger-tint);color:var(--danger)}.chip.solid{background:var(--green);color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:52px;padding:0 18px;border-radius:14px;border:0;background:var(--green);color:#fff;font-size:15px;font-weight:700;text-decoration:none;white-space:nowrap}
+.btn:hover{background:var(--green-dark)}.btn.full{width:100%}
+.btn.sm{height:44px;padding:0 14px;border-radius:10px;font-size:13.5px}
+.btn.ghost{background:var(--card);color:var(--green);border:1.5px solid var(--green)}.btn.ghost:hover{background:var(--green-tint)}
+.btn.quiet{background:var(--soft);color:var(--ink)}.btn.quiet:hover{background:#E6DED1}
+.btn.orange{background:var(--orange)}.btn.danger{background:var(--card);color:var(--danger);border:1.5px solid var(--danger)}
+.btn:disabled{background:var(--off);color:#fff;border-color:var(--off)}
+.linkbtn{background:none;border:0;padding:8px 2px;font-size:13px;font-weight:600;color:var(--green);text-decoration:underline;text-underline-offset:3px}
+.field{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.field input,.field select,.field textarea{height:46px;padding:0 12px;border-radius:10px;border:1.5px solid var(--green);background:#fff;font-size:15px;font-weight:500;color:var(--ink);width:100%}
+.field textarea{height:auto;min-height:76px;padding:10px 12px;resize:vertical;line-height:1.5}
+.field input.num{font-family:var(--mono);font-weight:700;text-align:right;font-size:18px}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:4px;border-radius:12px;background:var(--soft)}
+.seg button{height:38px;border:0;border-radius:9px;background:transparent;font-size:13px;font-weight:600;color:#4A4439}
+.seg button[aria-pressed=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(30,27,22,.12)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.pick{height:36px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);font-size:13px;font-weight:500}
+.pick[aria-pressed=true]{border-color:var(--green);background:var(--green);color:#fff;font-weight:600}
+.avatar{width:44px;height:44px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;flex-shrink:0}
+.avatar.c{background:#8A6A3B}.avatar.lg{width:60px;height:60px;font-size:22px}
+.stars{color:var(--star);font-size:13px;letter-spacing:1px;white-space:nowrap}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13.5px}.kv dt{color:var(--muted)}.kv dd{font-weight:500}
+.line{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line)}.line:first-child{border-top:0}
+.ico{width:36px;height:36px;border-radius:9px;background:var(--photo);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nm{font-size:14px;font-weight:600;line-height:1.3}.nm small{font-weight:400;color:var(--muted);font-size:12px;margin-left:4px}
+.qty{display:flex;align-items:center;gap:2px}
+.qty button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:center}
+.qty .n{min-width:30px;text-align:center;font-size:16px}
+.qty input{width:58px;height:40px;text-align:right;padding:0 8px;border-radius:8px;border:1.5px solid var(--green);background:#fff;font:700 16px var(--mono)}
+.switch{width:44px;height:26px;border-radius:999px;border:0;background:var(--off);position:relative;padding:0;flex-shrink:0}.switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25)}.switch[aria-checked=true]{background:var(--green)}.switch[aria-checked=true]::after{left:21px}
+.addbtn{height:40px;padding:0 16px;border-radius:10px;border:0;background:var(--green);color:#fff;font-size:13.5px;font-weight:700}
+.boxbtn{height:40px;padding:0 10px;border-radius:10px;border:1.5px solid var(--green);background:var(--card);color:var(--green);font-size:12.5px;font-weight:700}
+.bq-card{position:relative;height:270px;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.bq{position:absolute;inset:0}.bq-canvas{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+.bq-tl{position:absolute;top:10px;left:10px}.bq-cap{position:absolute;left:10px;right:10px;bottom:10px;display:flex;flex-wrap:wrap;gap:5px;pointer-events:none}
+.bq-cap .chip,.bq-tl .chip{background:rgba(239,233,222,.92)}
+.bq-empty{position:absolute;inset:12px;border:1.5px dashed var(--line);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;font-weight:600;background:var(--card)}
+.bq-2d{position:absolute;inset:0;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;padding:34px 24px}.bq-2d svg{margin:-6px -8px}
+.miniseg{display:inline-flex;padding:3px;border-radius:999px;background:rgba(239,233,222,.92)}
+.miniseg button{height:30px;padding:0 12px;border:0;border-radius:999px;background:transparent;font-size:12.5px;font-weight:600;color:#4A4439}
+.miniseg button[aria-pressed=true]{background:var(--green);color:#fff}
+.thumb{width:64px;height:64px;border-radius:10px;background:var(--photo);object-fit:cover;flex-shrink:0;display:block}
+.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.photos button{padding:0;border:0;background:var(--photo);border-radius:10px;overflow:hidden;aspect-ratio:1;position:relative}
+.photos img{width:100%;height:100%;object-fit:cover;display:block}
+.photos .tag{position:absolute;left:5px;bottom:5px;font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(30,27,22,.72);color:#fff}
+.strip{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}.strip .pick{flex-shrink:0}.strip img{width:72px;height:72px;border-radius:9px;object-fit:cover;background:var(--photo);flex-shrink:0}
+.rv{padding:12px 0;border-top:1px solid var(--line)}.rv:first-child{border-top:0;padding-top:2px}
+.rv img{width:100%;max-height:260px;object-fit:cover;border-radius:10px;margin-top:8px;display:block;background:var(--photo)}
+.cmp{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.cmp table{border-collapse:collapse;table-layout:fixed;width:100%;min-width:calc(88px + 156px * var(--n))}
+.cmp th,.cmp td{padding:10px 12px;border-top:1px solid var(--line);text-align:left;vertical-align:top;font-size:13px}
+.cmp tr:first-child th,.cmp tr:first-child td{border-top:0}
+.cmp th{width:88px;color:var(--muted);font-weight:600;font-size:12px;background:var(--soft);position:sticky;left:0}
+.cmp td.best{background:#F3F8F3}
+.cmp img{width:100%;height:92px;object-fit:cover;border-radius:8px;background:var(--photo);display:block}
+.bar{height:8px;border-radius:999px;background:var(--soft);overflow:hidden}.bar i{display:block;height:100%;border-radius:999px;background:var(--green)}.bar.over i{background:var(--orange)}
+.note{padding:10px 12px;border-radius:10px;background:var(--green-tint);font-size:13px;color:#24503A}
+.note.orange{background:var(--orange-tint);color:var(--orange);font-weight:600}
+.note.soft{background:var(--soft);color:#4A4439}
+.sticky-cta{position:sticky;bottom:57px;z-index:15;margin:0 -16px -24px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--line);display:flex;align-items:center;gap:12px}
+.rate{display:flex;gap:4px}.rate button{width:44px;height:44px;border:0;background:transparent;font-size:26px;color:var(--off);padding:0}.rate button.on{color:var(--star)}
+.filebtn{position:relative;overflow:hidden}.filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.lightbox{position:fixed;inset:0;z-index:60;background:rgba(20,18,14,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:12px}
+.lightbox img{max-width:100%;max-height:80vh;border-radius:10px}.lightbox p{color:#fff;font-size:13px;opacity:.85;text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:70;max-width:min(440px,calc(100% - 32px));padding:12px 18px;border-radius:12px;background:var(--ink);color:#fff;font-size:14px;font-weight:500;box-shadow:0 6px 24px rgba(30,27,22,.25)}
+.login-acc{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px;border-radius:14px;border:1px solid var(--line);background:var(--card)}
+.login-acc:hover{border-color:var(--green)}
+.steps{counter-reset:s}.steps li{counter-increment:s;display:grid;grid-template-columns:24px 1fr;gap:8px;font-size:13px;padding:4px 0}
+.steps li::before{content:counter(s);width:22px;height:22px;border-radius:50%;background:var(--green-tint);color:var(--green);font:700 12px/22px var(--mono);text-align:center}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="appbar" id="appbar"></header>
+  <main id="view"></main>
+  <nav class="tabbar" id="tabs" aria-label="메뉴" hidden></nav>
+</div>
+<div id="bq-holder" hidden><div class="bq" id="bq-host"></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="models.js?v=20260918e"></script>
+<script src="bouquet3d.js?v=20260918e"></script>
+<script>
+(function(){
+'use strict';
+var KEY='flowerbid.v5', SKEY='flowerbid.session';
+var MATERIALS=3000, DESIGN=8000, SHIP=3000, SHIP_FREE=30000;
+var WHEN=['오늘 18:00','내일 오전','내일 오후','모레 오전'], PURPOSE=['생일','감사','기념일','축하','졸업·입학','병문안','근조'];
+var TAGS=['내추럴','파스텔','컴팩트','그린 많이','비비드','모던','근조 경험','당일 제작'];
+function U(id){return 'https://images.unsplash.com/photo-'+id+'?w=700&h=700&fit=crop&q=70&auto=format'}
+
+// ---------- 꽃 · 가격(landing 과 같은 공식) ----------
+var FLOWERS=[
+ {id:'mum',model:'mum',c3:'#F6F2E8',name:'국화',v:'백선',grade:'특',unit:'송이',box:12000,per:20,margin:2.0,petal:'#F3EEE3',center:'#EAD6A8'},
+ {id:'rose',model:'rose',c3:'#B23A3A',name:'장미',v:'레드나오미',grade:'상',unit:'송이',box:11200,per:10,margin:2.5,petal:'#B84A45',center:'#7D2E2B'},
+ {id:'lisi-w',model:'lisianthus',c3:'#F4EFE4',name:'리시안셔스',v:'화이트',grade:'특',unit:'송이',box:12500,per:10,margin:2.8,petal:'#F3EEE3',center:'#D9CBA5'},
+ {id:'lisi-i',model:'lisianthus',c3:'#E6D2A2',name:'리시안셔스',v:'아이보리',grade:'특',unit:'송이',box:12500,per:10,margin:2.8,petal:'#EFE6D2',center:'#D9CBA5'},
+ {id:'lisi-p',model:'lisianthus',c3:'#E7A3AC',name:'리시안셔스',v:'핑크',grade:'특',unit:'송이',box:13500,per:10,margin:2.8,petal:'#E9C4C0',center:'#C98A86'},
+ {id:'carn',model:'carnation',c3:'#EBA9AD',name:'카네이션',v:'핑크',grade:'상',unit:'송이',box:10000,per:20,margin:3.0,petal:'#E9C4C0',center:'#C98A86'},
+ {id:'tulip',model:'tulip',c3:'#E9C24F',name:'튤립',v:'옐로우',grade:'특',unit:'송이',box:8000,per:10,margin:2.8,petal:'#E7C86A',center:'#B89A3E'},
+ {id:'mum-y',model:'mum',c3:'#EBC74A',name:'국화',v:'옐로우',grade:'특',unit:'송이',box:12000,per:20,margin:2.0,petal:'#E7C86A',center:'#B89A3E'},
+ {id:'rose-p',model:'rose',c3:'#E9A3AE',name:'장미',v:'핑크',grade:'상',unit:'송이',box:11500,per:10,margin:2.5,petal:'#E9B4BC',center:'#C98A86'},
+ {id:'rose-w',model:'rose',c3:'#F5F0E6',name:'장미',v:'화이트',grade:'상',unit:'송이',box:11200,per:10,margin:2.5,petal:'#F3EEE3',center:'#D9CBA5'},
+ {id:'carn-r',model:'carnation',c3:'#C0353A',name:'카네이션',v:'레드',grade:'상',unit:'송이',box:10500,per:20,margin:3.0,petal:'#C0454A',center:'#7D2E2B'},
+ {id:'tulip-p',model:'tulip',c3:'#EFA9B8',name:'튤립',v:'핑크',grade:'특',unit:'송이',box:8200,per:10,margin:2.8,petal:'#EFB5C0',center:'#C98A86'},
+ {id:'gerb-o',model:'gerbera',c3:'#F08A3C',name:'거베라',v:'오렌지',grade:'상',unit:'송이',box:9000,per:10,margin:2.6,petal:'#F0A060',center:'#5B4A1E'},
+ {id:'gerb-p',model:'gerbera',c3:'#EE8FA6',name:'거베라',v:'핑크',grade:'상',unit:'송이',box:9000,per:10,margin:2.6,petal:'#EEA2B4',center:'#5B4A1E'},
+ {id:'sunf',model:'sunflower',c3:'#F2B632',name:'해바라기',v:'옐로우',grade:'특',unit:'송이',box:14000,per:10,margin:2.6,petal:'#F2C04A',center:'#4A3420'},
+ {id:'lily-w',model:'lily',c3:'#F7F3EA',name:'백합',v:'화이트',grade:'특',unit:'송이',box:18000,per:10,margin:2.5,petal:'#F3EEE3',center:'#9A4E1E'},
+ {id:'lily-p',model:'lily',c3:'#F0B7C2',name:'백합',v:'핑크',grade:'특',unit:'송이',box:18500,per:10,margin:2.5,petal:'#F0C0C8',center:'#9A4E1E'},
+ {id:'hydr-b',model:'hydrangea',c3:'#8FA8D8',name:'수국',v:'블루',grade:'특',unit:'송이',box:20000,per:5,margin:2.0,petal:'#9DB2DC',center:'#E8E2C8'},
+ {id:'hydr-p',model:'hydrangea',c3:'#E3A9C4',name:'수국',v:'핑크',grade:'특',unit:'송이',box:20000,per:5,margin:2.0,petal:'#E6B4CB',center:'#E8E2C8'},
+ {id:'peony',model:'peony',c3:'#F2B5C0',name:'작약',v:'핑크',grade:'특',unit:'송이',box:17500,per:5,margin:2.0,petal:'#F2BEC7',center:'#E6A0AE'},
+ {id:'gyps',model:'gypsophila',c3:'#FAF8F2',green:true,name:'안개꽃',v:'화이트',grade:'줄기',unit:'줄기',box:9000,per:10,margin:2.5,petal:'#F6F3EA',center:'#F6F3EA'},
+ {id:'euca',model:'eucalyptus',c3:null,green:true,name:'유칼립투스',v:'그린',grade:'줄기',unit:'줄기',box:6000,per:10,margin:3.0,euca:true}
+];
+var GROUPS=FLOWERS.reduce(function(a,f){if(a.indexOf(f.name)<0) a.push(f.name);return a},[]);
+
+// ---- 경조사별 추천 구성(담은 뒤 자유롭게 고칠 수 있다)
+var PRESETS={
+ '생일':[{n:'파스텔 생일',l:{'rose-p':5,'lisi-p':4,'gerb-p':3,gyps:2,euca:2}},{n:'비비드 생일',l:{'gerb-o':5,'tulip-y':4,'rose':3,euca:2}}],
+ '감사':[{n:'어버이날 카네이션',l:{'carn-r':8,carn:4,gyps:2,euca:2}},{n:'스승의 날 단정하게',l:{carn:6,'lisi-w':3,euca:2}}],
+ '기념일':[{n:'레드 로즈 클래식',l:{rose:10,gyps:3,euca:2}},{n:'작약 로맨틱',l:{peony:3,'rose-p':4,'lisi-w':3,euca:2}}],
+ '축하':[{n:'개업·승진 비비드',l:{sunf:3,'gerb-o':4,rose:3,euca:3}},{n:'수국 볼륨',l:{'hydr-b':2,'rose-w':4,'lisi-w':3,euca:2}}],
+ '졸업·입학':[{n:'해바라기 졸업',l:{sunf:3,'gerb-o':3,gyps:2,euca:2}},{n:'튤립 입학',l:{'tulip-p':5,tulip:4,gyps:2}}],
+ '병문안':[{n:'향이 약한 파스텔',l:{'gerb-p':4,'lisi-p':4,'rose-w':3,euca:2},note:'백합처럼 향이 강한 꽃은 넣지 않았어요.'}],
+ '근조':[{n:'흰 국화 조문',l:{mum:12,'lily-w':2,euca:2}},{n:'국화·리시안셔스 조문',l:{mum:8,'lisi-w':5,gyps:2}}]
+};
+function presetLines(pr){return FLOWERS.filter(function(f){return pr.l[f.id]}).map(function(f){return {id:f.id,qty:pr.l[f.id]}})}
+// 구성을 보고 용도를 추천한다(공급자가 올릴 때 자동 분류, 직접 바꿀 수 있다)
+function suggestOccasion(lines){
+  var n={},tot=0;lines.forEach(function(l){var f=fl(l.id);if(f.green) return;n[l.id]=(n[l.id]||0)+l.qty;tot+=l.qty});if(!tot) return '생일';
+  function sh(ids){return ids.reduce(function(a,i){return a+(n[i]||0)},0)/tot}
+  if(sh(['mum','lily-w','lisi-w','rose-w'])>=0.7&&sh(['mum','lily-w'])>0) return '근조';
+  if(sh(['carn','carn-r'])>=0.4) return '감사';
+  if(sh(['rose'])>=0.4||sh(['peony'])>=0.25) return '기념일';
+  if(sh(['sunf'])>=0.2) return '졸업·입학';
+  if(sh(['gerb-o','hydr-b','hydr-p','mum-y'])>=0.35) return '축하';
+  return '생일';
+}
+function fl(id){for(var i=0;i<FLOWERS.length;i++) if(FLOWERS[i].id===id) return FLOWERS[i]}
+function price(f){return Math.round(f.box/f.per*f.margin/10)*10}
+function flowersTotal(lines){return lines.reduce(function(a,l){return a+l.qty*price(fl(l.id))},0)}
+function estimate(lines,method){var f=flowersTotal(lines);return lines.length?f+MATERIALS+DESIGN+(method==='배송'&&f<SHIP_FREE?SHIP:0):0}
+function short(f){return f.name+(f.name==='리시안셔스'?' '+f.v:'')}
+function summary(lines){return lines.map(function(l){return short(fl(l.id))+' '+l.qty}).join(' · ')}
+
+// ---------- 계정(목업 3개) + 로그인 없는 제휴 꽃집 1곳 ----------
+var ACCOUNTS=[
+ {id:'c1',role:'consumer',name:'최유진',sub:'송파구 잠실동',initial:'유'},
+ {id:'f1',role:'florist',name:'화양플라워',person:'김화양',area:'광진구 화양동',km:0.8,years:12,initial:'화',doneBase:412},
+ {id:'f2',role:'florist',name:'반포꽃집',person:'이서윤',area:'서초구 반포동',km:1.4,years:6,initial:'반',doneBase:188}
+];
+var PARTNERS=[{id:'f3',role:'florist',name:'서초플라워',person:'박도현',area:'서초구 서초동',km:2.6,years:9,initial:'서',doneBase:630,auto:true}];
+function acc(id){return ACCOUNTS.concat(PARTNERS).filter(function(a){return a.id===id})[0]}
+function florists(){return ACCOUNTS.concat(PARTNERS).filter(function(a){return a.role==='florist'})}
+
+function seed(){
+  var now=Date.now(), H=3600e3;
+  var D={v:5,seq:1043,
+   stock:{f1:{mum:60,rose:30,'lisi-w':2,'lisi-i':25,'lisi-p':18,carn:40,tulip:8,euca:40},
+          f2:{mum:40,rose:12,'lisi-w':30,'lisi-i':0,'lisi-p':10,carn:25,tulip:20,euca:15},
+          f3:{mum:200,rose:50,'lisi-w':40,'lisi-i':30,'lisi-p':25,carn:60,tulip:30,euca:80}},
+   profiles:{f1:{tags:['내추럴','그린 많이','근조 경험'],intro:'들꽃처럼 자연스럽게 묶습니다. 그린을 넉넉히 쓰고, 포장은 크라프트 위주로 담백하게 합니다. 근조 화환도 당일 제작합니다.'},
+             f2:{tags:['파스텔','컴팩트','당일 제작'],intro:'작고 단정한 파스텔 톤 꽃다발이 주력입니다. 예산이 크지 않아도 풍성해 보이게 구성해 드려요.'},
+             f3:{tags:['비비드','모던'],intro:'선명한 색과 큰 볼륨. 행사·개업 꽃과 바구니를 많이 합니다.'}},
+   photos:{f1:[{src:U('1487530811176-3780de880c2d'),cap:'화이트·라벤더 내추럴',occ:'감사'},{src:U('1457089328109-e5d9bd499191'),cap:'딥톤 가을 구성',occ:'기념일'},{src:U('1531120364508-a6b656c3e78d'),cap:'들꽃 믹스',occ:'생일'},{src:U('1567696153798-9111f9cd3d0d'),cap:'크라프트 포장',occ:'생일'},{src:U('1523694576729-dc99e9c0f9b4'),cap:'화이트 라운드',occ:'근조'}],
+           f2:[{src:U('1523693916903-027d144a2b7d'),cap:'핑크 로즈',occ:'생일'},{src:U('1623406795110-99f1c4325084'),cap:'파스텔 랩핑',occ:'기념일'},{src:U('1497276236755-0f85ba99a126'),cap:'작약',occ:'기념일'},{src:U('1572454591674-2739f30d8c40'),cap:'피치 로즈',occ:'감사'},{src:U('1561181286-d3fee7d55364'),cap:'핑크 튤립',occ:'졸업·입학'}],
+           f3:[{src:U('1599791095997-5cf38bb5ff69'),cap:'레드·화이트',occ:'기념일'},{src:U('1494337095615-b5f370aad75f'),cap:'오렌지 카네이션',occ:'감사'},{src:U('1619962992057-be492a5816f6'),cap:'컬러 튤립',occ:'졸업·입학'},{src:U('1615385639736-362b69696227'),cap:'레드 크라프트',occ:'축하'},{src:U('1469317835793-6d02c2392778'),cap:'꽃바구니',occ:'축하'}]},
+   reviews:{f1:[{by:'김**',rating:5,purpose:'감사',at:now-26*H,text:'사진보다 실물이 더 자연스러웠어요. 유칼립투스 향이 좋아서 어머니가 한참 들고 계셨습니다.',photo:U('1487530811176-3780de880c2d')},
+                {by:'이**',rating:5,purpose:'근조',at:now-5*24*H,text:'급하게 부탁드렸는데 마감 40분 전에 도착했습니다. 감사합니다.'},
+                {by:'박**',rating:4,purpose:'생일',at:now-9*24*H,text:'구성은 마음에 들었고 픽업 시간이 10분쯤 밀렸어요.',photo:U('1567696153798-9111f9cd3d0d')}],
+            f2:[{by:'정**',rating:5,purpose:'생일',at:now-30*H,text:'3만원대인데도 풍성해 보여서 놀랐어요. 색감이 딱 부탁드린 파스텔이었습니다.',photo:U('1623406795110-99f1c4325084')},
+                {by:'한**',rating:4,purpose:'기념일',at:now-6*24*H,text:'예쁘고 친절하세요. 리본 색을 고를 수 있으면 더 좋겠어요.',photo:U('1523693916903-027d144a2b7d')}],
+            f3:[{by:'오**',rating:4,purpose:'축하',at:now-3*24*H,text:'크고 화려합니다. 개업 선물로 딱이었어요.',photo:U('1599791095997-5cf38bb5ff69')},
+                {by:'윤**',rating:3,purpose:'생일',at:now-12*24*H,text:'꽃은 싱싱했는데 제가 고른 구성보다 색이 많이 진했습니다.'}]},
+   requests:[
+    {id:1042,by:'c1',lines:[{id:'mum',qty:10},{id:'lisi-w',qty:3},{id:'euca',qty:2}],budget:50000,purpose:'감사',when:'내일 오전',method:'픽업',memo:'어머니께 드릴 거예요. 너무 화려하지 않게 부탁드려요.',status:'open',at:now-2*H,
+     bids:[{id:'b1',by:'f2',price:36000,ready:'내일 오전',note:'내일 10시 픽업 가능합니다. 국화는 오늘 들어온 것으로 준비할게요.',sub:null,at:now-80*60e3},
+           {id:'b2',by:'f3',price:39000,ready:'내일 오후',note:'볼륨을 조금 키워 드릴 수 있습니다.',sub:null,at:now-50*60e3}]},
+    {id:1038,by:'c1',lines:[{id:'rose',qty:5},{id:'lisi-p',qty:4},{id:'euca',qty:3}],budget:50000,purpose:'기념일',when:'오늘 18:00',method:'픽업',memo:'',status:'awarded',at:now-28*H,award:'b3',
+     bids:[{id:'b3',by:'f1',price:43000,ready:'오늘 18:00',note:'장미는 꽃머리 큰 것으로 골라 드릴게요.',sub:null,at:now-27*H},
+           {id:'b4',by:'f2',price:41000,ready:'내일 오전',note:'오늘은 어렵고 내일 오전 가능합니다.',sub:null,at:now-26*H}]}],
+   fresh:{f1:{mum:4,rose:2,'lisi-w':3,'lisi-i':2,'lisi-p':1,carn:1,tulip:2,euca:6},
+          f2:{mum:3,rose:4,'lisi-w':2,'lisi-i':3,'lisi-p':2,carn:2,tulip:1,euca:5},
+          f3:{mum:2,rose:1,'lisi-w':4,'lisi-i':3,'lisi-p':3,carn:2,tulip:4,euca:6}},
+   left:{},   // 남는 꽃 표시(꽃집이 끄고 켤 수 있다). 비어 있으면 신선기간 2일 이하를 기본으로 본다
+   listings:[
+    {id:901,fid:'f2',title:'파스텔 남는 꽃 한 다발',lines:[{id:'tulip',qty:5},{id:'lisi-p',qty:4},{id:'carn',qty:3}],list:41820,off:30,price:29300,sets:2,sold:0,pickup:'오늘 마감 전',photo:null,occ:'생일',status:'on',at:now-50*60e3},
+    {id:902,fid:'f3',title:'레드·화이트 남는 꽃',lines:[{id:'rose',qty:6},{id:'mum',qty:6}],list:35000,off:40,price:21000,sets:3,sold:1,pickup:'오늘 마감 전',photo:null,occ:'기념일',status:'on',at:now-2*H},
+    {id:903,fid:'f3',title:'흰 국화 조문 다발',lines:[{id:'mum',qty:10},{id:'lisi-w',qty:3}],list:33500,off:40,price:20100,sets:2,sold:0,pickup:'오늘 마감 전',photo:null,occ:'근조',status:'on',at:now-70*60e3}],
+   orders:[],
+   // 송이 단위 거래(꽃집 ↔ 소비자). offers = 꽃집의 매도, wants = 소비자의 매수 희망
+   offers:[{id:911,fid:'f2',flower:'tulip',qty:8,sold:0,price:1500,pickup:'오늘 마감 전',status:'on',at:now-40*60e3},
+           {id:912,fid:'f3',flower:'mum',qty:30,sold:6,price:800,pickup:'오늘 마감 전',status:'on',at:now-90*60e3},
+           {id:913,fid:'f1',flower:'carn',qty:20,sold:0,price:1000,pickup:'내일 오전',status:'on',at:now-25*60e3}],
+   wants:[{id:921,by:'c1',flower:'lisi-p',qty:6,filled:0,price:2600,pickup:'내일 오전',status:'open',at:now-15*60e3}],
+   draft:{cart:{},budget:50000,purpose:'생일',when:'내일 오전',method:'픽업',memo:''}};
+  // 새로 늘어난 품목은 꽃집마다 다른 재고·신선기간을 정해진 규칙으로 채운다(새로고침해도 같은 값)
+  ['f1','f2','f3'].forEach(function(fid,fi){FLOWERS.forEach(function(f,i){var h=(i*37+fi*53+11)%29;
+    if(!(f.id in D.stock[fid])) D.stock[fid][f.id]=h<6?0:h+(fi===2?12:0);
+    if(!(f.id in D.fresh[fid])) D.fresh[fid][f.id]=1+(h%6)})});
+  return D;
+}
+var S, session=null, ui={sort:'price',cmp:false,view:'proposal',bid:{},review:{},lform:null,confirm:null,tag:null,leftTab:'bq',buy:{},want:null,sell:null,grp:'전체',occ:'전체',stemGrp:'전체',photoOcc:'전체',upOcc:'생일'};
+var PICKUP=['오늘 마감 전','내일 오전'];
+function load(){try{var r=JSON.parse(localStorage.getItem(KEY));if(r&&r.v===5) return r}catch(e){} return seed()}
+var canStore=(function(){try{localStorage.setItem(KEY+'.t','1');localStorage.removeItem(KEY+'.t');return true}catch(e){return false}})();   // 막힌 환경에서는 메모리로만 동작
+function save(){if(!canStore) return true;try{localStorage.setItem(KEY,JSON.stringify(S));return true}catch(e){toast('저장 공간이 부족해요. 로그인 화면에서 데모 초기화를 눌러 주세요.');return false}}
+S=load(); try{session=localStorage.getItem(SKEY)}catch(e){}
+function me(){return session?acc(session):null}
+
+// ---------- 표현 ----------
+function fmt(n){return Number(n).toLocaleString('ko-KR')}
+function won(n,cls,size){return '<span class="num '+(cls||'')+'"'+(size?' style="font-size:'+size+'px"':'')+'>'+fmt(n)+'<span class="unit">원</span></span>'}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function ago(t){var m=Math.max(1,Math.round((Date.now()-t)/60e3));return m<60?m+'분 전':m<1440?Math.round(m/60)+'시간 전':Math.round(m/1440)+'일 전'}
+function ic(p,s,w){return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(w||1.8)+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'}
+var I={plus:'<path d="M12 5v14M5 12h14"/>',minus:'<path d="M5 12h14"/>',check:'<path d="M5 12l5 5 9-10"/>',back:'<path d="M15 5l-7 7 7 7"/>',out:'<path d="M10 5H5v14h5M14 8l4 4-4 4M18 12H9"/>',camera:'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+ flower:'<circle cx="12" cy="9" r="2.2"/><path d="M12 6.8V3.5M14.2 9h3.3M12 11.200v3.300M9.800 9H6.500M12 14.500V21"/>',list:'<path d="M5 6h14M5 12h14M5 18h9"/>',users:'<circle cx="9" cy="8" r="3.500"/><path d="M3 20a6 6 0 0112 0"/><circle cx="17" cy="9" r="2.500"/><path d="M15.500 14a5 5 0 015.500 5"/>',
+ tag:'<path d="M4 4h7l9 9-7 7-9-9z"/><circle cx="8.5" cy="8.5" r="1.3"/>',gavel:'<path d="M14 4l6 6M11 7l6 6M12.500 5.500l-7 7 3 3 7-7M4 20h9"/>',box:'<path d="M4 8l8-4 8 4v8l-8 4-8-4zM4 8l8 4 8-4M12 12v8"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/>',swap:'<path d="M4 8h13l-3-3M20 16H7l3 3"/>',pin:'<path d="M12 21s6-6 6-11a6 6 0 10-12 0c0 5 6 11 6 11z"/><circle cx="12" cy="10" r="2"/>',clock:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>'};
+function flowerSvg(f,size){
+  if(f.euca){var c='';for(var i=0;i<6;i++) c+='<circle cx="'+(32+(i%2?-10:10))+'" cy="'+(12+i*9)+'" r="6" fill="#7C8F6A" opacity="'+(0.9-i*0.08)+'"/>';return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 62V8" stroke="#7C8F6A" stroke-width="2.5" stroke-linecap="round"/>'+c+'</svg>'}
+  var p='';[0,72,144,216,288].forEach(function(a){p+='<ellipse cx="32" cy="18" rx="7" ry="11" fill="'+f.petal+'" transform="rotate('+a+' 32 28)"/>'});
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 40v22" stroke="#7C8F6A" stroke-width="3" stroke-linecap="round"/><path d="M32 52c-6-2-9-6-9-10 5 0 8 4 9 10z" fill="#7C8F6A"/>'+p+'<circle cx="32" cy="28" r="5" fill="'+f.center+'"/></svg>';
+}
+function stars(r){var n=Math.round(r);return '<span class="stars" aria-label="별점 '+r+'점">'+'★★★★★'.slice(0,n)+'<span style="color:var(--off)">'+'★★★★★'.slice(n)+'</span></span>'}
+function rating(fid){var rs=S.reviews[fid]||[];if(!rs.length) return {avg:0,n:0};return {avg:Math.round(rs.reduce(function(a,r){return a+r.rating},0)/rs.length*10)/10,n:rs.length}}
+function doneCount(fid){return acc(fid).doneBase+S.requests.filter(function(r){return r.status==='done'&&bidOf(r,r.award).by===fid}).length+S.orders.filter(function(o){return o.status==='done'&&o.fid===fid}).length}
+function job(id){return S.requests.filter(function(r){return r.id===id})[0]||S.orders.filter(function(o){return o.id===id})[0]}
+function jobFlorist(j){return j.fid||bidOf(j,j.award).by}
+// ----- 남는 꽃: 신선기간이 임박했고(또는 꽃집이 표시했고), 낙찰 주문·판매 중인 꽃다발에 묶이지 않은 수량
+function isLeft(fid,id){var m=S.left[fid];return m&&id in m?!!m[id]:((S.fresh[fid]||{})[id]||9)<=2}
+function reserved(fid,id){var n=0;S.requests.forEach(function(r){if(r.status==='awarded'&&bidOf(r,r.award).by===fid) applySub(r.lines,bidOf(r,r.award).sub).forEach(function(l){if(l.id===id) n+=l.qty})});return n}
+function committed(fid,id){var n=0;S.listings.forEach(function(L){if(L.fid===fid&&L.status==='on') L.lines.forEach(function(l){if(l.id===id) n+=l.qty*(L.sets-L.sold)})});
+  S.offers.forEach(function(o){if(o.fid===fid&&o.status==='on'&&o.flower===id) n+=o.qty-o.sold});return n}
+function leftQty(fid,id){return isLeft(fid,id)?Math.max(0,stockOf(fid,id)-reserved(fid,id)-committed(fid,id)):0}
+function listPriceOf(lines){return flowersTotal(lines)+(lines.length?MATERIALS+DESIGN:0)}
+function bidOf(r,bid){return r.bids.filter(function(b){return b.id===bid})[0]}
+function myBid(r){return r.bids.filter(function(b){return b.by===session})[0]}
+function applySub(lines,sub){
+  if(!sub) return lines; var out=[],merged=false;
+  lines.forEach(function(l){
+    if(l.id===sub.from){if(l.qty-sub.qty>0) out.push({id:l.id,qty:l.qty-sub.qty});out.push({id:sub.to,qty:sub.qty+(lines.filter(function(x){return x.id===sub.to})[0]||{qty:0}).qty});merged=true}
+    else if(!(merged&&l.id===sub.to)&&l.id!==sub.to) out.push(l); });
+  return out;
+}
+function subText(sub){return short(fl(sub.from))+' '+sub.qty+' → '+short(fl(sub.to))+' '+sub.qty}
+function img(src,cls,alt){return '<img class="'+(cls||'')+'" src="'+esc(src)+'" alt="'+esc(alt||'')+'" loading="lazy" onerror="this.style.visibility=\'hidden\'">'}
+function statusChip(r){
+  if(r.status==='open') return '<span class="chip '+(r.bids.length?'green':'')+'">입찰 중 · '+r.bids.length+'건</span>';
+  if(r.status==='awarded') return '<span class="chip solid">꽃집 선택 완료</span>';
+  return '<span class="chip">제작 완료</span>';
+}
+
+// ---------- 3D: 렌더러 하나를 화면 사이에서 옮겨 쓴다 ----------
+var bqApi=null, bqSig=null, bqHost=document.getElementById('bq-host'), bqHolder=document.getElementById('bq-holder');
+function fallback2d(host,lines){var h='',n=0;lines.forEach(function(l){for(var i=0;i<l.qty&&n<28;i++,n++) h+=flowerSvg(fl(l.key),44)});host.innerHTML='<div class="bq-2d">'+h+'</div>'}
+function placeBouquet(lines){
+  var slot=document.querySelector('[data-bq]');
+  if(!slot){bqHolder.appendChild(bqHost);return}
+  slot.appendChild(bqHost);
+  var live=lines.filter(function(l){return l.qty>0}), sig=JSON.stringify(live);
+  var empty=slot.parentNode.querySelector('.bq-empty'); if(empty) empty.hidden=live.length>0;
+  if(!bqApi) bqApi=window.Bouquet3D?Bouquet3D.mount(bqHost,{fallback:fallback2d}):{update:function(l){fallback2d(bqHost,l)}};
+  if(sig===bqSig) return; bqSig=sig;
+  bqApi.update(live.map(function(l){var f=fl(l.id);return {key:f.id,model:f.model,color:f.c3,qty:l.qty,green:!!f.green}}));
+}
+function bqCard(lines,tl,emptyText){
+  return '<div class="bq-card"><div data-bq class="bq"></div>'+(tl?'<div class="bq-tl">'+tl+'</div>':'')+
+    '<div class="bq-cap">'+lines.filter(function(l){return l.qty>0}).map(function(l){return '<span class="chip">'+short(fl(l.id))+' '+l.qty+'</span>'}).join('')+'</div>'+
+    (emptyText?'<div class="bq-empty" hidden>'+emptyText+'</div>':'')+'</div>';
+}
+function fillThumbs(){
+  if(!window.Bouquet3D||!Bouquet3D.thumb) return;
+  [].forEach.call(document.querySelectorAll('img[data-thumb]'),function(el){
+    var lines=JSON.parse(el.getAttribute('data-thumb')); el.removeAttribute('data-thumb');
+    Bouquet3D.thumb(lines.map(function(l){var f=fl(l.id);return {key:f.id,model:f.model,color:f.c3,qty:l.qty,green:!!f.green}}),200).then(function(u){if(u) el.src=u});
+  });
+}
+function designThumb(lines){return '<img class="thumb" alt="소비자가 디자인한 꽃다발" data-thumb="'+esc(JSON.stringify(lines))+'" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">'}
+
+// ---------- 라우팅 ----------
+function route(){return (location.hash||'#/').slice(2).split('/')}
+function go(h){if(location.hash===h) render(); else location.hash=h}
+var TABS={consumer:[['c/build','만들기',I.flower],['c/left','남는 꽃',I.tag],['c/requests','내 주문',I.list],['c/florists','꽃집',I.users]],
+          florist:[['f/open','입찰 요청',I.gavel],['f/bids','내 입찰',I.list],['f/stock','재고·남는 꽃',I.box],['f/profile','프로필',I.user]]};
+function render(){
+  var r=route(), u=me(), bar=document.getElementById('appbar'), tabs=document.getElementById('tabs'), view=document.getElementById('view');
+  if(!u){ if(r[0]) {location.hash='#/';return}
+    bar.className='appbar';bar.innerHTML='<h1>꽃다발 입찰</h1><span class="chip">목업</span>';tabs.hidden=true;view.innerHTML=vLogin();placeBouquet([]);return }
+  var side=u.role==='consumer'?'c':'f';
+  if(r[0]!==side){location.hash='#/'+TABS[u.role][0][0];return}            // 역할이 다른 화면은 열 수 없다
+  var sup=u.role==='florist', back=r.length>2;
+  bar.className='appbar'+(sup?' supplier':'');
+  bar.innerHTML=(back?'<a class="iconbtn" href="#/'+r[0]+'/'+r[1]+'" aria-label="뒤로">'+ic(I.back,22)+'</a>':'')+
+    '<h1>'+esc(sup?u.name:'꽃다발 입찰')+'</h1><span class="rolechip">'+(sup?'공급자':'소비자')+'</span><span class="who">'+esc(sup?u.person:u.name)+'</span>'+
+    '<button type="button" class="iconbtn" data-act="logout" aria-label="로그아웃">'+ic(I.out,20)+'</button>';
+  var pend=sup?S.orders.filter(function(o){return o.fid===u.id&&o.status==='reserved'}).length:0;
+  var won_=sup?S.requests.filter(function(q){return q.status==='awarded'&&bidOf(q,q.award).by===u.id}).length:0;
+  tabs.hidden=false;
+  tabs.innerHTML=TABS[u.role].map(function(t){var n=t[0]==='f/stock'?pend:t[0]==='f/bids'?won_:0;
+    return '<a href="#/'+t[0]+'"'+((r[0]+'/'+r[1])===t[0]?' aria-current="page"':'')+'>'+ic(t[2],22)+t[1]+(n?'<span class="dot">'+n+'</span>':'')+'</a>'}).join('');
+  var key=r[0]+'/'+r[1], lines=[];
+  var out = key==='c/build'?vBuild(): key==='c/left'?(r[2]?vLeftItem(+r[2]):vLeft()): key==='c/requests'?(r[2]?(vRequest(+r[2])||vOrder(+r[2])):vRequests()): key==='c/florists'?(r[2]?vFlorist(r[2]):vFlorists()):
+            key==='f/open'?(r[2]?vBidForm(+r[2]):vOpen()): key==='f/bids'?vMyBids(): key==='f/stock'?vStock(): key==='f/profile'?vProfile(): null;
+  if(!out){location.hash='#/'+TABS[u.role][0][0];return}
+  view.innerHTML=out.html; placeBouquet(out.lines||[]); fillThumbs();
+}
+
+// ---------- 로그인 ----------
+function vLogin(){
+  function card(a){return '<button type="button" class="login-acc" data-act="login" data-id="'+a.id+'"><span class="avatar'+(a.role==='consumer'?' c':'')+'">'+a.initial+'</span><span class="grow"><span class="h" style="display:block">'+esc(a.name)+'</span><span class="sub">'+esc(a.role==='consumer'?a.sub+' · 꽃다발을 만들고 꽃집을 고릅니다':a.person+' 플로리스트 · '+a.area)+'</span></span><span class="chip '+(a.role==='consumer'?'green':'')+'">'+(a.role==='consumer'?'소비자':'공급자')+'</span></button>'}
+  return '<div class="stack" style="gap:6px;padding-top:8px"><p class="ttl">어느 계정으로 들어갈까요?</p><p class="sub">목업이라 비밀번호가 없습니다. 계정을 누르면 바로 로그인됩니다.</p></div>'+
+    '<div class="stack"><p class="sub" style="font-weight:700">소비자 화면</p>'+ACCOUNTS.filter(function(a){return a.role==='consumer'}).map(card).join('')+'</div>'+
+    '<div class="stack"><p class="sub" style="font-weight:700">공급자(플로리스트) 화면</p>'+ACCOUNTS.filter(function(a){return a.role==='florist'}).map(card).join('')+'</div>'+
+    '<div class="card"><p class="h" style="margin-bottom:6px">이렇게 써 보세요</p><ol class="steps" style="padding:0;margin:0"><li>소비자로 들어가 꽃다발을 3D로 만들고 입찰 요청을 올립니다.</li><li>로그아웃하고 플로리스트 계정으로 들어가 금액을 써 냅니다. 재고가 모자라면 대체 꽃을 제안하고, 남는 꽃은 꽃다발로 묶거나 송이 단위로 수량·가격을 적어 손님에게 바로 팝니다.</li><li>다시 소비자로 들어가 꽃집의 사진·리뷰·금액을 비교하고 직접 고릅니다. “남는 꽃” 탭에서는 할인 꽃다발을 예약하거나, 송이 단위로 수량을 적어 사고, 원하는 꽃을 “구해요”로 올립니다.</li></ol></div>'+
+    '<p class="sub">계정을 바꿔도 내용이 이어지도록 이 브라우저에만 저장합니다. 꽃집 이름·리뷰는 예시이고, 포트폴리오 예시 사진은 Unsplash(Unsplash License)의 실제 꽃다발 사진입니다.</p>'+
+    '<div class="row between"><a class="linkbtn" href="./">소개 페이지로</a><button type="button" class="linkbtn" data-act="reset">데모 초기화</button></div>';
+}
+
+// ---------- 소비자: 만들기 ----------
+function draftLines(){return FLOWERS.filter(function(f){return S.draft.cart[f.id]>0}).map(function(f){return {id:f.id,qty:S.draft.cart[f.id]}})}
+function vBuild(){
+  var d=S.draft, lines=draftLines(), est=estimate(lines,d.method), over=est-d.budget, pct=Math.round(est/d.budget*100);
+  var rows=FLOWERS.filter(function(f){return ui.grp==='전체'||f.name===ui.grp||(d.cart[f.id]||0)>0}).map(function(f){var q=d.cart[f.id]||0;
+    return '<div class="line"><span class="ico">'+flowerSvg(f,28)+'</span><div class="grow"><div class="nm">'+f.name+'<small>'+f.v+(f.grade==='줄기'?'':' · '+f.grade)+'</small></div><div class="sub">오늘 '+won(price(f),'',13)+' /'+f.unit+'</div></div>'+
+      (q?'<div class="qty"><button type="button" aria-label="'+esc(short(f))+' 빼기" data-act="d-sub" data-id="'+f.id+'">'+ic(I.minus,16,2)+'</button><span class="num n">'+q+'</span><button type="button" aria-label="'+esc(short(f))+' 더 담기" data-act="d-add" data-id="'+f.id+'">'+ic(I.plus,16,2)+'</button></div>'
+        :'<button type="button" class="addbtn" data-act="d-add" data-id="'+f.id+'">담기</button>')+'</div>'}).join('');
+  function picks(name,list,cur){return '<div class="chips">'+list.map(function(x){return '<button type="button" class="pick" aria-pressed="'+(x===cur)+'" data-act="d-set" data-k="'+name+'" data-v="'+x+'">'+x+'</button>'}).join('')+'</div>'}
+  return {lines:lines,html:
+    bqCard(lines,'<span class="chip">끌어서 돌려 보세요</span>','꽃을 담아보세요<span class="sub">아래에서 송이 단위로 고르면 여기에 쌓여요</span>')+
+    '<div class="card stack tight"><div class="row between"><span class="sub" style="font-weight:600">예산</span>'+won(d.budget,'',17)+'</div><input id="budget" type="range" min="10000" max="150000" step="5000" value="'+d.budget+'" data-bind="budget" aria-label="예산" style="accent-color:var(--green);width:100%">'+
+      '<div class="bar'+(over>0?' over':'')+'"><i style="width:'+Math.min(100,pct)+'%"></i></div><div class="row between sub"><span>시세 기준 예상가 <b class="num" style="color:var(--ink)">'+fmt(est)+'원</b></span><span class="'+(over>0?'warn':'')+'" style="font-weight:600">'+(over>0?'예산보다 '+fmt(over)+'원 많아요':pct+'%')+'</span></div></div>'+
+    '<div class="card stack"><div class="stack tight"><span class="sub" style="font-weight:600">어떤 자리에 드리나요?</span>'+picks('purpose',PURPOSE,d.purpose)+'</div>'+
+      '<div class="stack tight"><span class="sub" style="font-weight:600">'+esc(d.purpose)+'에 어울리는 추천 구성</span>'+(PRESETS[d.purpose]||[]).map(function(pr,i){var pl=presetLines(pr);
+        return '<div class="row" style="padding:8px 0;border-top:1px solid var(--line)">'+designThumb(pl)+'<div class="grow"><div class="nm">'+esc(pr.n)+'</div><div class="sub">'+esc(summary(pl))+'</div>'+(pr.note?'<div class="sub">'+esc(pr.note)+'</div>':'')+'<div class="sub">시세 기준 <b class="num" style="color:var(--ink)">'+fmt(estimate(pl,d.method))+'원</b></div></div><button type="button" class="btn ghost sm" data-act="preset" data-v="'+i+'">담기</button></div>'}).join('')+'<p class="sub">담은 뒤에 아래에서 자유롭게 빼고 더할 수 있어요.</p></div></div>'+
+    '<div class="strip" role="group" aria-label="꽃 종류">'+['전체'].concat(GROUPS).map(function(g){return '<button type="button" class="pick" aria-pressed="'+(ui.grp===g)+'" data-act="grp" data-v="'+g+'">'+g+'</button>'}).join('')+'</div>'+
+    '<div class="card" style="padding-block:4px">'+rows+'</div>'+
+    '<div class="card stack"><div class="stack tight"><span class="sub" style="font-weight:600">받는 때</span>'+picks('when',WHEN,d.when)+'</div>'+
+      '<div class="stack tight"><span class="sub" style="font-weight:600">받는 방법</span>'+picks('method',['픽업','배송'],d.method)+'</div>'+
+      '<label class="field">플로리스트에게 한마디<textarea id="memo" data-bind="memo" maxlength="200" placeholder="예: 너무 화려하지 않게, 포장은 크라프트로">'+esc(d.memo)+'</textarea></label></div>'+
+    '<div class="sticky-cta"><div class="grow"><div class="sub">예상가(입찰 금액은 꽃집마다 다릅니다)</div>'+won(est,over>0?'warn':'',20)+'</div><button type="button" class="btn" data-act="post"'+(lines.length?'':' disabled')+'>입찰 요청 올리기</button></div>'};
+}
+
+// ---------- 소비자: 내 요청 ----------
+function vRequests(){
+  var mine=S.requests.filter(function(r){return r.by===session}).sort(function(a,b){return b.at-a.at});
+  var ords=S.orders.filter(function(o){return o.by===session}).sort(function(a,b){return b.at-a.at});
+  var ordHtml=ords.length?'<p class="h" style="margin-top:6px">남는 꽃 주문</p>'+ords.map(function(o){var L=S.listings.filter(function(x){return x.id===o.listing})[0];
+    return '<a class="card tap" href="'+(o.kind==='stems'?'#/c/requests/'+o.id:'#/c/left/'+o.listing)+'"><div class="row">'+(L&&L.photo?img(L.photo,'thumb','꽃집이 올린 사진'):designThumb(o.lines))+'<div class="grow stack tight"><div class="row between"><span class="h">#'+o.id+' · '+esc(acc(o.fid).name)+(o.kind==='stems'?' · 송이':'')+'</span>'+(o.status==='done'?'<span class="chip">픽업 완료</span>':'<span class="chip solid">예약됨</span>')+'</div><span class="sub">'+esc(summary(o.lines))+'</span><div class="row between sub"><span>'+esc(o.pickup)+' 픽업</span>'+won(o.price,'',15)+'</div></div></div></a>'}).join(''):'';
+  if(!mine.length&&ords.length) return {html:'<p class="ttl">내 주문</p>'+ordHtml};
+  if(!mine.length) return {html:'<div class="card stack" style="align-items:flex-start"><p class="h">아직 올린 요청이 없어요</p><p class="sub">꽃다발을 만들어 올리면 근처 꽃집들이 금액을 써 냅니다.</p><a class="btn sm" href="#/c/build">꽃다발 만들기</a></div>'};
+  return {html:'<p class="ttl">내 주문</p><p class="h">입찰 요청</p>'+mine.map(function(r){var low=r.bids.length?Math.min.apply(null,r.bids.map(function(b){return b.price})):0;
+    return '<a class="card tap" href="#/c/requests/'+r.id+'"><div class="row">'+designThumb(r.lines)+'<div class="grow stack tight"><div class="row between"><span class="h">#'+r.id+' · '+esc(r.purpose)+'</span>'+statusChip(r)+'</div><span class="sub">'+esc(summary(r.lines))+'</span>'+
+      '<div class="row between sub"><span>'+esc(r.when)+' · '+esc(r.method)+'</span><span>'+(r.status==='open'?(low?'최저 <b class="num" style="color:var(--ink)">'+fmt(low)+'원</b>':'입찰 대기'):'<b class="num" style="color:var(--ink)">'+fmt(bidOf(r,r.award).price)+'원</b>')+'</span></div></div></div></a>'}).join('')+ordHtml};
+}
+var READY_RANK={}; WHEN.forEach(function(w,i){READY_RANK[w]=i});
+function sortBids(r){
+  var bs=r.bids.slice(), k=ui.sort;
+  bs.sort(function(a,b){return k==='price'?a.price-b.price:k==='rating'?rating(b.by).avg-rating(a.by).avg:k==='near'?acc(a.by).km-acc(b.by).km:READY_RANK[a.ready]-READY_RANK[b.ready]});
+  if(r.award) bs.sort(function(a,b){return (b.id===r.award)-(a.id===r.award)});
+  return bs;
+}
+function vRequest(id){
+  var r=S.requests.filter(function(x){return x.id===id&&x.by===session})[0]; if(!r) return null;
+  var est=estimate(r.lines,r.method), bids=sortBids(r), viewBid=ui.viewBid&&bidOf(r,ui.viewBid), win=r.award&&bidOf(r,r.award);
+  var showSub=(viewBid&&viewBid.sub&&ui.view==='proposal')?viewBid.sub:(win&&win.sub?win.sub:null), lines=applySub(r.lines,showSub);
+  var tl=viewBid&&viewBid.sub&&!win?'<div class="miniseg" role="group" aria-label="미리보기"><button type="button" aria-pressed="'+(ui.view!=='proposal')+'" data-act="view" data-v="original">내 원안</button><button type="button" aria-pressed="'+(ui.view==='proposal')+'" data-act="view" data-v="proposal">'+esc(acc(viewBid.by).name)+' 제안</button></div>':'<span class="chip">내가 만든 꽃다발</span>';
+  var h=bqCard(lines,tl)+'<div class="card"><div class="row between" style="margin-bottom:8px"><span class="h">#'+r.id+' · '+esc(r.purpose)+'</span>'+statusChip(r)+'</div><dl class="kv"><dt>받는 때</dt><dd>'+esc(r.when)+' · '+esc(r.method)+'</dd><dt>예산</dt><dd>'+won(r.budget,'',14)+' <span class="sub">· 시세 기준 예상가 '+fmt(est)+'원</span></dd>'+(r.memo?'<dt>한마디</dt><dd>'+esc(r.memo)+'</dd>':'')+'</dl></div>';
+  if(r.status==='done'){
+    h+='<div class="card win stack"><div class="row"><span class="avatar">'+acc(win.by).initial+'</span><div class="grow"><p class="h">'+esc(acc(win.by).name)+'</p><p class="sub">제작 완료 · '+fmt(win.price)+'원</p></div><a class="btn ghost sm" href="#/c/florists/'+win.by+'">프로필</a></div>'+(r.photo?'<div><p class="sub" style="font-weight:600;margin-bottom:6px">꽃집이 보낸 완성 사진</p>'+img(r.photo,'','완성 사진').replace('class=""','style="width:100%;border-radius:10px;display:block"')+'</div>':'<p class="sub">꽃집이 완성 사진 없이 완료 처리했습니다.</p>')+'</div>';
+    h+=r.reviewed?'<div class="note">리뷰를 남겼어요. 꽃집 프로필에서 볼 수 있습니다.</div>':vReviewForm(r);
+    return {lines:lines,html:h};
+  }
+  if(!r.bids.length) return {lines:lines,html:h+'<div class="card stack"><p class="h">아직 입찰이 없어요</p><p class="sub">로그아웃한 뒤 플로리스트 계정으로 들어가 이 요청에 금액을 써 내 보세요.</p></div>'};
+  var low=Math.min.apply(null,r.bids.map(function(b){return b.price}));
+  h+='<div class="row between wrap"><p class="h">'+(win?'선택한 꽃집':'입찰 '+r.bids.length+'건 · 직접 골라 주세요')+'</p>'+(win?'':'<div class="miniseg"><button type="button" aria-pressed="'+!ui.cmp+'" data-act="cmp" data-v="0">목록</button><button type="button" aria-pressed="'+!!ui.cmp+'" data-act="cmp" data-v="1">비교표</button></div>')+'</div>';
+  if(!win) h+='<div class="chips">'+[['price','금액 낮은순'],['rating','평점 높은순'],['near','가까운순'],['ready','빠른 준비순']].map(function(s){return '<button type="button" class="pick" aria-pressed="'+(ui.sort===s[0])+'" data-act="sort" data-v="'+s[0]+'">'+s[1]+'</button>'}).join('')+'</div>';
+  if(ui.cmp&&!win){
+    var col=function(fn){return bids.map(function(b){return '<td'+(b.price===low?' class="best"':'')+'>'+fn(b,acc(b.by))+'</td>'}).join('')};
+    h+='<div class="cmp" style="--n:'+bids.length+'"><table><tr><th>꽃집</th>'+col(function(b,a){return '<a href="#/c/florists/'+a.id+'" style="font-weight:700">'+esc(a.name)+'</a><div class="sub">'+esc(a.person)+'</div>'})+'</tr>'+
+      '<tr><th>대표 사진</th>'+col(function(b,a){var p=(S.photos[a.id]||[])[0];return p?img(p.src,'',a.name+' 작업 사진'):'<span class="sub">사진 없음</span>'})+'</tr>'+
+      '<tr><th>입찰 금액</th>'+col(function(b){var d=Math.round((b.price-est)/est*100);return won(b.price,'',17)+'<div class="sub">예상가 대비 '+(d===0?'같음':'<b class="'+(d>0?'up':'down')+'">'+(d>0?'▲':'▼')+Math.abs(d)+'%</b>')+'</div>'})+'</tr>'+
+      '<tr><th>평점 · 리뷰</th>'+col(function(b,a){var t=rating(a.id);return t.n?stars(t.avg)+' <b class="num">'+t.avg+'</b><div class="sub">리뷰 '+t.n+'개</div>':'<span class="sub">리뷰 없음</span>'})+'</tr>'+
+      '<tr><th>준비</th>'+col(function(b){return esc(b.ready)})+'</tr><tr><th>거리</th>'+col(function(b,a){return '<span class="num">'+a.km.toFixed(1)+'km</span><div class="sub">'+esc(a.area)+'</div>'})+'</tr>'+
+      '<tr><th>경력 · 완료</th>'+col(function(b,a){return a.years+'년 · '+fmt(doneCount(a.id))+'건'})+'</tr>'+
+      '<tr><th>스타일</th>'+col(function(b,a){return '<div class="chips">'+S.profiles[a.id].tags.map(function(t){return '<span class="chip">'+esc(t)+'</span>'}).join('')+'</div>'})+'</tr>'+
+      '<tr><th>대체 제안</th>'+col(function(b){return b.sub?'<span class="chip orange">'+esc(subText(b.sub))+'</span>':'<span class="sub">원안 그대로</span>'})+'</tr>'+
+      '<tr><th>한마디</th>'+col(function(b){return '<span style="font-size:12.5px">'+esc(b.note||'—')+'</span>'})+'</tr>'+
+      '<tr><th>선택</th>'+col(function(b,a){return '<button type="button" class="btn sm full" data-act="award" data-id="'+b.id+'" data-req="'+r.id+'">'+(ui.confirm===b.id?'확정할게요':'선택')+'</button>'})+'</tr></table></div>';
+    return {lines:lines,html:h};
+  }
+  h+=bids.map(function(b){var a=acc(b.by), t=rating(a.id), d=Math.round((b.price-est)/est*100), isWin=b.id===r.award, ph=(S.photos[a.id]||[]).slice(0,4);
+    return '<div class="card stack'+(isWin?' win':win?' dim':'')+'"><div class="row"><span class="avatar">'+a.initial+'</span><div class="grow"><div class="row wrap" style="gap:6px"><span class="h">'+esc(a.name)+'</span>'+(isWin?'<span class="chip solid">선택함</span>':b.price===low&&!win?'<span class="chip green">최저가</span>':'')+'</div>'+
+      '<div class="sub">'+(t.n?stars(t.avg)+' <b class="num" style="color:var(--ink)">'+t.avg+'</b> · 리뷰 '+t.n+' · ':'')+a.km.toFixed(1)+'km · 경력 '+a.years+'년</div></div><div style="text-align:right">'+won(b.price,'',20)+'<div class="sub">'+(d===0?'예상가와 같음':'예상가 대비 <b class="'+(d>0?'up':'down')+'">'+(d>0?'▲':'▼')+Math.abs(d)+'%</b>')+'</div></div></div>'+
+      (ph.length?'<div class="strip">'+ph.map(function(p){return img(p.src,'',a.name+' 작업 사진')}).join('')+'</div>':'')+
+      '<div class="row wrap" style="gap:6px"><span class="chip">'+ic(I.clock,13)+esc(b.ready)+'</span>'+(b.sub?'<span class="chip orange">대체 제안 · '+esc(subText(b.sub))+'</span>':'')+'</div>'+(b.note?'<p style="font-size:13.5px">“'+esc(b.note)+'”</p>':'')+
+      '<div class="row">'+(b.sub&&!win?'<button type="button" class="btn quiet sm" data-act="viewbid" data-id="'+b.id+'">3D로 보기</button>':'')+'<a class="btn ghost sm grow" href="#/c/florists/'+a.id+'">사진·리뷰 보기</a>'+(win?'':'<button type="button" class="btn sm grow" data-act="award" data-id="'+b.id+'" data-req="'+r.id+'">'+(ui.confirm===b.id?'이 꽃집으로 확정':'이 꽃집 선택')+'</button>')+'</div></div>'}).join('');
+  if(win) h+='<div class="note">'+esc(acc(win.by).name)+'에 제작을 맡겼어요. 꽃집이 완성 사진을 올리면 여기에서 보고 리뷰를 남길 수 있습니다.</div>';
+  return {lines:lines,html:h};
+}
+function vReviewForm(r){var d=ui.review[r.id]||(ui.review[r.id]={rating:5,text:'',photo:null});
+  return '<div class="card stack"><p class="h">리뷰 남기기</p><div class="rate" role="group" aria-label="별점">'+[1,2,3,4,5].map(function(n){return '<button type="button" class="'+(n<=d.rating?'on':'')+'" aria-label="'+n+'점" aria-pressed="'+(n===d.rating)+'" data-act="rv-rate" data-req="'+r.id+'" data-v="'+n+'">★</button>'}).join('')+'</div>'+
+    '<label class="field">어땠나요?<textarea id="rv-text-'+r.id+'" data-bind="review.'+r.id+'.text" maxlength="300" placeholder="받아 본 꽃다발은 어땠는지 적어 주세요">'+esc(d.text)+'</textarea></label>'+
+    (d.photo?'<div>'+img(d.photo,'','첨부한 사진').replace('class=""','style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;display:block"')+'</div>':'')+
+    '<div class="row"><label class="btn quiet sm filebtn grow">'+ic(I.camera,18)+(d.photo?'사진 바꾸기':'받은 꽃 사진 첨부')+'<input id="rv-photo-'+r.id+'" type="file" accept="image/*" data-file="review" data-req="'+r.id+'"></label><button type="button" class="btn sm grow" data-act="rv-send" data-req="'+r.id+'">리뷰 올리기</button></div></div>';
+}
+
+// ---------- 소비자: 남는 꽃 꽃다발 ----------
+function listingCard(L,href){var a=acc(L.fid),t=rating(a.id),left=L.sets-L.sold;
+  return '<a class="card tap'+(left>0&&L.status==='on'?'':' dim')+'" href="'+href+'"><div class="row" style="align-items:flex-start">'+(L.photo?img(L.photo,'thumb','꽃집이 올린 사진'):designThumb(L.lines))+'<div class="grow stack tight"><div class="row between"><span class="h">'+esc(L.title)+'</span><span class="chip orange">−'+L.off+'%</span></div>'+
+    '<span class="sub">'+(L.occ?'<span class="chip green" style="margin-right:6px">'+esc(L.occ)+'</span>':'')+esc(a.name)+(t.n?' · '+stars(t.avg)+' '+t.avg:'')+' · '+a.km.toFixed(1)+'km</span><span class="sub">'+esc(summary(L.lines))+'</span>'+
+    '<div class="row between"><span class="sub">'+esc(L.pickup)+' 픽업 · '+(L.status!=='on'?'판매 종료':left>0?'남은 '+left+'세트':'품절')+'</span><span><s class="muted num" style="font-size:12px;font-weight:500;margin-right:5px">'+fmt(L.list)+'</s>'+won(L.price,'warn',17)+'</span></div></div></div></a>'}
+function pctOff(f,price){return Math.round((1-price/price_(f))*100)}
+function price_(f){return price(f)}
+function offerLeft(o){return o.status==='on'?Math.max(0,o.qty-o.sold):0}
+function vLeft(){
+  var tab=ui.leftTab, seg='<div class="seg" role="group" aria-label="남는 꽃 보기">'+[['bq','꽃다발'],['stems','송이로 사기'],['want','구해요']].map(function(t){return '<button type="button" aria-pressed="'+(tab===t[0])+'" data-act="left-tab" data-v="'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div>';
+  var head='<p class="ttl">남는 꽃</p><p class="sub">꽃집에 오늘 남는 꽃입니다. 같은 등급의 꽃이고, 버려질 꽃이라 가격이 낮습니다.</p>'+seg;
+  if(tab==='stems'){
+    var sg=GROUPS.filter(function(g){return S.offers.some(function(o){return o.status==='on'&&fl(o.flower).name===g})}); if(ui.stemGrp!=='전체'&&sg.indexOf(ui.stemGrp)<0) ui.stemGrp='전체';
+    head+='<div class="strip" role="group" aria-label="꽃 종류">'+['전체'].concat(sg).map(function(g){return '<button type="button" class="pick" aria-pressed="'+(ui.stemGrp===g)+'" data-act="stem-grp" data-v="'+g+'">'+g+'</button>'}).join('')+'</div>';
+    var offs=S.offers.filter(function(o){return o.status==='on'&&(ui.stemGrp==='전체'||fl(o.flower).name===ui.stemGrp)}).sort(function(a,b){return (offerLeft(b)>0)-(offerLeft(a)>0)||FLOWERS.indexOf(fl(a.flower))-FLOWERS.indexOf(fl(b.flower))||a.price-b.price});
+    return {html:head+'<p class="sub">꽃집이 송이 단위로 내놓은 매도입니다. 필요한 수량을 적어 바로 삽니다.</p>'+(offs.length?offs.map(function(o){var f=fl(o.flower),a=acc(o.fid),t=rating(a.id),left=offerLeft(o),q=Math.max(1,Math.min(left,ui.buy[o.id]||Math.min(5,left)));
+      return '<div class="card stack'+(left?'':' dim')+'"><div class="row"><span class="ico">'+flowerSvg(f,28)+'</span><div class="grow"><div class="nm">'+f.name+'<small>'+f.v+(f.grade==='줄기'?'':' · '+f.grade)+'</small></div><div class="sub"><a href="#/c/florists/'+a.id+'">'+esc(a.name)+'</a>'+(t.n?' · '+stars(t.avg)+' '+t.avg:'')+' · '+a.km.toFixed(1)+'km · '+esc(o.pickup)+'</div></div>'+
+        '<div style="text-align:right">'+won(o.price,'warn',18)+'<div class="sub">/'+f.unit+' · <s class="num">'+fmt(price(f))+'</s> <b class="down">−'+pctOff(f,o.price)+'%</b></div></div></div>'+
+        (left?'<div class="row between"><span class="sub">남은 <b class="num" style="color:var(--ink)">'+left+'</b>'+f.unit+'</span><div class="row" style="gap:6px"><div class="qty"><button type="button" aria-label="수량 줄이기" data-act="buy-q" data-id="'+o.id+'" data-v="-1">'+ic(I.minus,16,2)+'</button><input id="buy-'+o.id+'" type="number" inputmode="numeric" min="1" max="'+left+'" value="'+q+'" aria-label="'+esc(short(f))+' 살 수량" data-bind="buy.'+o.id+'" data-rerender><button type="button" aria-label="수량 늘리기" data-act="buy-q" data-id="'+o.id+'" data-v="1">'+ic(I.plus,16,2)+'</button></div><button type="button" class="btn sm" data-act="buy" data-id="'+o.id+'">'+fmt(q*o.price)+'원 매수</button></div></div>'
+             :'<span class="chip">매진</span>')+'</div>'}).join(''):'<div class="card"><p class="h">지금은 올라온 매도가 없어요</p><p class="sub">“구해요”에 원하는 꽃과 수량을 올리면 꽃집이 남는 꽃으로 응합니다.</p></div>')};
+  }
+  if(tab==='want'){
+    var W=ui.want||(ui.want={flower:'rose',qty:5,price:0,pickup:PICKUP[1]}), wf=fl(W.flower); if(!W.price) W.price=Math.round(price(wf)*0.7/100)*100;
+    var match=S.offers.filter(function(o){return o.flower===W.flower&&offerLeft(o)>0&&o.price<=W.price}).sort(function(a,b){return a.price-b.price})[0];
+    var mine=S.wants.filter(function(w){return w.by===session}).sort(function(a,b){return b.at-a.at});
+    return {html:head+'<div class="card stack"><p class="h">이 꽃, 이 가격에 구해요</p><label class="field">꽃<select id="want-flower" data-bind="want.flower" data-rerender>'+FLOWERS.map(function(f){return '<option value="'+f.id+'"'+(f.id===W.flower?' selected':'')+'>'+short(f)+' · 시세 '+fmt(price(f))+'원</option>'}).join('')+'</select></label>'+
+      '<div class="row"><label class="field grow">수량('+wf.unit+')<input id="want-qty" class="num" type="number" inputmode="numeric" min="1" max="100" value="'+W.qty+'" data-bind="want.qty" data-rerender></label><label class="field grow">희망가(1'+wf.unit+')<input id="want-price" class="num" type="number" inputmode="numeric" min="100" step="100" value="'+W.price+'" data-bind="want.price" data-rerender></label></div>'+
+      '<div class="stack tight"><span class="sub" style="font-weight:600">픽업</span><div class="chips">'+PICKUP.map(function(x){return '<button type="button" class="pick" aria-pressed="'+(x===W.pickup)+'" data-act="want-pickup" data-v="'+x+'">'+x+'</button>'}).join('')+'</div></div>'+
+      '<p class="sub">시세 '+fmt(price(wf))+'원보다 <b class="'+(W.price<price(wf)?'down':'up')+'">'+Math.abs(pctOff(wf,W.price))+'% '+(W.price<price(wf)?'낮게':'높게')+'</b> · 모두 체결되면 <b class="num">'+fmt(W.qty*W.price)+'원</b></p>'+
+      (match?'<div class="note">이 가격 이하의 매도가 이미 있어요: '+esc(acc(match.fid).name)+' '+fmt(match.price)+'원 · 남은 '+offerLeft(match)+wf.unit+'. <button type="button" class="linkbtn" data-act="left-tab" data-v="stems" style="padding:0">송이로 사기에서 바로 사기</button></div>':'')+
+      '<button type="button" class="btn full" data-act="want-post">매수 희망 올리기</button></div>'+
+      (mine.length?'<div class="card stack tight"><p class="h">내 매수 희망</p>'+mine.map(function(w){var f=fl(w.flower);return '<div class="row between" style="padding-top:8px;border-top:1px solid var(--line)"><div><div style="font-size:14px;font-weight:600">'+short(f)+' '+w.qty+f.unit+' · '+fmt(w.price)+'원/'+f.unit+'</div><div class="sub">'+esc(w.pickup)+' · 체결 '+w.filled+' / '+w.qty+' · '+ago(w.at)+'</div></div>'+(w.status==='open'?'<button type="button" class="btn danger sm" data-act="want-cancel" data-id="'+w.id+'">내리기</button>':'<span class="chip '+(w.filled>=w.qty?'solid':'')+'">'+(w.filled>=w.qty?'모두 체결':'내림')+'</span>')+'</div>'}).join('')+'</div>':'')};
+  }
+  var all=S.listings.filter(function(L){return L.status==='on'}), occs=PURPOSE.filter(function(o){return all.some(function(L){return L.occ===o})});
+  if(ui.occ!=='전체'&&occs.indexOf(ui.occ)<0) ui.occ='전체';
+  var on=all.filter(function(L){return ui.occ==='전체'||L.occ===ui.occ}).sort(function(a,b){return (b.sets-b.sold>0)-(a.sets-a.sold>0)||b.at-a.at});
+  head+='<div class="strip" role="group" aria-label="용도">'+['전체'].concat(occs).map(function(o){return '<button type="button" class="pick" aria-pressed="'+(ui.occ===o)+'" data-act="occ" data-v="'+o+'">'+o+(o==='전체'?'':' '+all.filter(function(L){return L.occ===o}).length)+'</button>'}).join('')+'</div>';
+  return {html:head+(on.length?on.map(function(L){return listingCard(L,'#/c/left/'+L.id)}).join(''):'<div class="card"><p class="h">지금은 올라온 꽃다발이 없어요</p><p class="sub">플로리스트 계정으로 들어가 남는 꽃으로 꽃다발을 올려 보세요.</p></div>')};
+}
+function vOrder(id){
+  var o=S.orders.filter(function(x){return x.id===id&&x.by===session})[0]; if(!o) return null; var a=acc(o.fid),t=rating(a.id);
+  var h=bqCard(o.lines,'<span class="chip">'+(o.kind==='stems'?'송이로 산 남는 꽃':'남는 꽃 꽃다발')+'</span>')+
+    '<div class="card stack"><div class="row between"><span class="h">주문 #'+o.id+'</span>'+(o.status==='done'?'<span class="chip">픽업 완료</span>':'<span class="chip solid">예약됨</span>')+'</div><dl class="kv"><dt>구성</dt><dd>'+esc(summary(o.lines))+'</dd><dt>금액</dt><dd>'+won(o.price,'',15)+(o.unit?' <span class="sub">· '+fmt(o.unit)+'원 × '+o.lines[0].qty+'</span>':'')+'</dd><dt>픽업</dt><dd>'+esc(o.pickup)+' · '+esc(a.area)+'</dd></dl><div class="note soft">결제는 픽업할 때 꽃집에서 합니다.</div></div>'+
+    '<a class="card tap" href="#/c/florists/'+a.id+'"><div class="row"><span class="avatar">'+a.initial+'</span><div class="grow"><p class="h">'+esc(a.name)+'</p><p class="sub">'+(t.n?stars(t.avg)+' <b class="num" style="color:var(--ink)">'+t.avg+'</b> · 리뷰 '+t.n+' · ':'')+a.km.toFixed(1)+'km</p></div></div></a>';
+  h+=o.status==='done'?(o.reviewed?'<div class="note">리뷰를 남겼어요.</div>':vReviewForm(o)):'<div class="note">'+esc(o.pickup)+'에 '+esc(a.name)+'에서 픽업하세요.</div>';
+  return {lines:o.lines,html:h};
+}
+function vLeftItem(id){
+  var L=S.listings.filter(function(x){return x.id===id})[0]; if(!L) return null;
+  var a=acc(L.fid),t=rating(a.id),left=L.sets-L.sold,mine=S.orders.filter(function(o){return o.listing===id&&o.by===session}).sort(function(x,y){return y.at-x.at})[0];
+  var h=bqCard(L.lines,'<span class="chip">남는 꽃으로만 구성 · 3D 미리보기</span>')+(L.photo?'<div class="card stack tight"><p class="sub" style="font-weight:600">꽃집이 올린 실제 사진</p>'+img(L.photo,'','꽃집이 올린 사진').replace('class=""','style="width:100%;border-radius:10px;display:block"')+'</div>':'')+
+    '<div class="card stack"><div class="row between"><span class="h">'+esc(L.title)+'</span><span class="chip orange">정가보다 −'+L.off+'%</span></div><div class="row between"><span class="sub">시세 기준 정가 <s class="num">'+fmt(L.list)+'원</s></span>'+won(L.price,'warn',24)+'</div>'+
+    '<dl class="kv"><dt>구성</dt><dd>'+esc(summary(L.lines))+'</dd><dt>픽업</dt><dd>'+esc(L.pickup)+' · '+esc(a.area)+'</dd><dt>남은 수량</dt><dd>'+(L.status!=='on'?'판매 종료':left>0?left+'세트':'품절')+'</dd></dl>'+
+    '<div class="note soft">남는 꽃이라 구성은 바꿀 수 없어요. 결제는 픽업할 때 꽃집에서 합니다.</div></div>'+
+    '<a class="card tap" href="#/c/florists/'+a.id+'"><div class="row"><span class="avatar">'+a.initial+'</span><div class="grow"><p class="h">'+esc(a.name)+'</p><p class="sub">'+(t.n?stars(t.avg)+' <b class="num" style="color:var(--ink)">'+t.avg+'</b> · 리뷰 '+t.n+' · ':'')+a.km.toFixed(1)+'km · 사진·리뷰 보기</p></div></div></a>';
+  if(mine&&mine.status==='done') h+=mine.reviewed?'<div class="note">픽업을 마쳤고 리뷰를 남겼어요.</div>':vReviewForm(mine);
+  else if(mine) h+='<div class="note">예약했어요 · 주문 #'+mine.id+'. '+esc(L.pickup)+'에 '+esc(a.name)+'에서 픽업하세요.</div>';
+  else h+='<div class="sticky-cta"><div class="grow"><div class="sub">픽업 때 결제</div>'+won(L.price,'warn',20)+'</div><button type="button" class="btn" data-act="reserve" data-id="'+L.id+'"'+(left>0&&L.status==='on'?'':' disabled')+'>'+(left>0&&L.status==='on'?'예약하기':'품절')+'</button></div>';
+  return {lines:L.lines,html:h};
+}
+
+// ---------- 소비자: 꽃집 ----------
+function vFlorists(){
+  return {html:'<p class="ttl">근처 꽃집</p><p class="sub">사진과 리뷰를 보고, 입찰이 들어오면 직접 골라 주세요.</p>'+florists().sort(function(a,b){return a.km-b.km}).map(function(a){var t=rating(a.id),ph=(S.photos[a.id]||[]).slice(0,4);
+    return '<a class="card tap stack" href="#/c/florists/'+a.id+'"><div class="row"><span class="avatar">'+a.initial+'</span><div class="grow"><p class="h">'+esc(a.name)+'</p><p class="sub">'+(t.n?stars(t.avg)+' <b class="num" style="color:var(--ink)">'+t.avg+'</b> · 리뷰 '+t.n+' · ':'')+a.km.toFixed(1)+'km · '+esc(a.area)+'</p></div></div>'+
+      '<div class="strip">'+ph.map(function(p){return img(p.src,'',a.name+' 작업 사진')}).join('')+'</div><div class="chips">'+S.profiles[a.id].tags.map(function(t){return '<span class="chip">'+esc(t)+'</span>'}).join('')+'</div></a>'}).join('')};
+}
+function profileBody(a,own){
+  var t=rating(a.id), p=S.profiles[a.id], ph=S.photos[a.id]||[], rs=S.reviews[a.id]||[];
+  return '<div class="card stack"><div class="row"><span class="avatar lg">'+a.initial+'</span><div class="grow"><p class="ttl" style="font-size:19px">'+esc(a.name)+'</p><p class="sub">'+esc(a.person)+' 플로리스트 · '+esc(a.area)+' · '+a.km.toFixed(1)+'km</p></div></div>'+
+    '<div class="row" style="gap:0;text-align:center">'+[[t.n?t.avg:'—','평점'],[t.n,'리뷰'],[fmt(doneCount(a.id)),'완료'],[a.years+'년','경력']].map(function(x){return '<div class="grow"><div class="num" style="font-size:19px">'+x[0]+'</div><div class="sub">'+x[1]+'</div></div>'}).join('')+'</div>'+
+    '<div class="chips">'+p.tags.map(function(x){return '<span class="chip green">'+esc(x)+'</span>'}).join('')+'</div><p style="font-size:14px">'+esc(p.intro)+'</p></div>'+
+    '<div class="card stack"><div class="row between"><p class="h">작업 사진 '+ph.length+'장</p>'+(own?'<label class="btn quiet sm filebtn">'+ic(I.camera,18)+'사진 올리기<input id="pf-photo" type="file" accept="image/*" data-file="portfolio"></label>':'')+'</div>'+
+      (own?'<div class="stack tight"><span class="sub" style="font-weight:600">올릴 사진의 용도(손님이 용도별로 걸러 봅니다)</span><div class="chips">'+PURPOSE.map(function(o){return '<button type="button" class="pick" aria-pressed="'+(ui.upOcc===o)+'" data-act="up-occ" data-v="'+o+'">'+o+'</button>'}).join('')+'</div></div>':'')+
+      (ph.length?'<div class="strip" role="group" aria-label="용도별 보기">'+['전체'].concat(PURPOSE.filter(function(o){return ph.some(function(x){return x.occ===o})})).map(function(o){return '<button type="button" class="pick" aria-pressed="'+(ui.photoOcc===o)+'" data-act="photo-occ" data-v="'+o+'">'+o+'</button>'}).join('')+'</div>':'')+
+      (ph.length?'<div class="photos">'+ph.filter(function(x){return ui.photoOcc==='전체'||x.occ===ui.photoOcc}).map(function(x,i){return '<button type="button" data-act="zoom" data-src="'+esc(x.src)+'" data-cap="'+esc(x.cap||'')+'" aria-label="사진 크게 보기: '+esc(x.cap||'')+'">'+img(x.src,'',x.cap)+(x.occ?'<span class="tag">'+esc(x.occ)+(x.user?' · 직접 올림':'')+'</span>':x.user?'<span class="tag">직접 올림</span>':'')+'</button>'}).join('')+'</div>':'<p class="sub">아직 올린 사진이 없어요.</p>')+'</div>'+
+    '<div class="card"><div class="row between" style="margin-bottom:4px"><p class="h">리뷰 '+rs.length+'개</p>'+(t.n?'<span>'+stars(t.avg)+' <b class="num">'+t.avg+'</b></span>':'')+'</div>'+
+      (rs.length?rs.map(function(v){return '<div class="rv"><div class="row between"><span>'+stars(v.rating)+' <b style="font-size:13px">'+esc(v.by)+'</b></span><span class="sub">'+esc(v.purpose)+' · '+ago(v.at)+'</span></div><p style="font-size:13.5px;margin-top:4px">'+esc(v.text)+'</p>'+(v.photo?img(v.photo,'','리뷰 사진'):'')+'</div>'}).join(''):'<p class="sub">아직 리뷰가 없어요.</p>')+'</div>';
+}
+function vFlorist(id){var a=acc(id); if(!a||a.role!=='florist') return null; return {html:profileBody(a,false)}}
+
+// ---------- 공급자: 입찰 요청 ----------
+function stockOf(fid,id){return (S.stock[fid]||{})[id]||0}
+function vOpen(){
+  var open=S.requests.filter(function(r){return r.status==='open'}).sort(function(a,b){return b.at-a.at});
+  if(!open.length) return {html:'<div class="card"><p class="h">지금은 열린 요청이 없어요</p><p class="sub">소비자가 꽃다발을 올리면 여기에 뜹니다.</p></div>'};
+  return {html:'<p class="ttl">입찰할 수 있는 요청</p>'+open.map(function(r){var mb=myBid(r), lack=r.lines.filter(function(l){return l.qty>stockOf(session,l.id)}).length;
+    return '<a class="card tap" href="#/f/open/'+r.id+'"><div class="row">'+designThumb(r.lines)+'<div class="grow stack tight"><div class="row between"><span class="h">#'+r.id+' · '+esc(r.purpose)+'</span>'+(mb?'<span class="chip solid">내 입찰 '+fmt(mb.price)+'원</span>':'<span class="chip orange">입찰 전</span>')+'</div><span class="sub">'+esc(summary(r.lines))+'</span>'+
+      '<div class="row between sub"><span>'+esc(r.when)+' · '+esc(r.method)+' · '+ago(r.at)+'</span><span>입찰 '+r.bids.length+'건</span></div>'+(lack?'<span class="chip orange" style="align-self:flex-start">내 재고 부족 '+lack+'품목</span>':'')+'</div></div></a>'}).join('')};
+}
+function subOptions(r){var out=[];r.lines.forEach(function(l){var f=fl(l.id);FLOWERS.forEach(function(c){if(c.name===f.name&&c.id!==f.id&&c.grade===f.grade) out.push({from:f.id,to:c.id,max:l.qty})})});return out}
+function vBidForm(id){
+  var r=S.requests.filter(function(x){return x.id===id&&x.status==='open'})[0]; if(!r) return null;
+  var mb=myBid(r), est=estimate(r.lines,r.method), d=ui.bid[id]||(ui.bid[id]=mb?{price:mb.price,ready:mb.ready,note:mb.note,sub:mb.sub?mb.sub.from+'>'+mb.sub.to:'',subQty:mb.sub?mb.sub.qty:0}:{price:est,ready:r.when,note:'',sub:'',subQty:0});
+  var opts=subOptions(r), subSel=d.sub?{from:d.sub.split('>')[0],to:d.sub.split('>')[1],qty:d.subQty}:null, lines=applySub(r.lines,subSel&&subSel.qty>0?subSel:null);
+  var rows=r.lines.map(function(l){var f=fl(l.id),s=stockOf(session,l.id),lack=Math.max(0,l.qty-s);
+    return '<div class="line"><span class="ico">'+flowerSvg(f,28)+'</span><div class="grow"><div class="nm">'+f.name+'<small>'+f.v+'</small></div><div class="sub">시세가 '+fmt(price(f))+'원 × '+l.qty+'</div></div><div style="text-align:right"><span class="num" style="font-size:17px">'+l.qty+'<span class="unit">'+f.unit+'</span></span><div style="font-size:12px;font-weight:700" class="'+(lack?'warn':'down')+'">내 재고 '+s+(lack?' · 부족 '+lack:' ✓')+'</div></div></div>'}).join('');
+  var lackAny=r.lines.some(function(l){return l.qty>stockOf(session,l.id)}), others=r.bids.filter(function(b){return b.by!==session}).length;
+  return {lines:lines,html:bqCard(lines,'<span class="chip">'+(subSel&&subSel.qty>0?'대체 제안을 반영한 모습':'소비자가 만든 꽃다발')+'</span>')+
+    '<div class="card"><div class="row between" style="margin-bottom:8px"><span class="h">#'+r.id+' · '+esc(r.purpose)+'</span><span class="sub">'+esc(acc(r.by).name)+' · '+ago(r.at)+'</span></div><dl class="kv"><dt>받는 때</dt><dd>'+esc(r.when)+' · '+esc(r.method)+'</dd><dt>예산</dt><dd>'+won(r.budget,'',14)+'</dd><dt>시세 예상가</dt><dd>'+won(est,'',14)+' <span class="sub">꽃값 '+fmt(flowersTotal(r.lines))+' + 부자재·디자인 '+fmt(MATERIALS+DESIGN)+'</span></dd>'+(r.memo?'<dt>한마디</dt><dd>'+esc(r.memo)+'</dd>':'')+'</dl></div>'+
+    '<div class="card" style="padding-block:6px"><p class="h" style="padding:8px 0 2px">꽃 구성 · 내 재고 대조</p>'+rows+'</div>'+
+    (lackAny?'<div class="note orange">재고가 모자란 꽃이 있어요. 아래에서 대체 꽃을 제안하거나, 새벽 발주로 채울 수 있는 수량인지 확인하세요.</div>':'')+
+    '<div class="card stack"><p class="h">'+(mb?'내 입찰 고치기':'입찰하기')+'</p><label class="field">입찰 금액(원)<input id="bid-price" class="num" type="number" inputmode="numeric" min="1000" step="1000" value="'+d.price+'" data-bind="bid.'+id+'.price"></label>'+
+      '<div class="chips">'+[['예상가',est],['−5%',Math.round(est*.95/1000)*1000],['+5%',Math.round(est*1.05/1000)*1000]].map(function(c){return '<button type="button" class="pick" data-act="bid-price" data-req="'+id+'" data-v="'+c[1]+'">'+c[0]+' '+fmt(c[1])+'</button>'}).join('')+'</div>'+
+      '<label class="field">준비할 수 있는 때<select id="bid-ready" data-bind="bid.'+id+'.ready" data-rerender>'+WHEN.map(function(w){return '<option'+(w===d.ready?' selected':'')+'>'+w+'</option>'}).join('')+'</select></label>'+
+      (opts.length?'<label class="field">대체 꽃 제안(선택)<select id="bid-sub" data-bind="bid.'+id+'.sub" data-rerender><option value="">원안 그대로</option>'+opts.map(function(o){var v=o.from+'>'+o.to;return '<option value="'+v+'"'+(v===d.sub?' selected':'')+'>'+short(fl(o.from))+' → '+short(fl(o.to))+' (내 재고 '+stockOf(session,o.to)+')</option>'}).join('')+'</select></label>'+
+        (d.sub?'<label class="field">바꿀 수량<input id="bid-subqty" class="num" type="number" inputmode="numeric" min="1" max="'+opts.filter(function(o){return o.from+'>'+o.to===d.sub})[0].max+'" value="'+(d.subQty||1)+'" data-bind="bid.'+id+'.subQty" data-rerender></label>':''):'')+
+      '<label class="field">소비자에게 한마디<textarea id="bid-note" data-bind="bid.'+id+'.note" maxlength="200" placeholder="예: 오늘 들어온 국화로 준비할게요">'+esc(d.note)+'</textarea></label>'+
+      '<p class="sub">다른 꽃집 입찰 '+others+'건 · 금액은 서로 공개되지 않습니다. 소비자가 사진·리뷰·금액을 보고 직접 고릅니다.</p>'+
+      '<button type="button" class="btn full" data-act="bid-send" data-req="'+id+'">'+(mb?'입찰 고치기':'이 금액으로 입찰')+'</button></div>'};
+}
+function vMyBids(){
+  var mine=S.requests.filter(function(r){return myBid(r)}).sort(function(a,b){return b.at-a.at});
+  if(!mine.length) return {html:'<div class="card stack" style="align-items:flex-start"><p class="h">아직 입찰한 요청이 없어요</p><a class="btn sm" href="#/f/open">입찰 요청 보기</a></div>'};
+  return {html:'<p class="ttl">내 입찰</p>'+mine.map(function(r){var b=myBid(r), wonIt=r.award===b.id, lost=r.award&&!wonIt, lines=applySub(r.lines,b.sub);
+    var state=r.status==='done'&&wonIt?'<span class="chip">제작 완료</span>':wonIt?'<span class="chip solid">낙찰</span>':lost?'<span class="chip red">미선정</span>':'<span class="chip green">결과 대기</span>';
+    var lack=wonIt&&r.status==='awarded'?lines.filter(function(l){return l.qty>stockOf(session,l.id)}):[];
+    return '<div class="card stack'+(wonIt&&r.status==='awarded'?' win':lost?' dim':'')+'"><div class="row">'+designThumb(lines)+'<div class="grow stack tight"><div class="row between"><span class="h">#'+r.id+' · '+esc(r.purpose)+'</span>'+state+'</div><span class="sub">'+esc(summary(lines))+'</span><div class="row between sub"><span>'+esc(b.ready)+' · '+esc(r.method)+'</span>'+won(b.price,'',15)+'</div></div></div>'+
+      (wonIt&&r.status==='awarded'?(lack.length?'<div class="note orange">재고 부족: '+lack.map(function(l){return short(fl(l.id))+' '+(l.qty-stockOf(session,l.id))}).join(', ')+' · <a href="#/f/stock" style="color:inherit">발주 메모 보기</a></div>':'')+
+        '<p class="sub">'+esc(acc(r.by).name)+' 님이 선택했습니다. 완성 사진을 올리면 손님에게 전달되고 내 작업 사진에도 들어갑니다.</p><div class="row"><label class="btn sm filebtn grow">'+ic(I.camera,18)+'완성 사진 올리고 제작 완료<input id="done-photo-'+r.id+'" type="file" accept="image/*" capture="environment" data-file="done" data-req="'+r.id+'"></label><button type="button" class="linkbtn" data-act="done-nophoto" data-req="'+r.id+'">사진 없이 완료</button></div>':
+       r.status==='open'?'<a class="btn ghost sm" href="#/f/open/'+r.id+'">입찰 고치기</a>':'')+'</div>'}).join('')};
+}
+
+// ---------- 공급자: 재고 · 남는 꽃 ----------
+function lformLines(){var f=ui.lform;return FLOWERS.filter(function(x){return f.cart[x.id]>0}).map(function(x){return {id:x.id,qty:f.cart[x.id]}})}
+function lformMax(id){return Math.floor(leftQty(session,id)/ui.lform.sets)}
+function vStock(){
+  var F=ui.lform||(ui.lform={cart:{},off:30,sets:1,pickup:PICKUP[0],title:'',photo:null});
+  FLOWERS.forEach(function(f){var m=lformMax(f.id);if((F.cart[f.id]||0)>m) F.cart[f.id]=m});
+  var need={}; FLOWERS.forEach(function(f){need[f.id]=reserved(session,f.id)});
+  var lacks=FLOWERS.filter(function(f){return need[f.id]>stockOf(session,f.id)});
+  var pool=FLOWERS.filter(function(f){return leftQty(session,f.id)>0}), lines=lformLines(), stems=lines.reduce(function(a,l){return a+l.qty},0), list=listPriceOf(lines), sale=Math.round(list*(1-F.off/100)/100)*100;
+  var todo=S.orders.filter(function(o){return o.fid===session&&o.status==='reserved'}).sort(function(a,b){return a.at-b.at});
+  var mineL=S.listings.filter(function(L){return L.fid===session}).sort(function(a,b){return b.at-a.at});
+  var h='<p class="ttl">재고 · 남는 꽃</p>';
+  if(todo.length) h+='<div class="card win stack"><p class="h">픽업 예약 '+todo.length+'건</p>'+todo.map(function(o){return '<div class="row between" style="padding-top:8px;border-top:1px solid var(--line)"><div><div style="font-size:14px;font-weight:600">#'+o.id+' · '+esc(acc(o.by).name)+'</div><div class="sub">'+esc(summary(o.lines))+' · '+esc(o.pickup)+' · '+fmt(o.price)+'원</div></div><button type="button" class="btn sm" data-act="pickup-done" data-id="'+o.id+'">픽업 완료</button></div>'}).join('')+'</div>';
+  if(lacks.length) h+='<div class="card stack" style="border-color:var(--orange)"><p class="h warn">낙찰 주문에 모자란 꽃</p>'+lacks.map(function(f){var n=need[f.id]-stockOf(session,f.id);return '<div class="row between"><span class="nm">'+short(f)+' <small>필요 '+need[f.id]+' · 재고 '+stockOf(session,f.id)+'</small></span><span class="num warn">'+n+f.unit+' → '+Math.ceil(n/f.per)+'속</span></div>'}).join('')+
+    '<button type="button" class="btn ghost sm" data-act="po-copy">새벽 발주 메모로 복사</button></div>';
+  h+='<div class="stack"><div><p class="h">남는 꽃으로 꽃다발 만들기</p><p class="sub">신선기간이 임박했고 주문에 묶이지 않은 꽃만 담을 수 있습니다. 손님에게 바로 팔기 때문에 중간 유통이 없습니다.</p></div>';
+  if(!pool.length) h+='<div class="card"><p class="h">지금은 남는 꽃이 없어요</p><p class="sub">아래 내 재고에서 “남는 꽃” 스위치를 켜거나, 신선기간이 2일 이하인 꽃의 재고가 있으면 여기에 나타납니다.</p></div></div>';
+  else h+=bqCard(lines,'<span class="chip">남는 꽃으로만 구성</span>','남는 꽃을 담아 보세요<span class="sub">자동 구성을 누르면 한 다발이 짜입니다</span>')+
+    '<div class="card" style="padding-block:4px">'+pool.map(function(f){var q=F.cart[f.id]||0,d=(S.fresh[session]||{})[f.id];
+      return '<div class="line"><span class="ico">'+flowerSvg(f,28)+'</span><div class="grow"><div class="nm">'+f.name+'<small>'+f.v+'</small></div><div class="sub"><b class="num '+(d<=1?'warn':'')+'">'+d+'일</b> 남음 · 남는 수량 <b class="num" style="color:var(--ink)">'+leftQty(session,f.id)+'</b></div></div><div class="qty"><button type="button" aria-label="'+esc(short(f))+' 빼기" data-act="lf-sub" data-id="'+f.id+'"'+(q?'':' disabled')+'>'+ic(I.minus,16,2)+'</button><span class="num n">'+q+'</span><button type="button" aria-label="'+esc(short(f))+' 더 담기" data-act="lf-add" data-id="'+f.id+'">'+ic(I.plus,16,2)+'</button></div></div>'}).join('')+'</div>'+
+    '<div class="row"><button type="button" class="btn ghost sm grow" data-act="lf-auto">자동 구성</button><button type="button" class="btn quiet sm grow" data-act="lf-clear"'+(stems?'':' disabled')+'>비우기</button></div>'+
+    '<div class="card stack"><div class="row between"><span class="sub" style="font-weight:600">시세 기준 정가</span>'+won(list,'',15)+'</div><div class="seg" role="group" aria-label="할인율">'+[20,30,40,50].map(function(n){return '<button type="button" aria-pressed="'+(F.off===n)+'" data-act="lf-off" data-v="'+n+'">−'+n+'%</button>'}).join('')+'</div>'+
+      '<div class="row between"><span class="sub" style="font-weight:600">판매가</span>'+won(sale,'warn',22)+'</div>'+
+      '<div class="row between"><span class="sub" style="font-weight:600">세트 수(같은 구성)</span><div class="qty"><button type="button" aria-label="세트 줄이기" data-act="lf-sets" data-v="-1"'+(F.sets>1?'':' disabled')+'>'+ic(I.minus,16,2)+'</button><span class="num n">'+F.sets+'</span><button type="button" aria-label="세트 늘리기" data-act="lf-sets" data-v="1">'+ic(I.plus,16,2)+'</button></div></div>'+
+      '<div class="stack tight"><span class="sub" style="font-weight:600">픽업</span><div class="chips">'+PICKUP.map(function(x){return '<button type="button" class="pick" aria-pressed="'+(x===F.pickup)+'" data-act="lf-pickup" data-v="'+x+'">'+x+'</button>'}).join('')+'</div></div>'+
+      '<div class="stack tight"><span class="sub" style="font-weight:600">용도 분류 · 구성을 보고 자동 추천: <b style="color:var(--green)">'+esc(suggestOccasion(lines))+'</b></span><div class="chips">'+PURPOSE.map(function(o){return '<button type="button" class="pick" aria-pressed="'+((F.occ||suggestOccasion(lines))===o)+'" data-act="lf-occ" data-v="'+o+'">'+o+'</button>'}).join('')+'</div></div>'+
+      '<label class="field">이름<input id="lf-title" type="text" maxlength="24" data-bind="lform.title" value="'+esc(F.title)+'" placeholder="예: 오늘의 남는 꽃 한 다발"></label>'+
+      (F.photo?img(F.photo,'','올릴 사진').replace('class=""','style="width:100%;max-height:200px;object-fit:cover;border-radius:10px;display:block"'):'')+
+      '<label class="btn quiet sm filebtn">'+ic(I.camera,18)+(F.photo?'사진 바꾸기':'미리 만들어 뒀다면 실제 사진 올리기(선택)')+'<input id="lf-photo" type="file" accept="image/*" data-file="listing"></label>'+
+      '<p class="sub">버려질 뻔한 꽃 <b>'+stems*F.sets+'송이</b> · 다 팔리면 <b class="num">'+fmt(sale*F.sets)+'원</b></p>'+
+      '<button type="button" class="btn full" data-act="lf-publish"'+(stems?'':' disabled')+'>손님에게 판매 올리기</button></div></div>';
+  // ---- 송이 단위 매도
+  var SL=ui.sell||(ui.sell={flower:(pool[0]||FLOWERS[0]).id,qty:0,price:0,pickup:PICKUP[0]}); if(pool.length&&!pool.filter(function(f){return f.id===SL.flower})[0]) SL.flower=pool[0].id;
+  var sf=fl(SL.flower), smax=leftQty(session,SL.flower); if(!SL.price) SL.price=Math.round(price(sf)*0.7/100)*100; if(!SL.qty) SL.qty=Math.min(10,smax); if(SL.qty>smax) SL.qty=smax;
+  if(pool.length) h+='<div class="card stack"><div><p class="h">송이 단위로 팔기(매도)</p><p class="sub">꽃다발로 묶지 않고, 남는 꽃을 수량과 송이당 가격만 적어 손님에게 팝니다.</p></div>'+
+    '<label class="field">꽃<select id="sell-flower" data-bind="sell.flower" data-rerender>'+pool.map(function(f){return '<option value="'+f.id+'"'+(f.id===SL.flower?' selected':'')+'>'+short(f)+' · 남는 수량 '+leftQty(session,f.id)+'</option>'}).join('')+'</select></label>'+
+    '<div class="row"><label class="field grow">수량('+sf.unit+')<input id="sell-qty" class="num" type="number" inputmode="numeric" min="1" max="'+smax+'" value="'+SL.qty+'" data-bind="sell.qty" data-rerender></label><label class="field grow">1'+sf.unit+' 가격<input id="sell-price" class="num" type="number" inputmode="numeric" min="100" step="100" value="'+SL.price+'" data-bind="sell.price" data-rerender></label></div>'+
+    '<div class="chips">'+[20,30,40,50].map(function(n){var pv=Math.round(price(sf)*(1-n/100)/100)*100;return '<button type="button" class="pick" aria-pressed="'+(SL.price===pv)+'" data-act="sell-price" data-v="'+pv+'">−'+n+'% '+fmt(pv)+'</button>'}).join('')+'</div>'+
+    '<div class="stack tight"><span class="sub" style="font-weight:600">픽업</span><div class="chips">'+PICKUP.map(function(x){return '<button type="button" class="pick" aria-pressed="'+(x===SL.pickup)+'" data-act="sell-pickup" data-v="'+x+'">'+x+'</button>'}).join('')+'</div></div>'+
+    '<p class="sub">시세 '+fmt(price(sf))+'원 · 다 팔리면 <b class="num">'+fmt(SL.qty*SL.price)+'원</b></p><button type="button" class="btn full" data-act="sell-post"'+(smax>0?'':' disabled')+'>매도 올리기</button></div>';
+  var myOff=S.offers.filter(function(o){return o.fid===session}).sort(function(a,b){return b.at-a.at});
+  if(myOff.length) h+='<div class="card stack tight"><p class="h">내 매도</p>'+myOff.map(function(o){var f=fl(o.flower),left=offerLeft(o);return '<div class="row between" style="padding-top:8px;border-top:1px solid var(--line)"><div><div style="font-size:14px;font-weight:600">'+short(f)+' · <span class="num warn">'+fmt(o.price)+'원</span>/'+f.unit+'</div><div class="sub">체결 '+o.sold+' / '+o.qty+f.unit+' · '+esc(o.pickup)+'</div></div>'+(o.status==='on'?(left?'<button type="button" class="btn danger sm" data-act="sell-off" data-id="'+o.id+'">내리기</button>':'<span class="chip solid">매진</span>'):'<span class="chip">내림</span>')+'</div>'}).join('')+'</div>';
+  var wants=S.wants.filter(function(w){return w.status==='open'&&w.filled<w.qty}).sort(function(a,b){return b.at-a.at});
+  if(wants.length) h+='<div class="card stack tight"><div><p class="h">손님 매수 희망</p><p class="sub">남는 꽃으로만 응할 수 있습니다. 손님이 적은 가격 그대로 체결됩니다.</p></div>'+wants.map(function(w){var f=fl(w.flower),rem=w.qty-w.filled,can=Math.min(rem,leftQty(session,w.flower)),d=pctOff(f,w.price);
+    return '<div class="row between" style="padding-top:8px;border-top:1px solid var(--line)"><div><div style="font-size:14px;font-weight:600">'+short(f)+' '+rem+f.unit+' · <span class="num">'+fmt(w.price)+'원</span>/'+f.unit+'</div><div class="sub">'+esc(acc(w.by).name)+' · '+esc(w.pickup)+' · 시세보다 '+(d>=0?'−'+d:'+'+(-d))+'% · 내 남는 수량 '+leftQty(session,w.flower)+'</div></div><button type="button" class="btn sm" data-act="want-fill" data-id="'+w.id+'"'+(can>0?'':' disabled')+'>'+(can>0?can+f.unit+' 팔기':'남는 꽃 없음')+'</button></div>'}).join('')+'</div>';
+  if(mineL.length) h+='<div class="card stack tight"><p class="h">내 판매</p>'+mineL.map(function(L){var left=L.sets-L.sold;return '<div class="row between" style="padding-top:8px;border-top:1px solid var(--line)"><div class="grow"><div style="font-size:14px;font-weight:600">'+esc(L.title)+' <span class="num warn">'+fmt(L.price)+'원</span></div><div class="sub">'+esc(summary(L.lines))+' · 예약 '+L.sold+' / '+L.sets+'세트</div></div>'+(L.status==='on'?(left>0?'<button type="button" class="btn danger sm" data-act="lf-off-sale" data-id="'+L.id+'">내리기</button>':'<span class="chip solid">매진</span>'):'<span class="chip">내림</span>')+'</div>'}).join('')+'</div>';
+  h+='<div class="card" style="padding-block:6px"><p class="h" style="padding:8px 0 2px">내 재고</p>'+FLOWERS.map(function(f){var st=stockOf(session,f.id),n=need[f.id]||0,d=(S.fresh[session]||{})[f.id],c=committed(session,f.id);
+    return '<div class="line" style="flex-wrap:wrap"><span class="ico">'+flowerSvg(f,28)+'</span><div class="grow"><div class="nm">'+f.name+'<small>'+f.v+'</small></div><div class="sub"><b class="num '+(d<=1?'warn':'')+'">'+d+'일</b> 남음'+(n?' · 낙찰 주문 '+n:'')+(c?' · 판매 중 '+c:'')+'</div></div>'+
+      '<div class="qty"><button type="button" aria-label="'+esc(short(f))+' 1 빼기" data-act="s-dec" data-id="'+f.id+'">'+ic(I.minus,16,2)+'</button><input id="st-'+f.id+'" type="number" inputmode="numeric" min="0" max="999" value="'+st+'" aria-label="'+esc(short(f))+' 재고" data-stock="'+f.id+'"><button type="button" aria-label="'+esc(short(f))+' 1 더하기" data-act="s-inc" data-id="'+f.id+'">'+ic(I.plus,16,2)+'</button></div><button type="button" class="boxbtn" data-act="s-box" data-id="'+f.id+'" aria-label="'+esc(short(f))+' 1속 입고">+1속</button>'+
+      '<div class="row between" style="flex-basis:100%;padding-left:46px"><span class="sub">남는 꽃으로 내놓기'+(isLeft(session,f.id)?' · <b class="num" style="color:var(--ink)">'+leftQty(session,f.id)+'</b> 가능':'')+'</span><button type="button" class="switch" role="switch" aria-checked="'+isLeft(session,f.id)+'" aria-label="'+esc(short(f))+' 남는 꽃으로 내놓기" data-act="left-toggle" data-id="'+f.id+'"></button></div></div>'}).join('')+'</div>';
+  return {lines:lines,html:h};
+}
+function vProfile(){var a=me(),p=S.profiles[a.id];
+  return {html:'<p class="ttl">내 프로필</p><p class="sub">소비자가 입찰을 비교할 때 보는 화면입니다.</p><div class="card stack"><p class="h">소개 고치기</p><label class="field">소개글<textarea id="pf-intro" data-bind="profile.intro" maxlength="240">'+esc(p.intro)+'</textarea></label><div class="stack tight"><span class="sub" style="font-weight:600">스타일(최대 3개)</span><div class="chips">'+TAGS.map(function(t){return '<button type="button" class="pick" aria-pressed="'+(p.tags.indexOf(t)>-1)+'" data-act="pf-tag" data-v="'+t+'">'+t+'</button>'}).join('')+'</div></div><button type="button" class="btn sm" data-act="pf-save">저장</button></div>'+profileBody(a,true)};
+}
+
+// ---------- 사진: 줄여서 저장 ----------
+function readPhoto(file,cb){
+  if(!file||!/^image\//.test(file.type)){toast('이미지 파일을 골라 주세요');return}
+  var url=URL.createObjectURL(file), im=new Image();
+  im.onload=function(){var m=900,s=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);cb(c.toDataURL('image/jpeg',0.78))};
+  im.onerror=function(){URL.revokeObjectURL(url);toast('사진을 읽지 못했어요. 다른 사진으로 해 보세요.')};
+  im.src=url;
+}
+function complete(r,photo){
+  var b=bidOf(r,r.award); r.status='done'; r.doneAt=Date.now(); if(photo){r.photo=photo;(S.photos[b.by]=S.photos[b.by]||[]).unshift({src:photo,cap:'주문 #'+r.id+' · '+r.purpose,occ:r.purpose,user:true})}
+  applySub(r.lines,b.sub).forEach(function(l){S.stock[b.by][l.id]=Math.max(0,stockOf(b.by,l.id)-l.qty)});
+  if(!save()&&photo){r.photo=null;S.photos[b.by].shift();save()}
+  toast(photo?'제작 완료 · 손님에게 사진을 보냈고 내 작업 사진에 넣었어요':'제작 완료로 표시했어요');
+}
+
+// ---------- 이벤트 ----------
+var toastT; function toast(m){var el=document.getElementById('toast');el.textContent=m;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){el.hidden=true},2800)}
+function setPath(path,val){var p=path.split('.'),o=p[0]==='profile'?S.profiles[session]:p[0]==='budget'||p[0]==='memo'?S.draft:ui[p[0]]; if(p[0]==='budget'||p[0]==='memo'){S.draft[p[0]]=val;return}
+  for(var i=1;i<p.length-1;i++) o=o[p[i]]=o[p[i]]||{}; o[p[p.length-1]]=val}
+document.addEventListener('input',function(e){var b=e.target.getAttribute&&e.target.getAttribute('data-bind');if(!b) return;
+  var v=e.target.type==='number'||e.target.type==='range'?Number(e.target.value):e.target.value; setPath(b,v);
+  if(b==='budget'){save();render()} });
+document.addEventListener('change',function(e){var t=e.target; if(!t.getAttribute) return;
+  if(t.getAttribute('data-stock')){var id=t.getAttribute('data-stock');S.stock[session][id]=Math.max(0,Math.min(999,Math.round(Number(t.value)||0)));save();render();return}
+  if(t.getAttribute('data-file')){var kind=t.getAttribute('data-file'),rid=+t.getAttribute('data-req'),f=t.files&&t.files[0];
+    readPhoto(f,function(src){
+      if(kind==='portfolio'){(S.photos[session]=S.photos[session]||[]).unshift({src:src,cap:'직접 올린 사진',occ:ui.upOcc,user:true});if(!save()) S.photos[session].shift(); else toast('작업 사진에 올렸어요')}
+      else if(kind==='listing'){ui.lform.photo=src}
+      else if(kind==='review'){(ui.review[rid]=ui.review[rid]||{rating:5,text:''}).photo=src}
+      else if(kind==='done'){complete(S.requests.filter(function(r){return r.id===rid})[0],src)}
+      render()});return}
+  if(t.hasAttribute('data-rerender')){if(/\.sub$/.test(t.getAttribute('data-bind'))){var k=t.getAttribute('data-bind').split('.')[1];ui.bid[k].subQty=t.value?1:0} render()}
+  if(t.getAttribute('data-bind')==='memo') save();
+});
+document.addEventListener('click',function(e){
+  var lb=e.target.closest('.lightbox'); if(lb){lb.remove();return}
+  var b=e.target.closest('[data-act]'); if(!b||b.disabled) return;
+  var act=b.getAttribute('data-act'), id=b.getAttribute('data-id'), v=b.getAttribute('data-v'), rid=+b.getAttribute('data-req'), req=rid&&job(rid);
+  if(act!=='award') ui.confirm=null;
+  if(act==='login'){session=id;try{localStorage.setItem(SKEY,id)}catch(err){} ui.viewBid=null;bqSig=null;go('#/'+TABS[acc(id).role][0][0]);toast(acc(id).name+' 계정으로 들어왔어요');return}
+  if(act==='logout'){session=null;try{localStorage.removeItem(SKEY)}catch(err){} go('#/');return}
+  if(act==='reset'){S=seed();save();ui.bid={};ui.review={};ui.lform=null;ui.buy={};ui.want=null;ui.sell=null;toast('데모 데이터를 처음 상태로 돌렸어요');render();return}
+  if(act==='zoom'){var d=document.createElement('div');d.className='lightbox';d.setAttribute('role','dialog');d.setAttribute('aria-label','사진 크게 보기');d.innerHTML='<img src="'+esc(b.getAttribute('data-src'))+'" alt=""><p>'+esc(b.getAttribute('data-cap'))+' · 아무 곳이나 누르면 닫힙니다</p>';document.body.appendChild(d);return}
+  if(act==='d-add'){S.draft.cart[id]=Math.min(30,(S.draft.cart[id]||0)+1)}
+  else if(act==='d-sub'){S.draft.cart[id]=Math.max(0,(S.draft.cart[id]||0)-1)}
+  else if(act==='d-set'){S.draft[b.getAttribute('data-k')]=v}
+  else if(act==='preset'){var pr=PRESETS[S.draft.purpose][+v];S.draft.cart={};Object.keys(pr.l).forEach(function(k){S.draft.cart[k]=pr.l[k]});ui.grp='전체';toast('“'+pr.n+'” 구성을 담았어요. 자유롭게 고쳐 보세요.');window.scrollTo(0,0)}
+  else if(act==='grp'){ui.grp=v}
+  else if(act==='occ'){ui.occ=v}
+  else if(act==='stem-grp'){ui.stemGrp=v}
+  else if(act==='photo-occ'){ui.photoOcc=v}
+  else if(act==='up-occ'){ui.upOcc=v}
+  else if(act==='lf-occ'){ui.lform.occ=v}
+  else if(act==='post'){var lines=draftLines();if(!lines.length) return;var nid=++S.seq;S.requests.push({id:nid,by:session,lines:lines,budget:S.draft.budget,purpose:S.draft.purpose,when:S.draft.when,method:S.draft.method,memo:S.draft.memo.trim(),status:'open',at:Date.now(),bids:[]});
+    S.draft.cart={};S.draft.memo='';save();toast('요청 #'+nid+'을 올렸어요. 꽃집들의 입찰을 기다립니다.');go('#/c/requests/'+nid);return}
+  else if(act==='sort'){ui.sort=v}
+  else if(act==='cmp'){ui.cmp=v==='1'}
+  else if(act==='view'){ui.view=v}
+  else if(act==='viewbid'){ui.viewBid=id;ui.view='proposal';window.scrollTo(0,0)}
+  else if(act==='award'){ if(ui.confirm!==id){ui.confirm=id;toast('한 번 더 누르면 '+acc(bidOf(req,id).by).name+'(으)로 확정됩니다')} else {req.award=id;req.status='awarded';ui.confirm=null;ui.cmp=false;ui.viewBid=null;save();toast(acc(bidOf(req,id).by).name+'을 선택했어요')} }
+  else if(act==='rv-rate'){(ui.review[rid]=ui.review[rid]||{text:''}).rating=+v}
+  else if(act==='rv-send'){var rv=ui.review[rid]||{rating:5,text:''};if(!(rv.text||'').trim()){toast('한 줄이라도 적어 주세요');return}
+    var fid=jobFlorist(req);(S.reviews[fid]=S.reviews[fid]||[]).unshift({by:acc(session).name.charAt(0)+'**',rating:rv.rating||5,purpose:req.purpose||'남는 꽃',at:Date.now(),text:rv.text.trim(),photo:rv.photo||null});req.reviewed=true;
+    if(!save()){S.reviews[fid][0].photo=null;save()} delete ui.review[rid];toast('리뷰를 올렸어요')}
+  else if(act==='bid-price'){ui.bid[rid].price=+v}
+  else if(act==='bid-send'){var d=ui.bid[rid],p=Math.round(Number(d.price));if(!(p>=1000)){toast('입찰 금액을 1,000원 이상으로 적어 주세요');return}
+    var sub=null;if(d.sub&&d.subQty>0){var sp=d.sub.split('>'),mx=(req.lines.filter(function(l){return l.id===sp[0]})[0]||{qty:0}).qty;sub={from:sp[0],to:sp[1],qty:Math.max(1,Math.min(mx,Math.round(d.subQty)))}}
+    var mb=myBid(req);if(mb){mb.price=p;mb.ready=d.ready;mb.note=(d.note||'').trim();mb.sub=sub;mb.at=Date.now()} else req.bids.push({id:'b'+Date.now().toString(36),by:session,price:p,ready:d.ready,note:(d.note||'').trim(),sub:sub,at:Date.now()});
+    save();delete ui.bid[rid];toast(mb?'입찰을 고쳤어요':fmt(p)+'원으로 입찰했어요');go('#/f/bids');return}
+  else if(act==='done-nophoto'){complete(req,null)}
+  else if(act==='s-inc'||act==='s-dec'||act==='s-box'){S.stock[session][id]=Math.max(0,Math.min(999,stockOf(session,id)+(act==='s-inc'?1:act==='s-dec'?-1:fl(id).per)));save()}
+  else if(act==='left-toggle'){(S.left[session]=S.left[session]||{})[id]=!isLeft(session,id)}
+  else if(act==='lf-add'){var m=lformMax(id),q0=ui.lform.cart[id]||0;if(q0>=m){toast('남는 수량은 '+m+fl(id).unit+'까지예요');return}ui.lform.cart[id]=q0+1}
+  else if(act==='lf-sub'){ui.lform.cart[id]=Math.max(0,(ui.lform.cart[id]||0)-1)}
+  else if(act==='lf-clear'){ui.lform.cart={}}
+  else if(act==='lf-auto'){var n=0,moved=true;ui.lform.cart={};var pl=FLOWERS.filter(function(f){return leftQty(session,f.id)>0});
+    while(n<12&&moved){moved=false;pl.forEach(function(f){if(n<12&&(ui.lform.cart[f.id]||0)<lformMax(f.id)){ui.lform.cart[f.id]=(ui.lform.cart[f.id]||0)+1;n++;moved=true}})}
+    toast('남는 꽃 '+n+'송이로 한 다발을 짰어요')}
+  else if(act==='lf-off'){ui.lform.off=+v}
+  else if(act==='lf-pickup'){ui.lform.pickup=v}
+  else if(act==='lf-sets'){var ns=Math.max(1,ui.lform.sets+(+v));if(!lformLines().every(function(l){return l.qty*ns<=leftQty(session,l.id)})){toast('남는 꽃으로는 '+ui.lform.sets+'세트까지 만들 수 있어요');return}ui.lform.sets=ns}
+  else if(act==='lf-publish'){var F=ui.lform,ll=lformLines();if(!ll.length) return;var li=listPriceOf(ll);
+    S.listings.push({id:++S.seq,fid:session,title:(F.title||'').trim()||((F.occ||suggestOccasion(ll))+' 남는 꽃 한 다발'),lines:ll,list:li,off:F.off,price:Math.round(li*(1-F.off/100)/100)*100,sets:F.sets,sold:0,pickup:F.pickup,photo:F.photo,occ:F.occ||suggestOccasion(ll),status:'on',at:Date.now()});
+    if(!save()){S.listings[S.listings.length-1].photo=null;save()} ui.lform=null;toast('손님 앱 “남는 꽃” 탭에 올렸어요')}
+  else if(act==='lf-off-sale'){S.listings.filter(function(L){return L.id===+id})[0].status='off';toast('판매를 내렸어요. 남은 꽃은 다시 남는 꽃으로 돌아옵니다.')}
+  else if(act==='pickup-done'){var od=S.orders.filter(function(o){return o.id===+id})[0];od.status='done';od.doneAt=Date.now();toast('픽업 완료로 표시했어요')}
+  else if(act==='po-copy'){var memo=FLOWERS.filter(function(f){return reserved(session,f.id)>stockOf(session,f.id)}).map(function(f){return f.name+' '+f.v+' '+(f.grade==='줄기'?'':f.grade+' ')+Math.ceil((reserved(session,f.id)-stockOf(session,f.id))/f.per)+'속'}).join('\n');
+    try{navigator.clipboard.writeText(memo).then(function(){toast('발주 메모를 복사했어요')},function(){toast(memo.replace(/\n/g,' · '))})}catch(err){toast(memo.replace(/\n/g,' · '))} return}
+  else if(act==='left-tab'){ui.leftTab=v}
+  else if(act==='buy-q'){var of=S.offers.filter(function(o){return o.id===+id})[0],lf=offerLeft(of);ui.buy[id]=Math.max(1,Math.min(lf,(Number(ui.buy[id])||Math.min(5,lf))+(+v)))}
+  else if(act==='buy'){var of2=S.offers.filter(function(o){return o.id===+id})[0],lf2=offerLeft(of2),bq_=Math.round(Number(ui.buy[id])||Math.min(5,lf2));
+    if(!(bq_>=1)){toast('수량을 1 이상으로 적어 주세요');return} if(bq_>lf2){toast('남은 수량은 '+lf2+fl(of2.flower).unit+'예요');ui.buy[id]=lf2;render();return}
+    of2.sold+=bq_;S.stock[of2.fid][of2.flower]=Math.max(0,stockOf(of2.fid,of2.flower)-bq_);
+    var oid2=++S.seq;S.orders.push({id:oid2,kind:'stems',offer:of2.id,by:session,fid:of2.fid,lines:[{id:of2.flower,qty:bq_}],unit:of2.price,price:bq_*of2.price,pickup:of2.pickup,status:'reserved',at:Date.now()});delete ui.buy[id];
+    toast(short(fl(of2.flower))+' '+bq_+fl(of2.flower).unit+' 매수 · 주문 #'+oid2)}
+  else if(act==='want-pickup'){ui.want.pickup=v}
+  else if(act==='want-post'){var W=ui.want,wq=Math.round(Number(W.qty)),wp=Math.round(Number(W.price));if(!(wq>=1)||!(wp>=100)){toast('수량과 희망가를 확인해 주세요');return}
+    S.wants.push({id:++S.seq,by:session,flower:W.flower,qty:wq,filled:0,price:wp,pickup:W.pickup,status:'open',at:Date.now()});ui.want=null;toast('매수 희망을 올렸어요. 꽃집이 남는 꽃으로 응하면 주문이 됩니다.')}
+  else if(act==='want-cancel'){S.wants.filter(function(w){return w.id===+id})[0].status='off';toast('매수 희망을 내렸어요')}
+  else if(act==='want-fill'){var w=S.wants.filter(function(x){return x.id===+id})[0],fq=Math.min(w.qty-w.filled,leftQty(session,w.flower));if(!(fq>0)){toast('남는 꽃이 없어요');return}
+    w.filled+=fq;if(w.filled>=w.qty) w.status='done';S.stock[session][w.flower]=Math.max(0,stockOf(session,w.flower)-fq);
+    S.orders.push({id:++S.seq,kind:'stems',want:w.id,by:w.by,fid:session,lines:[{id:w.flower,qty:fq}],unit:w.price,price:fq*w.price,pickup:w.pickup,status:'reserved',at:Date.now()});
+    toast(short(fl(w.flower))+' '+fq+fl(w.flower).unit+'를 '+fmt(w.price)+'원에 팔았어요 · 픽업 예약에 추가')}
+  else if(act==='sell-price'){ui.sell.price=+v}
+  else if(act==='sell-pickup'){ui.sell.pickup=v}
+  else if(act==='sell-post'){var SL=ui.sell,sq=Math.round(Number(SL.qty)),sp=Math.round(Number(SL.price)),mx=leftQty(session,SL.flower);if(!(sq>=1)||!(sp>=100)){toast('수량과 가격을 확인해 주세요');return} if(sq>mx){toast('남는 수량은 '+mx+fl(SL.flower).unit+'까지예요');return}
+    S.offers.push({id:++S.seq,fid:session,flower:SL.flower,qty:sq,sold:0,price:sp,pickup:SL.pickup,status:'on',at:Date.now()});ui.sell=null;toast('매도를 올렸어요. 손님 앱 “송이로 사기”에 보입니다.')}
+  else if(act==='sell-off'){S.offers.filter(function(o){return o.id===+id})[0].status='off';toast('매도를 내렸어요. 남은 꽃은 다시 남는 꽃으로 돌아옵니다.')}
+  else if(act==='reserve'){var L=S.listings.filter(function(x){return x.id===+id})[0];if(!L||L.status!=='on'||L.sets-L.sold<1){toast('방금 품절됐어요');render();return}
+    L.sold++;L.lines.forEach(function(l){S.stock[L.fid][l.id]=Math.max(0,stockOf(L.fid,l.id)-l.qty)});
+    var oid=++S.seq;S.orders.push({id:oid,listing:L.id,by:session,fid:L.fid,lines:L.lines,price:L.price,pickup:L.pickup,status:'reserved',at:Date.now()});toast('예약했어요 · 주문 #'+oid)}
+  else if(act==='pf-tag'){var tg=S.profiles[session].tags,i=tg.indexOf(v);if(i>-1) tg.splice(i,1); else if(tg.length<3) tg.push(v); else {toast('스타일은 3개까지 고를 수 있어요');return}}
+  else if(act==='pf-save'){S.profiles[session].intro=(S.profiles[session].intro||'').trim();save();toast('프로필을 저장했어요')}
+  save(); render();
+});
+window.addEventListener('hashchange',function(){ui.confirm=null;ui.photoOcc='전체';window.scrollTo(0,0);render()});
+render();
+})();
+</script>
+</body>
+</html>

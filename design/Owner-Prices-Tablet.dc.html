@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>사장님 — 시세·품목 (태블릿)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap">
+<style>
+body{margin:0;font-family:'IBM Plex Sans KR',system-ui,-apple-system,sans-serif;background:#F6F1E8;color:#1E1B16;-webkit-font-smoothing:antialiased}
+a{color:#1F5A3C;text-decoration:none}a:hover{color:#143D29}
+button,input{font-family:inherit;color:inherit}
+button{cursor:pointer}
+.mono{font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;letter-spacing:-0.02em}
+.muted{color:#6B655B}
+.up{color:#C2382B}.down{color:#1F5A3C}.flat{color:#8A8378}
+.card{background:#FFFDF9;border:1px solid #E6DED1;border-radius:14px}
+.ro{background:#EFE9DE;color:#4A4439;border-radius:8px}
+.ed{background:#fff;border:1.5px solid #1F5A3C;border-radius:8px}
+input[type=range]{accent-color:#1F5A3C}
+input[type=number]{-moz-appearance:textfield}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+</style>
+</helmet>
+<div style="width:1024px;height:768px;box-sizing:border-box;background:#F6F1E8;display:flex;flex-direction:column;overflow:hidden;position:relative;"><div style="height:36px;background:#1F5A3C;color:#fff;display:flex;align-items:center;gap:8px;padding:0 16px;font-size:12.5px;font-weight:500;"><span style="font-size:10px;font-weight:700;letter-spacing:.08em;opacity:.75;">해결하는 문제</span><span>문제 3·4 · “시세가 올라서요” 대신 계산식을 보여주기 (태블릿)</span></div><header style="display:flex;align-items:flex-end;justify-content:space-between;padding:16px 24px 12px;"><div><h1 style="margin:0;font-size:24px;font-weight:700;">시세 · 품목</h1><div class="muted" style="font-size:13px;margin-top:2px;">aT 화훼공판장 경매 시세 · 오늘 05:00 갱신 · 마진·재고는 바로 고쳐집니다</div></div><div style="display:flex;gap:8px;"><button type="button" aria-pressed="true" style="height:36px;padding:0 14px;border-radius:999px;border:1.5px solid #1F5A3C;background:#1F5A3C;color:#fff;font-size:13px;font-weight:600;white-space:nowrap;">전체</button><button type="button" aria-pressed="false" style="height:36px;padding:0 14px;border-radius:999px;border:1.5px solid #E6DED1;background:#FFFDF9;color:#1E1B16;font-size:13px;font-weight:500;white-space:nowrap;">취급 중</button><button type="button" aria-pressed="false" style="height:36px;padding:0 14px;border-radius:999px;border:1.5px solid #E6DED1;background:#FFFDF9;color:#1E1B16;font-size:13px;font-weight:500;white-space:nowrap;">재고 임박</button></div></header><div style="flex:1;display:flex;gap:16px;padding:0 24px 20px;min-height:0;"><section class="card" style="flex:1;display:flex;flex-direction:column;overflow:hidden;"><div style="display:grid;grid-template-columns:48px 1.4fr 88px 64px 84px 104px 76px 84px 78px;gap:10px;padding:10px 16px;font-size:11.5px;font-weight:600;color:#6B655B;border-bottom:1px solid #E6DED1;background:#EFE9DE;"><span style="text-align:left;">취급</span><span style="text-align:left;">품목 · 품종 · 등급</span><span style="text-align:right;">속 단가</span><span style="text-align:right;">송이/속</span><span style="text-align:right;">마진계수</span><span style="text-align:right;">송이 판매가</span><span style="text-align:right;">어제 대비</span><span style="text-align:right;">재고</span><span style="text-align:center;">오늘만 할인</span></div><div style="display:flex;flex-direction:column;"><sc-for list="{{items}}" as="it" hint-placeholder-count="5"><div style="{{it.rowStyle}}"><button type="button" aria-pressed="{{it.on}}" aria-label="취급" onClick="{{it.toggleOn}}" style="{{it.onStyle}}"><span style="{{it.onKnob}}"></span></button><button type="button" onClick="{{it.select}}" style="border:0;background:transparent;text-align:left;padding:0;display:flex;flex-direction:column;gap:1px;height:44px;justify-content:center;"><span style="font-size:15px;font-weight:700;">{{it.name}} <span style="font-weight:500;">{{it.var}}</span></span><span class="muted" style="font-size:12px;">{{it.grade}}등급</span></button><div class="ro mono" style="height:40px;display:flex;align-items:center;justify-content:flex-end;padding:0 10px;font-size:15px;font-weight:600;">{{it.boxFmt}}</div><div class="ro mono" style="height:40px;display:flex;align-items:center;justify-content:flex-end;padding:0 10px;font-size:15px;font-weight:600;">{{it.per}}</div><input type="number" step="0.1" min="1" max="6" aria-label="마진계수" value="{{it.margin}}" onChange="{{it.onMargin}}" class="ed mono" style="height:40px;width:100%;box-sizing:border-box;padding:0 10px;text-align:right;font-size:16px;font-weight:700;"><div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:center;height:44px;"><span class="mono" style="{{it.saleStyle}}">{{it.saleFmt}}</span><sc-if value="{{it.disc}}" hint-placeholder-val="{{false}}"><span class="mono muted" style="font-size:11px;text-decoration:line-through;">{{it.baseFmt}}</span></sc-if></div><span class="mono" style="{{it.deltaStyle}}">{{it.deltaFmt}}</span><input type="number" step="1" min="0" aria-label="재고" value="{{it.stock}}" onChange="{{it.onStock}}" class="ed mono" style="height:40px;width:100%;box-sizing:border-box;padding:0 10px;text-align:right;font-size:16px;font-weight:700;"><div style="display:flex;justify-content:center;"><button type="button" aria-pressed="{{it.disc}}" aria-label="오늘만 할인" onClick="{{it.toggleDisc}}" style="{{it.discStyle}}"><span style="{{it.discKnob}}"></span></button></div></div></sc-for></div><div style="margin-top:auto;padding:10px 16px;border-top:1px solid #E6DED1;display:flex;gap:16px;font-size:12px;color:#6B655B;align-items:center;"><span class="ro" style="padding:3px 8px;">회색 = 시세 · 읽기전용</span><span class="ed" style="padding:3px 8px;color:#1F5A3C;font-weight:600;">초록 테두리 = 편집 가능</span><span>마진계수를 고치면 판매가가 바로 바뀝니다</span></div></section><aside style="width:300px;display:flex;flex-direction:column;gap:12px;"><section class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:8px;"><div style="display:flex;align-items:baseline;justify-content:space-between;"><h2 style="margin:0;font-size:14px;font-weight:700;">{{sel.name}} {{sel.var}} {{sel.grade}} · 14일 시세</h2></div><svg width="268" height="150" viewBox="0 0 268 150" role="img" aria-label="14일 시세 추이"><path d="{{chartArea}}" fill="#1F5A3C" opacity=".08"></path><path d="{{chartD}}" fill="none" stroke="#1F5A3C" stroke-width="2" stroke-linejoin="round"></path><circle cx="{{lastX}}" cy="{{lastY}}" r="4" fill="#1F5A3C"></circle><text x="8" y="148" font-size="10" fill="#6B655B" font-family="IBM Plex Mono">9/5</text><text x="260" y="148" font-size="10" fill="#6B655B" text-anchor="end" font-family="IBM Plex Mono">오늘</text></svg><div style="display:flex;gap:12px;font-size:12px;"><span><span class="muted">최저</span> <span class="mono" style="font-weight:600;">{{loFmt}}</span></span><span><span class="muted">최고</span> <span class="mono" style="font-weight:600;">{{hiFmt}}</span></span><span><span class="muted">오늘</span> <span class="mono" style="{{sel.deltaStyle}}">{{sel.boxFmt}} {{sel.deltaFmt}}</span></span></div></section><section style="padding:14px 16px;border-radius:14px;background:#E3EEE5;display:flex;flex-direction:column;gap:8px;"><div style="font-size:12px;font-weight:700;color:#1F5A3C;">손님에게 보이는 가격 설명</div><div style="font-size:14px;line-height:1.5;color:#2E4A3A;">시세 <span class="mono" style="font-weight:700;">{{sel.boxFmt}}원</span>/속 ÷ <span class="mono" style="font-weight:700;">{{sel.per}}</span>송이 × 마진 <span class="mono" style="font-weight:700;">{{sel.margin}}</span> = <span class="mono" style="font-size:18px;font-weight:700;color:#1F5A3C;">{{sel.baseFmt}}원</span></div><div style="font-size:11.5px;color:#3C5A48;">마진에는 폐기·포장·인건비가 들어 있어요. 손님 화면과 매장 안내판에 이 문구 그대로 표시됩니다.</div><button type="button" style="height:44px;border:0;border-radius:10px;background:#1F5A3C;color:#fff;font-size:14px;font-weight:700;">손님 화면에 보여주기</button></section></aside></div></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 1024, "height": 768}}'>
+class Component extends DCLogic {
+
+constructor(p){super(p);this.state={sel:'mum',items:[{"id": "mum", "name": "국화", "var": "백선", "grade": "특", "box": 24000, "per": 20, "margin": 2.8, "delta": 8, "stock": 60, "on": true, "disc": false, "discPrice": null, "hist": [20000, 20000, 21000, 22000, 21000, 22000, 23000, 22000, 22000, 23000, 22000, 22000, 22200, 24000]}, {"id": "rose", "name": "장미", "var": "레드나오미", "grade": "상", "box": 28000, "per": 10, "margin": 2.5, "delta": -5, "stock": 30, "on": true, "disc": false, "discPrice": null, "hist": [30000, 31000, 30000, 29000, 30000, 32000, 31000, 30000, 29000, 30000, 29500, 29000, 29500, 28000]}, {"id": "lisi", "name": "리시안셔스", "var": "화이트", "grade": "특", "box": 35000, "per": 10, "margin": 2.8, "delta": 2, "stock": 15, "on": true, "disc": false, "discPrice": null, "hist": [33000, 33000, 34000, 34000, 33000, 34000, 35000, 35000, 34000, 34000, 34500, 34000, 34300, 35000]}, {"id": "carn", "name": "카네이션", "var": "핑크", "grade": "상", "box": 30000, "per": 20, "margin": 2.8, "delta": -12, "stock": 40, "on": true, "disc": true, "discPrice": 2900, "hist": [36000, 36000, 35000, 35000, 34000, 35000, 34000, 34000, 33000, 34000, 34000, 34000, 34000, 30000]}, {"id": "tulip", "name": "튤립", "var": "옐로우", "grade": "특", "box": 22000, "per": 10, "margin": 3.0, "delta": 15, "stock": 0, "on": false, "disc": false, "discPrice": null, "hist": [18000, 18000, 19000, 19000, 18500, 19000, 19000, 20000, 19500, 19000, 19000, 19500, 19100, 22000]}]};}
+fmt(n){return Math.round(n).toLocaleString('ko-KR');}
+renderVals(){
+  const G='#1F5A3C',O='#B85A0C',R='#C2382B',ink='#1E1B16',line='#E6DED1';
+  const sw=(on,c)=>'width:44px;height:26px;border-radius:999px;border:0;padding:0;position:relative;flex-shrink:0;background:'+(on?c:'#C9C1B3')+';';
+  const knob=(on)=>'position:absolute;top:3px;left:'+(on?21:3)+'px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);';
+  const upd=(id,patch)=>this.setState({items:this.state.items.map(x=>x.id===id?{...x,...patch}:x)});
+  const items=this.state.items.map(it=>{
+    const base=Math.round(it.box/it.per*(parseFloat(it.margin)||0)/10)*10;
+    const sale=it.disc&&it.discPrice?it.discPrice:base;
+    const selected=it.id===this.state.sel;
+    return {...it,
+      boxFmt:this.fmt(it.box),baseFmt:this.fmt(base),saleFmt:this.fmt(sale),
+      saleStyle:'font-size:18px;font-weight:700;color:'+(it.disc?O:ink)+';',
+      deltaFmt:it.delta===0||it.delta==null?'—':(it.delta>0?'▲'+it.delta+'%':'▼'+(-it.delta)+'%'),
+      deltaStyle:'text-align:right;font-size:14px;font-weight:700;color:'+(it.delta>0?R:(it.delta<0?G:'#8A8378'))+';',
+      rowStyle:'display:grid;grid-template-columns:48px 1.4fr 88px 64px 84px 104px 76px 84px 78px;gap:10px;align-items:center;padding:8px 16px;border-bottom:1px solid '+line+';'+(selected?'background:'+'#E3EEE5'+';':'')+(it.on?'':'opacity:.45;'),
+      onStyle:sw(it.on,G),onKnob:knob(it.on),discStyle:sw(it.disc,O),discKnob:knob(it.disc),
+      toggleOn:()=>upd(it.id,{on:!it.on}),toggleDisc:()=>upd(it.id,{disc:!it.disc,discPrice:it.discPrice||Math.round(base*0.7/100)*100}),
+      onMargin:(e)=>upd(it.id,{margin:e.target.value}),
+      onStock:(e)=>upd(it.id,{stock:e.target.value}),
+      select:()=>this.setState({sel:it.id})};
+  });
+  const sel=items.find(x=>x.id===this.state.sel)||items[0];
+  const h=sel.hist,w=268,hh=150,lo=Math.min(...h)*0.92,hi=Math.max(...h)*1.04;
+  const pts=h.map((v,i)=>[8+i*(w-16)/(h.length-1),hh-14-(v-lo)/(hi-lo)*(hh-28)]);
+  const d='M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L');
+  const area=d+' L'+pts[pts.length-1][0].toFixed(1)+' '+(hh-14)+' L'+pts[0][0].toFixed(1)+' '+(hh-14)+' Z';
+  return {items,sel,chartD:d,chartArea:area,lastX:pts[pts.length-1][0].toFixed(1),lastY:pts[pts.length-1][1].toFixed(1),loFmt:this.fmt(Math.min(...h)),hiFmt:this.fmt(Math.max(...h))};
+}
+}
+</script>
+</body>
+</html>

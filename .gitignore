@@ -1,0 +1,8 @@
+.DS_Store
+.vercel
+node_modules
+# bundle.py 가 만드는 산출물
+landing/dist/
+# git 이전에 쓰던 수동 백업
+landing/_backup/
+*.blend1

@@ -1,0 +1,122 @@
+{
+ "v": 3,
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-09-18T03:00:00Z"
+ },
+ "title": "꽃다발 빌더 · 꽃집 사장님 앱",
+ "launch": {
+  "view": "canvas"
+ },
+ "pages": [],
+ "boards": {
+  "Main.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 390,
+   "h": 1460,
+   "title": "빌더 · 빈 상태"
+  },
+  "Builder-Filled.dc.html": {
+   "x": 470,
+   "y": 0,
+   "w": 390,
+   "h": 1600,
+   "title": "빌더 · 담긴 상태"
+  },
+  "Builder-Detail.dc.html": {
+   "x": 940,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "빌더 · 가격 상세 펼침"
+  },
+  "Owner-Today.dc.html": {
+   "x": 0,
+   "y": 1960,
+   "w": 390,
+   "h": 1120,
+   "title": "1 오늘"
+  },
+  "Owner-Orders.dc.html": {
+   "x": 470,
+   "y": 1960,
+   "w": 390,
+   "h": 1080,
+   "title": "2 주문 목록"
+  },
+  "Owner-OrderDetail.dc.html": {
+   "x": 940,
+   "y": 1960,
+   "w": 390,
+   "h": 1140,
+   "title": "2 주문 상세 · 제작 완료"
+  },
+  "Owner-Prices.dc.html": {
+   "x": 1410,
+   "y": 1960,
+   "w": 390,
+   "h": 1280,
+   "title": "3 시세·품목"
+  },
+  "Owner-Customers.dc.html": {
+   "x": 1880,
+   "y": 1960,
+   "w": 390,
+   "h": 920,
+   "title": "4 손님"
+  },
+  "Owner-CustomerDetail.dc.html": {
+   "x": 2350,
+   "y": 1960,
+   "w": 390,
+   "h": 1080,
+   "title": "4 손님 상세"
+  },
+  "Owner-Funeral.dc.html": {
+   "x": 2820,
+   "y": 1960,
+   "w": 390,
+   "h": 844,
+   "title": "5 근조 긴급"
+  },
+  "Owner-Prices-Tablet.dc.html": {
+   "x": 3290,
+   "y": 1960,
+   "w": 1024,
+   "h": 768,
+   "title": "3 시세·품목 · 태블릿",
+   "is_interactive": true
+  }
+ },
+ "order": [
+  "Main.dc.html",
+  "Builder-Filled.dc.html",
+  "Builder-Detail.dc.html",
+  "Owner-Today.dc.html",
+  "Owner-Orders.dc.html",
+  "Owner-OrderDetail.dc.html",
+  "Owner-Prices.dc.html",
+  "Owner-Customers.dc.html",
+  "Owner-CustomerDetail.dc.html",
+  "Owner-Funeral.dc.html",
+  "Owner-Prices-Tablet.dc.html"
+ ],
+ "notes": {
+  "t1": {
+   "x": 0,
+   "y": -300,
+   "text": "꽃다발 빌더 — 소비자 · 모바일 390",
+   "kind": "title1",
+   "maxW": 1330
+  },
+  "t2": {
+   "x": 0,
+   "y": 1660,
+   "text": "꽃집 사장님 운영 앱 — 모바일 390 · 시세는 태블릿 1024 포함",
+   "kind": "title1",
+   "maxW": 4400
+  }
+ },
+ "designSystems": []
+}

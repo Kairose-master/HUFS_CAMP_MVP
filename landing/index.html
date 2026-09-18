@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!--page-->
+<title>꽃집 운영 스왑·남는 꽃</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#F6F1E8; --card:#FFFDF9; --soft:#EFE9DE; --line:#E6DED1;
+  --ink:#1E1B16; --muted:#6B655B;
+  --green:#1F5A3C; --green-dark:#143D29; --green-tint:#E3EEE5;
+  --orange:#B85A0C; --orange-tint:#FBEBD9;
+  --up:#C2382B; --danger:#B3261E; --danger-tint:#FAE3E0;
+  --photo:#ECE5D8; --off:#C9C1B3;
+  --sans:'IBM Plex Sans KR',system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:76px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;word-break:keep-all}
+h1,h2,h3,p,ul,ol,dl,dd{margin:0}
+ul,ol{padding:0;list-style:none}
+a{color:var(--green)}
+button,input{font-family:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px}
+@media (min-width:720px){.wrap{padding-inline:32px}}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;font-weight:700}
+.unit{font-size:.6em;font-weight:600;margin-left:1px;font-family:var(--sans);letter-spacing:0}
+.muted{color:var(--muted)}
+.warn{color:var(--orange)}
+.up{color:var(--up)}.down{color:var(--green)}.flat{color:#8A8378}
+
+/* ---------- header ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(246,241,232,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;height:60px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px;color:var(--ink);text-decoration:none}
+.brand svg{color:var(--green)}
+.nav{display:none;gap:20px;margin-left:auto;font-size:14px;font-weight:500}
+.nav a{color:var(--ink);text-decoration:none}
+.nav a:hover{color:var(--green)}
+@media (min-width:820px){.nav{display:flex}.top .btn{margin-left:0}}
+.top .btn{margin-left:auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:52px;padding:0 22px;border-radius:14px;border:0;background:var(--green);color:#fff;font-size:16px;font-weight:700;text-decoration:none;white-space:nowrap}
+.btn:hover{background:var(--green-dark)}
+.btn.sm{height:40px;padding:0 14px;border-radius:10px;font-size:14px}
+.btn.ghost{background:transparent;color:var(--green);border:1.5px solid var(--green)}
+.btn.ghost:hover{background:var(--green-tint)}
+.btn.orange{background:var(--orange)}
+.btn.orange:hover{background:#96480A}
+.btn:disabled{background:var(--off);color:#fff}
+
+/* ---------- hero ---------- */
+.hero{padding-block:48px 40px}
+.hero .wrap{display:grid;gap:36px;align-items:center}
+@media (min-width:900px){.hero{padding-block:72px 56px}.hero .wrap{grid-template-columns:1.1fr .9fr;gap:56px}}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--green)}
+h1{font-size:clamp(32px,5.4vw,54px);line-height:1.18;letter-spacing:-0.03em;font-weight:700;text-wrap:balance;margin-top:12px}
+h1 em{font-style:normal;color:var(--green)}
+.lede{margin-top:18px;font-size:17px;color:#3F3A31;max-width:34em}
+.hero-cta{margin-top:28px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.reassure{margin-top:12px;font-size:13px;color:var(--muted)}
+.board{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:8px 18px 14px}
+.board-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 8px;font-size:13px;font-weight:600}
+.live{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-weight:500;font-size:12px}
+.live i{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.board a{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:baseline;padding:14px 0;border-top:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.board a:hover .b-label{color:var(--green)}
+.b-label{font-size:14px;font-weight:600}
+.b-val{font-size:30px;line-height:1;text-align:right}
+.b-sub{grid-column:1/-1;font-size:13px;color:var(--muted)}
+.b-ok .b-val{color:var(--green)}
+
+/* ---------- ticker ---------- */
+.ticker{border-block:1px solid var(--line);background:var(--soft);overflow:hidden}
+.ticker-track{display:flex;width:max-content;gap:0;padding-block:10px;animation:tick 48s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker-item{display:inline-flex;align-items:baseline;gap:8px;padding:0 22px;font-size:13px;border-right:1px solid var(--line);white-space:nowrap}
+.ticker-item .num{font-size:14px}
+.ticker-item .d{font-size:12px}
+@keyframes tick{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.ticker{overflow-x:auto}.ticker-track{animation:none}}
+
+/* ---------- sections ---------- */
+section{padding-block:56px}
+@media (min-width:900px){section{padding-block:80px}}
+h2{font-size:clamp(24px,3.4vw,34px);line-height:1.25;letter-spacing:-0.025em;font-weight:700;text-wrap:balance;margin-top:8px}
+.sec-lede{margin-top:12px;color:#3F3A31;max-width:36em}
+
+.ba{margin-top:32px;border-top:1px solid var(--ink)}
+.ba-row{display:grid;gap:6px 24px;padding:20px 0;border-bottom:1px solid var(--line)}
+.ba-row h3{font-size:16px;font-weight:700}
+.ba-row p{font-size:15px}
+.ba-before{color:var(--muted)}
+.ba-after{font-weight:500}
+.ba-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;margin-right:8px;color:var(--muted)}
+.ba-after .ba-tag{color:var(--green)}
+@media (min-width:820px){.ba-row{grid-template-columns:180px 1fr 1fr;align-items:baseline}}
+
+.demo{display:grid;gap:28px}
+@media (min-width:960px){.demo{grid-template-columns:.68fr 1.32fr;gap:44px;align-items:start}.demo-copy{position:sticky;top:92px}}
+.points{margin-top:20px;display:flex;flex-direction:column;gap:12px;font-size:15px}
+.points li{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start}
+.points svg{color:var(--green);margin-top:3px}
+.alt{background:var(--card);border-block:1px solid var(--line)}
+
+/* ---------- widget shell ---------- */
+.widget{background:var(--bg);border:1px solid var(--line);border-radius:22px;overflow:hidden;container-type:inline-size;min-width:0}
+.alt .widget{background:var(--bg)}
+.w-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line)}
+.w-title{font-size:15px;font-weight:700}
+.w-title span{font-weight:500;color:var(--muted);font-size:12.5px;margin-left:6px}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--soft);color:#4A4439;white-space:nowrap}
+.chip.green{background:var(--green-tint);color:var(--green)}
+.chip.orange{background:var(--orange-tint);color:var(--orange)}
+.chip.red{background:var(--danger);color:#fff;border-radius:6px;font-weight:700}
+.w-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:12px}
+.cardbox{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.linkbtn{background:none;border:0;padding:8px 4px;font-size:13px;font-weight:600;color:var(--green);text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- swap ---------- */
+.o-meta{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13.5px}
+.o-meta dt{color:var(--muted)}
+.o-meta dd{font-weight:500}
+.line{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.line:first-of-type{border-top:0}
+.line .nm{flex:1;min-width:0;font-size:14.5px;font-weight:600}
+.line .nm small{display:block;font-weight:400;color:var(--muted);font-size:12.5px;line-height:1.3}
+.line .q{font-size:18px}
+.line .st{font-variant-numeric:tabular-nums;font-size:12.5px;font-weight:700;min-width:96px;text-align:right}
+.line .st.ok{color:var(--green);font-weight:600}
+.line.new{background:var(--green-tint);margin-inline:-8px;padding-inline:8px;border-radius:10px;border-top-color:transparent}
+.swapbox{display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:14px;background:var(--orange-tint)}
+.swapbox.ok{background:var(--green-tint)}
+.swapbox.wait{background:var(--soft)}
+.swap-h{font-size:14px;font-weight:700;color:var(--orange)}
+.swapbox.ok .swap-h{color:var(--green)}
+.swapbox.wait .swap-h{color:var(--ink)}
+.swap-p{font-size:13.5px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:12px;background:rgba(255,253,249,.7)}
+.seg button{height:40px;border:0;border-radius:9px;background:transparent;font-size:13px;font-weight:600;color:#4A4439}
+.seg button[aria-pressed=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(30,27,22,.12)}
+.cands{display:flex;flex-direction:column;gap:8px}
+.cand{display:grid;grid-template-columns:36px 1fr auto;gap:2px 10px;align-items:center;text-align:left;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--card)}
+.cand[aria-pressed=true]{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}
+.cand:disabled{opacity:.55}
+.cand .ico{grid-row:1/3;width:36px;height:36px;border-radius:9px;background:var(--photo);display:flex;align-items:center;justify-content:center}
+.cand .c-nm{font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.cand .c-sub{grid-column:2;font-size:12px;color:var(--muted)}
+.cand .c-diff{grid-row:1/3;grid-column:3;text-align:right;font-size:14px}
+.sum{display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-radius:10px;background:var(--card);font-size:13.5px}
+.sum-row{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.sum-row .num{font-size:16px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.btn-row .btn{flex:1;min-width:150px}
+
+/* ---------- 3D bouquet ---------- */
+.w-stack{display:flex;flex-direction:column;gap:12px}
+.bq-card{position:relative;height:280px;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.bq-card.tall{height:330px}
+.bq{position:absolute;inset:0}
+.bq-canvas{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab;outline-offset:-3px}
+.bq-canvas:active{cursor:grabbing}
+.bq-tl{position:absolute;top:10px;left:10px;display:flex;gap:6px;align-items:center}
+.bq-tr{position:absolute;top:10px;right:10px;pointer-events:none}
+.bq-cap{position:absolute;left:10px;right:10px;bottom:10px;display:flex;flex-wrap:wrap;gap:5px;pointer-events:none}
+.bq-cap .chip,.bq-tr .chip,.bq-tl .chip{background:rgba(239,233,222,.92)}
+.bq-empty{position:absolute;inset:12px;border:1.5px dashed var(--line);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;font-size:14px;font-weight:600;background:var(--card)}
+.bq-empty small{font-weight:400;color:var(--muted);font-size:12.5px}
+.bq-2d{position:absolute;inset:0;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;padding:34px 24px}
+.bq-2d svg{margin:-6px -8px}
+.miniseg{display:inline-flex;padding:3px;border-radius:999px;background:rgba(239,233,222,.92)}
+.miniseg button{height:30px;padding:0 12px;border:0;border-radius:999px;background:transparent;font-size:12.5px;font-weight:600;color:#4A4439}
+.miniseg button[aria-pressed=true]{background:var(--green);color:#fff}
+.b-row{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
+.b-row:first-child{border-top:0}
+.b-row .ico{width:36px;height:36px;border-radius:9px;background:var(--photo);display:flex;align-items:center;justify-content:center}
+.b-row .nm{font-size:14px;font-weight:600;line-height:1.3}
+.b-row .nm small{font-weight:400;color:var(--muted);font-size:12px;margin-left:4px}
+.b-row .pr{font-size:12.5px;display:flex;flex-wrap:wrap;gap:2px 8px;align-items:baseline}
+.b-row .pr .num{font-size:13.5px}
+.b-row.off{opacity:.5}
+.qty{display:flex;align-items:center;gap:2px}
+.qty button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:center}
+.qty button:hover{border-color:var(--green);color:var(--green)}
+.qty button[aria-disabled=true]{opacity:.35}
+.qty .n{min-width:30px;text-align:center;font-size:16px}
+.addbtn{height:40px;padding:0 16px;border-radius:10px;border:0;background:var(--green);color:#fff;font-size:13.5px;font-weight:700}
+.addbtn:disabled{background:var(--off)}
+.tot{display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+.tot-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.tot-row.big{padding-top:8px;border-top:1px solid var(--line);font-weight:700;font-size:15px}
+.tot-row.big .num{font-size:22px}
+.bar{height:8px;border-radius:999px;background:var(--soft);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px;background:var(--green)}
+.bar.over i{background:var(--orange)}
+
+/* ---------- day timeline ---------- */
+.day{margin-top:32px;display:grid;gap:0}
+.day li{display:grid;grid-template-columns:84px 1fr;gap:16px;padding:18px 0;border-top:1px solid var(--line)}
+.day li:last-child{border-bottom:1px solid var(--line)}
+.day .t{font-size:17px;color:var(--green);padding-top:1px}
+.day h3{font-size:16px;font-weight:700}
+.day p{font-size:15px;color:#3F3A31;margin-top:2px;max-width:40em}
+@media (min-width:820px){.day li{grid-template-columns:140px 1fr}.day .t{font-size:20px}}
+
+/* ---------- faq ---------- */
+.faq{margin-top:28px;border-top:1px solid var(--ink);max-width:760px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;font-size:16px;font-weight:600}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary svg{flex-shrink:0;color:var(--muted);transition:transform .15s}
+.faq details[open] summary svg{transform:rotate(180deg)}
+.faq p{padding:0 0 20px;font-size:15px;color:#3F3A31;max-width:40em}
+
+/* ---------- final ---------- */
+.final{background:var(--green);color:#fff;text-align:left}
+.final h2{color:#fff;margin-top:0}
+.final p{margin-top:12px;opacity:.88;max-width:34em}
+.final .hero-cta{margin-top:26px}
+.final .btn{background:#fff;color:var(--green)}
+.final .btn:hover{background:var(--green-tint)}
+.final .btn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.6)}
+.final .btn.ghost:hover{background:rgba(255,255,255,.1)}
+.final .reassure{color:rgba(255,255,255,.75)}
+footer{padding-block:24px 32px;font-size:12.5px;color:var(--muted)}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;max-width:calc(100% - 32px);padding:12px 18px;border-radius:12px;background:var(--ink);color:#fff;font-size:14px;font-weight:500;box-shadow:0 6px 24px rgba(30,27,22,.25)}
+</style>
+<!--/head-->
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="꽃집 운영 홈">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="2.2"/><path d="M12 6.8V3.5M14.2 9h3.3M12 11.2v3.3M9.8 9H6.5M12 14.5V21M12 18c-2.5-.3-4-1.8-4.5-4 2.3 0 4 1.5 4.5 4z"/></svg>
+      꽃집 운영
+    </a>
+    <nav class="nav" aria-label="섹션">
+      <a href="#swap">꽃 스왑</a>
+      <a href="#leftover">남는 꽃 꽃다발</a>
+      <a href="#builder">3D 꽃다발</a>
+      <a href="app.html">입찰 데모</a>
+      <a href="#faq">자주 묻는 질문</a>
+    </nav>
+    <a class="btn sm" href="#swap">직접 만져보기</a>
+  </div>
+</header>
+
+<main id="top">
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">꽃집 사장님용 웹앱</p>
+      <h1>모자란 꽃은 <em>스왑 한 번</em>,<br>남는 꽃은 <em>손님에게 바로</em>.</h1>
+      <p class="lede">주문에 꽃이 모자라면 같은 등급의 대체 꽃이 먼저 골라져 있고, 손님은 링크에서 승인만 하면 됩니다. 신선기간이 임박해 남는 꽃은 꽃다발로 묶어 손님에게 바로 할인해 팝니다.</p>
+      <div class="hero-cta">
+        <a class="btn" href="#swap">꽃 스왑 만져보기</a>
+        <a class="btn ghost" href="#leftover">남는 꽃 꽃다발 보기</a>
+      </div>
+      <p class="reassure">설치·가입 없이 이 페이지에서 바로 동작합니다. 숫자는 모두 예시 데이터입니다.</p>
+    </div>
+    <aside class="board" aria-label="데모 꽃집 현황">
+      <div class="board-head"><span>데모 꽃집 · 지금</span><span class="live"><i></i>아래 데모와 연결됨</span></div>
+      <div id="board"></div>
+    </aside>
+  </div>
+</div>
+
+<div class="ticker" aria-label="오늘 시세 기준 송이 판매가">
+  <div class="ticker-track" id="ticker"></div>
+</div>
+
+<section id="why">
+  <div class="wrap">
+    <p class="eyebrow">왜 필요한가</p>
+    <h2>꽃은 시들고, 주문은 기다려 주지 않습니다.</h2>
+    <div class="ba">
+      <div class="ba-row">
+        <h3>주문 속 모자란 꽃</h3>
+        <p class="ba-before"><span class="ba-tag">지금</span>손님과 카톡으로 30분씩 상담합니다.</p>
+        <p class="ba-after"><span class="ba-tag">이 앱</span>추천 대체 꽃과 금액 차이가 먼저 계산돼 있고, 링크 한 번이면 손님이 승인합니다.</p>
+      </div>
+      <div class="ba-row">
+        <h3>팔다 남은 꽃</h3>
+        <p class="ba-before"><span class="ba-tag">지금</span>시들기 전에 못 팔면 그대로 버립니다.</p>
+        <p class="ba-after"><span class="ba-tag">이 앱</span>신선기간이 임박한 꽃만 모아 꽃다발로 구성하고, 손님에게 바로 할인해 팝니다. 꽃집끼리 넘기는 중간 단계는 없습니다.</p>
+      </div>
+      <div class="ba-row">
+        <h3>꽃집 고르기</h3>
+        <p class="ba-before"><span class="ba-tag">지금</span>손님은 여러 꽃집에 일일이 견적을 물어보고, 가격만 보고 고릅니다.</p>
+        <p class="ba-after"><span class="ba-tag">이 앱</span>손님이 3D로 만든 꽃다발에 꽃집들이 금액을 써 내고, 손님은 작업 사진과 리뷰를 비교해 직접 고릅니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="swap" class="alt">
+  <div class="wrap demo">
+    <div class="demo-copy">
+      <p class="eyebrow">꽃 스왑</p>
+      <h2>모자란 꽃, 고민 없이 바꿔 제안합니다.</h2>
+      <p class="sec-lede">주문 수량과 재고를 대조해 모자란 줄만 주황으로 표시합니다. 같은 품목·같은 등급에서 재고가 있는 색을 기본으로 추천합니다.</p>
+      <ul class="points">
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>대체 꽃을 고르면 <b>3D 꽃다발이 바로 바뀝니다.</b> 원안과 제안을 번갈아 돌려 보세요.</span></li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span><b>부족분만</b> 바꿀지 <b>전부</b> 바꿀지 고르면 합계와 예산 대비가 바로 다시 계산됩니다.</span></li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>손님은 로그인 없이 링크에서 <b>승인 또는 거절</b>만 합니다. 거절하면 원안이 유지됩니다.</span></li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>배송 2시간 전까지 답이 없으면 “응답 없음 — 전화하기” 경고가 뜹니다.</span></li>
+      </ul>
+    </div>
+    <div class="widget">
+      <div class="w-bar">
+        <div class="w-title">주문 #1043 · 생일<span>오늘 16:00 배송</span></div>
+        <div style="display:flex;align-items:center;gap:6px"><span class="chip">예시 데이터</span><button type="button" class="linkbtn" data-act="reset-all">처음 상태로</button></div>
+      </div>
+      <div class="w-body">
+        <div class="bq-card"><div class="bq" id="bq-swap"></div><div class="bq-tl" id="bq-swap-tl"></div><div class="bq-cap" id="bq-swap-cap"></div></div>
+        <div class="w-stack" id="swapw"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="leftover">
+  <div class="wrap demo">
+    <div class="demo-copy">
+      <p class="eyebrow">남는 꽃 꽃다발</p>
+      <h2>남는 꽃은 옆 가게가 아니라, 손님에게 갑니다.</h2>
+      <p class="sec-lede">꽃집끼리 재고를 사고팔면 유통 단계가 하나 더 생깁니다. 그래서 신선기간이 임박했고 내일 주문에도 쓰이지 않는 꽃만 모아, 꽃다발로 구성해 손님에게 바로 팝니다.</p>
+      <ul class="points">
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>남는 꽃은 <b>신선기간 2일 이하 + 주문에 쓰이지 않는 수량</b>으로 자동 계산됩니다. 주문에 필요한 꽃은 할인 판매로 나가지 않습니다.</span></li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span><b>자동 구성</b>을 누르면 남는 꽃만으로 한 다발이 짜이고, 3D로 바로 확인합니다.</span></li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>정가 대비 할인율과 세트 수를 정해 올리면 손님 앱의 “남는 꽃” 탭에 뜹니다.</span></li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>꽃다발로 묶지 않고 <b>송이 단위로 수량·가격만 적어</b> 팔 수도 있습니다. 손님은 필요한 만큼 사거나, 원하는 꽃을 “구해요”로 올립니다.</span></li>
+      </ul>
+    </div>
+    <div class="widget">
+      <div class="w-bar">
+        <div class="w-title">남는 꽃으로 꽃다발 만들기<span>오늘 판매분</span></div>
+        <span class="chip">예시 데이터</span>
+      </div>
+      <div class="w-body">
+        <div class="bq-card"><div class="bq" id="bq-left"></div><div class="bq-tl"><span class="chip">남는 꽃으로만 구성</span></div><div class="bq-cap" id="bq-left-cap"></div></div>
+        <div class="w-stack" id="leftw"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="builder" class="alt">
+  <div class="wrap demo">
+    <div class="demo-copy">
+      <p class="eyebrow">손님 화면 · 3D 꽃다발</p>
+      <h2>손님은 송이 단위로 담고, 3D로 돌려 봅니다.</h2>
+      <p class="sec-lede">가격은 그날 경매 시세에서 같은 공식으로 나오고, 담을 수 있는 수량은 꽃집의 오늘 재고까지입니다. 이렇게 만든 꽃다발이 그대로 입찰 요청이 됩니다.</p>
+      <ul class="points">
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>꽃집 재고보다 많이 담으려 하면 <b>“오늘 재고 n송이”</b>로 알려 주고, 재고가 0이면 “오늘 품절”로 보입니다.</span></li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>신선기간이 임박한 꽃은 <b>오늘만 할인</b> 가격으로 보입니다.</span></li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>꽃 6종은 Blender로 직접 만든 3D 모델입니다. 같은 품목의 다른 색은 꽃잎 색만 바꿔 추가합니다.</span></li>
+      </ul>
+    </div>
+    <div class="widget">
+      <div class="w-bar">
+        <div class="w-title">나만의 꽃다발<span>손님이 보는 화면 · 픽업</span></div>
+        <span class="chip">예시 데이터</span>
+      </div>
+      <div class="w-body">
+        <div class="bq-card tall"><div class="bq" id="bq-build"></div><div class="bq-tr"><span class="chip">끌어서 돌려 보세요</span></div><div class="bq-cap" id="bq-build-cap"></div></div>
+        <div class="w-stack" id="buildw"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="bid">
+  <div class="wrap">
+    <p class="eyebrow">새로 추가 · 입찰 데모</p>
+    <h2>손님이 만든 꽃다발에, 꽃집이 금액을 써 냅니다.</h2>
+    <p class="sec-lede">손님은 3D로 만든 꽃다발을 올리고, 근처 플로리스트들이 금액·준비 시각·대체 꽃을 제안합니다. 손님은 작업 사진과 리뷰, 금액을 나란히 비교해 직접 고릅니다. 꽃은 12종 22품목, 생일·감사·근조 같은 용도별 추천 구성으로 시작할 수 있습니다. 공급자 화면에서는 남는 꽃을 꽃다발이나 송이 단위로 손님에게 바로 팝니다.</p>
+    <div class="hero-cta"><a class="btn" href="app.html">입찰 데모 열기</a></div>
+    <p class="reassure">목업 계정 3개(소비자 1 · 플로리스트 2)로 역할을 바꿔 가며 써 볼 수 있습니다.</p>
+  </div>
+</section>
+
+<section id="day" class="alt">
+  <div class="wrap">
+    <p class="eyebrow">하루의 흐름</p>
+    <h2>사장님이 누르는 건 하루에 몇 번뿐입니다.</h2>
+    <ol class="day">
+      <li><span class="num t">05:00</span><div><h3>시세가 알아서 들어옵니다</h3><p>aT 화훼공판장 경매 시세가 반영되고, 속 단가 ÷ 속당 송이수 × 마진계수로 송이 판매가가 다시 계산됩니다.</p></div></li>
+      <li><span class="num t">주문 오면</span><div><h3>손님 꽃다발에 입찰</h3><p>손님이 3D로 만든 꽃다발이 뜨면 금액과 준비 시각을 써 냅니다. 손님은 작업 사진과 리뷰를 보고 직접 고릅니다.</p></div></li>
+      <li><span class="num t">영업 중</span><div><h3>모자란 주문은 스왑 제안</h3><p>주문 상세에 추천 대체 꽃이 이미 골라져 있습니다. 보내기만 누르면 손님에게 승인 링크가 갑니다.</p></div></li>
+      <li><span class="num t">마감 전</span><div><h3>남는 꽃은 꽃다발로</h3><p>신선기간이 임박한 꽃을 자동 구성으로 묶어 할인가로 올립니다. 팔리는 만큼 버리는 꽃이 줄어듭니다.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <p class="eyebrow">자주 묻는 질문</p>
+    <h2>시작하기 전에 궁금한 것들</h2>
+    <div class="faq" id="faqlist"></div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2>모자란 꽃도 남는 꽃도, 손님에게 바로 닿게.</h2>
+    <p>스왑 제안, 남는 꽃 꽃다발, 꽃집 입찰이 같은 시세와 같은 숫자에서 나옵니다.</p>
+    <div class="hero-cta">
+      <a class="btn" href="#swap" data-cta>우리 가게로 시작하기</a>
+      <a class="btn ghost" href="#swap">데모 다시 해보기</a>
+    </div>
+    <p class="reassure">앱 설치 없이 브라우저에서 열고, 홈 화면에 추가해 앱처럼 씁니다.</p>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">이 페이지의 품목·시세·주문·꽃집 이름은 모두 예시입니다. 가격은 핸드오프 문서의 공식(속 단가 ÷ 속당 송이수 × 마진계수, 10원 단위 반올림)으로 계산합니다.</div></footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="models.js?v=20260918e"></script>
+<script src="bouquet3d.js?v=20260918e"></script>
+<script>
+(function(){
+'use strict';
+// 실제 앱 주소가 정해지면 여기에 넣는다(예: '/shop/today'). 비어 있으면 CTA는 데모로 이동한다.
+var APP_URL = 'app.html';   // 로그인 목업(소비자/공급자)으로 들어가는 입찰 데모
+
+var MATERIALS = 3000, DESIGN = 8000, SHIP = 3000, SHIP_FREE = 30000;
+
+function defaults(){
+  return {
+    items: [
+      {id:'mum', model:'mum', c3:'#F6F2E8',    name:'국화',       v:'백선',       grade:'특', unit:'송이', box:12000, per:20, margin:2.0, prev:11100, stock:60, fresh:4, disc:false, need:[['확정',80],['예약',30],['구독',10]], petal:'#F3EEE3', center:'#EAD6A8'},
+      {id:'rose', model:'rose', c3:'#B23A3A',   name:'장미',       v:'레드나오미', grade:'상', unit:'송이', box:11200, per:10, margin:2.5, prev:11800, stock:30, fresh:2, disc:false, need:[['확정',25],['예약',15]], petal:'#B84A45', center:'#7D2E2B'},
+      {id:'lisi-w', model:'lisianthus', c3:'#F4EFE4', name:'리시안셔스', v:'화이트',     grade:'특', unit:'송이', box:12500, per:10, margin:2.8, prev:12250, stock:15, fresh:3, disc:false, need:[['확정',12]], petal:'#F3EEE3', center:'#D9CBA5'},
+      {id:'lisi-i', model:'lisianthus', c3:'#E6D2A2', name:'리시안셔스', v:'아이보리',   grade:'특', unit:'송이', box:12500, per:10, margin:2.8, prev:12500, stock:25, fresh:3, disc:false, need:[], petal:'#EFE6D2', center:'#D9CBA5'},
+      {id:'lisi-p', model:'lisianthus', c3:'#E7A3AC', name:'리시안셔스', v:'핑크',       grade:'특', unit:'송이', box:13500, per:10, margin:2.8, prev:13000, stock:18, fresh:2, disc:false, need:[], petal:'#E9C4C0', center:'#C98A86'},
+      {id:'carn', model:'carnation', c3:'#EBA9AD',   name:'카네이션',   v:'핑크',       grade:'상', unit:'송이', box:10000, per:20, margin:3.0, prev:11400, stock:40, fresh:1, disc:true,  need:[['확정',20]], petal:'#E9C4C0', center:'#C98A86'},
+      {id:'tulip', model:'tulip', c3:'#E9C24F',  name:'튤립',       v:'옐로우',     grade:'특', unit:'송이', box:8000,  per:10, margin:2.8, prev:7000,  stock:8,  fresh:2, disc:false, need:[], petal:'#E7C86A', center:'#B89A3E'},
+      {id:'euca', model:'eucalyptus', c3:null, green:true,   name:'유칼립투스', v:'그린',       grade:'줄기', unit:'줄기', box:6000, per:10, margin:3.0, prev:null, stock:40, fresh:6, disc:false, need:[['확정',6]], euca:true}
+    ],
+    order: defaultOrder(),
+    cart: {mum:10, 'lisi-w':3, euca:2}, budget: 50000, cartNote: '',
+    left: {cart:{}, off:30, sets:1, published:null}
+  };
+}
+function defaultOrder(){
+  return {budget:105000, lines:[{id:'lisi-w',qty:20},{id:'rose',qty:5},{id:'euca',qty:3}],
+          mode:'short', pick:null, status:'idle', sent:null, newId:null, view:'proposal'};
+}
+var S = defaults();
+var timers = [];
+
+// ---------- 계산 ----------
+function round10(n){return Math.round(n/10)*10}
+function round100(n){return Math.round(n/100)*100}
+function item(id){for(var i=0;i<S.items.length;i++) if(S.items[i].id===id) return S.items[i]; return null}
+function listPrice(it){return round10(it.box/it.per*it.margin)}
+function unitPrice(it){return it.disc ? round100(listPrice(it)*0.7) : listPrice(it)}
+function deltaPct(it){return it.prev ? Math.round((it.box-it.prev)/it.prev*100) : null}
+function needSum(it){return it.need.reduce(function(a,n){return a+n[1]},0)}
+function shortOf(it){return Math.max(0, needSum(it)-it.stock)}
+function flowersTotal(lines){return lines.reduce(function(a,l){return a+l.qty*unitPrice(item(l.id))},0)}
+function orderTotal(lines){var f=flowersTotal(lines);return f+MATERIALS+DESIGN+(f>=SHIP_FREE?0:SHIP)}
+function targetLine(){var ls=S.order.lines;for(var i=0;i<ls.length;i++) if(ls[i].qty>item(ls[i].id).stock) return ls[i];return null}
+function swapQty(t){var st=item(t.id).stock;return (S.order.mode==='all'||st===0)?t.qty:t.qty-st}
+function lineQty(id){var l=S.order.lines.filter(function(x){return x.id===id})[0];return l?l.qty:0}
+function candidates(t){
+  var base=item(t.id), q=swapQty(t);
+  return S.items.filter(function(c){return c.name===base.name&&c.id!==base.id&&c.grade===base.grade})
+    .map(function(c){var free=c.stock-lineQty(c.id);return {it:c,free:free,ok:free>=q,diff:(unitPrice(c)-unitPrice(base))*q}})
+    .sort(function(a,b){return (b.ok-a.ok)||(Math.abs(a.diff)-Math.abs(b.diff))||(b.free-a.free)});
+}
+// 남는 꽃 = 신선기간 2일 이하이면서 내일 필요 수량을 채우고도 남는 수량
+function leftPool(){return S.items.filter(function(it){return it.fresh<=2}).map(function(it){return {it:it,qty:Math.max(0,it.stock-needSum(it))}}).filter(function(x){return x.qty>0})}
+function leftMax(it){var x=leftPool().filter(function(x){return x.it.id===it.id})[0];return x?Math.floor(x.qty/S.left.sets):0}
+function leftLines(){return S.items.filter(function(it){return S.left.cart[it.id]>0}).map(function(it){return {id:it.id,qty:S.left.cart[it.id]}})}
+function leftList(lines){return lines.reduce(function(a,l){return a+l.qty*listPrice(item(l.id))},0)+(lines.length?MATERIALS+DESIGN:0)}
+
+// ---------- 표현 ----------
+function fmt(n){return n.toLocaleString('ko-KR')}
+function won(n,cls){return '<span class="num '+(cls||'')+'">'+fmt(n)+'<span class="unit">원</span></span>'}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function ic(p,size,sw){return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(sw||1.8)+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'}
+var I={plus:'<path d="M12 5v14M5 12h14"/>',minus:'<path d="M5 12h14"/>',check:'<path d="M5 12l5 5 9-10"/>',copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2"/>',send:'<path d="M20 4L4 11l7 2 2 7z"/>',clock:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',pin:'<path d="M12 21s6-6 6-11a6 6 0 10-12 0c0 5 6 11 6 11z"/><circle cx="12" cy="10" r="2"/>',chev:'<path d="M6 9l6 6 6-6"/>',swap:'<path d="M4 8h13l-3-3M20 16H7l3 3"/>'};
+function flowerSvg(it,size){
+  if(it.euca){var c='';for(var i=0;i<6;i++) c+='<circle cx="'+(32+(i%2?-10:10))+'" cy="'+(12+i*9)+'" r="6" fill="#7C8F6A" opacity="'+(0.9-i*0.08)+'"/>';
+    return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 62V8" stroke="#7C8F6A" stroke-width="2.5" stroke-linecap="round"/>'+c+'</svg>'}
+  var p='';[0,72,144,216,288].forEach(function(a){p+='<ellipse cx="32" cy="18" rx="7" ry="11" fill="'+it.petal+'" transform="rotate('+a+' 32 28)"/>'});
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 40v22" stroke="#7C8F6A" stroke-width="3" stroke-linecap="round"/><path d="M32 52c-6-2-9-6-9-10 5 0 8 4 9 10z" fill="#7C8F6A"/>'+p+'<circle cx="32" cy="28" r="5" fill="'+it.center+'"/></svg>';
+}
+function deltaHtml(d){if(!d) return '<span class="num d flat">—</span>';return d>0?'<span class="num d up">▲'+d+'%</span>':'<span class="num d down">▼'+(-d)+'%</span>'}
+function full(it){return it.name+' '+it.v+(it.grade==='줄기'?'':' '+it.grade)}
+
+// ---------- 히어로 보드 · 티커 ----------
+function renderBoard(){
+  var t=targetLine(), o=S.order, cl=cartLines(), cs=cl.reduce(function(a,l){return a+l.qty},0), lp=leftPool().reduce(function(a,x){return a+x.qty},0), pub=S.left.published;
+  var swapN=(t&&o.status!=='approved')?1:0;
+  var swapSub = o.status==='approved' ? '주문 #1043 · 스왑 승인됨 · 바로 제작 가능'
+    : !t ? '주문 #1043 · 재고로 바로 제작 가능'
+    : o.status==='sent' ? '주문 #1043 · 손님 승인 대기 중'
+    : '주문 #1043 · '+full(item(t.id))+' '+(t.qty-item(t.id).stock)+item(t.id).unit+' 부족';
+  document.getElementById('board').innerHTML =
+    '<a href="#swap" class="'+(swapN?'':'b-ok')+'"><span class="b-label">스왑이 필요한 주문</span><span class="num b-val '+(swapN?'warn':'')+'">'+swapN+'<span class="unit">건</span></span><span class="b-sub">'+swapSub+'</span></a>'+
+    '<a href="#leftover" class="'+(lp?'':'b-ok')+'"><span class="b-label">남는 꽃(신선기간 임박)</span><span class="num b-val '+(lp?'warn':'')+'">'+lp+'<span class="unit">송이</span></span><span class="b-sub">'+(pub?'꽃다발 '+pub.sets+'세트를 손님에게 판매 중':lp?'꽃다발로 묶어 손님에게 바로 팔 수 있어요':'버려질 꽃이 없습니다')+'</span></a>'+
+    '<a href="#builder" class="b-ok"><span class="b-label">손님이 담는 꽃다발</span><span class="num b-val">'+cs+'<span class="unit">송이</span></span><span class="b-sub">'+(cs?'시세 기준 '+fmt(flowersTotal(cl)+MATERIALS+DESIGN)+'원 · 3D로 돌려 보기':'아직 담은 꽃이 없어요')+'</span></a>';
+}
+function renderTicker(){
+  var h=S.items.map(function(it){var lp=listPrice(it),up=unitPrice(it);
+    return '<span class="ticker-item"><span>'+it.name+' '+it.v+'</span>'+won(up,it.disc?'warn':'')+(it.disc?'<s class="muted num" style="font-size:12px;font-weight:500">'+fmt(lp)+'</s>':'')+deltaHtml(deltaPct(it))+'</span>'}).join('');
+  document.getElementById('ticker').innerHTML=h+'<span aria-hidden="true" style="display:contents">'+h+'</span>';
+}
+
+// ---------- 스왑 ----------
+function renderSwap(){
+  var o=S.order, t=targetLine(), total=orderTotal(o.lines);
+  var lines=o.lines.map(function(l){var it=item(l.id), sh=Math.max(0,l.qty-it.stock);
+    return '<div class="line'+(o.status==='approved'&&l.id===o.newId?' new':'')+'"><span class="nm">'+it.name+'<small>'+it.v+(it.grade==='줄기'?'':' · '+it.grade)+'</small></span>'+
+      '<span class="num q">'+l.qty+'<span class="unit">'+it.unit+'</span></span>'+
+      (sh?'<span class="st warn">재고 '+it.stock+' · 부족 '+sh+'</span>':'<span class="st ok">재고 '+it.stock+' ✓</span>')+'</div>'}).join('');
+  var head='<div class="cardbox"><dl class="o-meta"><dt>받는 분</dt><dd>어머니 · 송파구 잠실동 (배송)</dd><dt>예산</dt><dd>'+won(o.budget)+' <span class="muted" style="font-weight:400;font-size:12.5px">· 현재 합계 '+fmt(total)+'원</span></dd></dl></div>'+
+    '<div class="cardbox" style="padding-block:6px"><div style="font-size:13px;font-weight:700;padding:8px 0 2px">꽃 구성 · 재고 대조</div>'+lines+'</div>';
+  var box='';
+  if(o.status==='approved'){
+    box='<div class="swapbox ok"><div class="swap-h">'+ic(I.check,16,2)+' 손님이 승인했어요 · 구성이 교체됐습니다</div><p class="swap-p">모든 줄이 재고 안에 들어왔습니다. 이제 바로 제작을 시작할 수 있어요.</p><div class="btn-row"><button type="button" class="btn ghost sm" data-act="swap-reset" data-fid="swap-reset">처음부터 다시 해보기</button></div></div>';
+  } else if(o.status==='sent'){
+    box='<div class="swapbox wait"><div class="swap-h">'+ic(I.clock,16)+' 손님 승인 대기 중</div><p class="swap-p">'+esc(o.sent)+' 제안을 링크로 보냈습니다. 손님이 답하면 이 화면이 바로 바뀝니다.</p>'+
+      '<div class="btn-row"><button type="button" class="btn sm" data-act="approve" data-fid="approve">손님이 승인 (데모)</button><button type="button" class="btn ghost sm" data-act="reject" data-fid="reject">손님이 거절 (데모)</button></div></div>';
+  } else if(!t){
+    box='<div class="swapbox ok"><div class="swap-h">'+ic(I.check,16,2)+' 재고 충분 — 스왑 없이 제작할 수 있어요</div><p class="swap-p">주문한 꽃이 모두 재고 안에 있습니다.</p><div class="btn-row"><button type="button" class="btn ghost sm" data-act="swap-reset" data-fid="swap-reset">주문을 처음 상태로</button></div></div>';
+  } else {
+    var base=item(t.id), q=swapQty(t), cs=candidates(t), keep=t.qty-q;
+    if(!cs.length){
+      box='<div class="swapbox"><div class="swap-h">'+full(base)+' '+(t.qty-base.stock)+base.unit+' 부족</div><p class="swap-p">같은 품목·같은 등급의 다른 색이 없습니다. 손님과 다른 꽃으로 상의해 주세요.</p></div>';
+    } else {
+      var picked=cs.filter(function(c){return c.it.id===o.pick&&c.ok})[0];
+      if(!picked){picked=cs.filter(function(c){return c.ok})[0]||null;o.pick=picked?picked.it.id:null}
+      var rejected=o.status==='rejected';
+      var cards=cs.map(function(c,i){
+        var rec=(i===0&&c.ok);
+        var d=c.diff===0?'<span class="flat" style="font-size:13px;font-weight:600">같은 가격</span>':'<span class="num '+(c.diff>0?'warn':'down')+'">'+(c.diff>0?'+':'−')+fmt(Math.abs(c.diff))+'<span class="unit">원</span></span>';
+        return '<button type="button" class="cand" aria-pressed="'+(picked&&picked.it.id===c.it.id)+'" data-act="pick" data-id="'+c.it.id+'" data-fid="pick-'+c.it.id+'"'+(c.ok?'':' disabled')+'>'+
+          '<span class="ico">'+flowerSvg(c.it,28)+'</span><span class="c-nm">'+c.it.v+(rec?'<span class="chip green">추천</span>':'')+'</span>'+
+          '<span class="c-sub">'+(c.ok?'재고 '+c.free+c.it.unit+' · 송이당 '+fmt(unitPrice(c.it))+'원':'재고 '+c.free+c.it.unit+' — '+q+c.it.unit+'에는 모자라요')+'</span><span class="c-diff">'+d+'</span></button>'}).join('');
+      var sum='';
+      if(picked){
+        var nt=total+picked.diff, over=nt-o.budget;
+        sum='<div class="sum"><div class="sum-row"><span>'+base.v+' '+t.qty+' → '+(keep?base.v+' '+keep+' + ':'')+picked.it.v+' '+q+'</span></div>'+
+          '<div class="sum-row"><span class="muted">바뀐 합계</span><span>'+(picked.diff?'<s class="muted num" style="font-size:12px;font-weight:500;margin-right:6px">'+fmt(total)+'</s>':'')+won(nt,over>0?'warn':'')+'</span></div>'+
+          '<div class="sum-row"><span class="muted">예산 '+fmt(o.budget)+'원 대비</span><span class="'+(over>0?'warn':'down')+'" style="font-size:12.5px;font-weight:600">'+(over>0?'예산보다 '+fmt(over)+'원 많아요':'예산 안 · '+fmt(-over)+'원 여유')+'</span></div></div>';
+      }
+      box='<div class="swapbox"><div class="swap-h">'+(rejected?'손님이 원안을 유지했어요 · 다른 꽃으로 다시 제안할 수 있습니다':full(base)+' '+(t.qty-base.stock)+base.unit+' 부족 · 대체 제안')+'</div>'+
+        (base.stock>0?'<div class="seg" role="group" aria-label="바꿀 범위"><button type="button" aria-pressed="'+(o.mode==='short')+'" data-act="mode" data-mode="short" data-fid="mode-short">부족분만 '+(t.qty-base.stock)+base.unit+'</button><button type="button" aria-pressed="'+(o.mode==='all')+'" data-act="mode" data-mode="all" data-fid="mode-all">전부 '+t.qty+base.unit+'</button></div>':'')+
+        '<div class="cands">'+cards+'</div>'+sum+
+        '<div class="btn-row"><button type="button" class="btn orange" data-act="send" data-fid="send"'+(picked?'':' disabled')+'>'+ic(I.send,18)+'대체 제안 보내기</button>'+'</div></div>';
+    }
+  }
+  document.getElementById('swapw').innerHTML=head+box;
+}
+
+// ---------- 3D 프리뷰 ----------
+var bq = {};
+function fallback2d(host, lines){
+  var h='', n=0;
+  lines.forEach(function(l){for(var i=0;i<l.qty&&n<28;i++,n++) h+=flowerSvg(item(l.key),44)});
+  host.innerHTML='<div class="bq-2d">'+h+'</div>';
+}
+function showBouquet(id, lines){
+  var host=document.getElementById(id);
+  var live=lines.filter(function(l){return l.qty>0});
+  var sig=JSON.stringify(live);
+  if(!bq[id]) bq[id]={api:window.Bouquet3D?Bouquet3D.mount(host,{fallback:fallback2d}):{update:function(l){fallback2d(host,l)}},sig:null};
+  if(bq[id].sig===sig) return;
+  bq[id].sig=sig;
+  var empty=host.parentNode.querySelector('.bq-empty');
+  if(!live.length){
+    if(!empty){empty=document.createElement('div');empty.className='bq-empty';empty.innerHTML='꽃을 담아보세요<small>아래에서 송이 단위로 고르면 여기에 쌓여요</small>';host.parentNode.appendChild(empty)}
+    empty.hidden=false;
+  } else if(empty) empty.hidden=true;
+  bq[id].api.update(live.map(function(l){var it=item(l.id);return {key:it.id,model:it.model,color:it.c3,qty:l.qty,green:!!it.green}}));
+}
+function capChips(lines){
+  return lines.filter(function(l){return l.qty>0}).map(function(l){var it=item(l.id);return '<span class="chip">'+it.name+(it.name==='리시안셔스'?' '+it.v:'')+' '+l.qty+'</span>'}).join('');
+}
+function proposedLines(){
+  var o=S.order, t=targetLine();
+  if(!t||!o.pick||o.status==='approved') return null;
+  var q=o.status==='sent'?o.sentQty:swapQty(t), out=[];
+  o.lines.forEach(function(l){
+    if(l.id===t.id){ if(l.qty-q>0) out.push({id:l.id,qty:l.qty-q}); out.push({id:o.pick,qty:q+lineQty(o.pick)}) }
+    else if(l.id!==o.pick) out.push({id:l.id,qty:l.qty});
+  });
+  return out;
+}
+function renderSwapPreview(){
+  var o=S.order, prop=proposedLines(), showProp=prop&&o.view==='proposal', lines=showProp?prop:o.lines;
+  document.getElementById('bq-swap-tl').innerHTML = prop
+    ? '<div class="miniseg" role="group" aria-label="미리보기"><button type="button" aria-pressed="'+(!showProp)+'" data-act="view" data-view="original" data-fid="view-o">원안</button><button type="button" aria-pressed="'+(!!showProp)+'" data-act="view" data-view="proposal" data-fid="view-p">제안</button></div>'
+    : '<span class="chip">'+(o.status==='approved'?'교체된 구성':'손님이 만든 구성')+'</span>';
+  document.getElementById('bq-swap-cap').innerHTML=capChips(lines);
+  showBouquet('bq-swap', lines);
+}
+
+// ---------- 손님 빌더 ----------
+function cartLines(){return S.items.filter(function(it){return S.cart[it.id]>0}).map(function(it){return {id:it.id,qty:S.cart[it.id]}})}
+function renderBuild(){
+  var notes=[];
+  S.items.forEach(function(it){var q=S.cart[it.id]||0;if(q>it.stock){S.cart[it.id]=it.stock;notes.push(it.name+(it.name==='리시안셔스'?' '+it.v:'')+' '+it.stock+it.unit)}});
+  if(notes.length) S.cartNote='재고가 줄어 수량을 맞췄어요: '+notes.join(', ');
+  var rows=S.items.map(function(it){
+    var q=S.cart[it.id]||0, up=unitPrice(it), max=q>=it.stock, ctl;
+    if(it.stock<=0) ctl='<button type="button" class="addbtn" disabled>오늘 품절</button>';
+    else if(!q) ctl='<button type="button" class="addbtn" data-act="add" data-id="'+it.id+'" data-fid="add-'+it.id+'">담기</button>';
+    else ctl='<div class="qty"><button type="button" aria-label="'+esc(full(it))+' 빼기" data-act="sub" data-id="'+it.id+'" data-fid="sub-'+it.id+'">'+ic(I.minus,16,2)+'</button><span class="num n">'+q+'</span><button type="button" aria-label="'+esc(full(it))+' 더 담기" aria-disabled="'+max+'" data-act="add" data-id="'+it.id+'" data-fid="add-'+it.id+'">'+ic(I.plus,16,2)+'</button></div>';
+    return '<div class="b-row'+(it.stock<=0?' off':'')+'"><span class="ico">'+flowerSvg(it,28)+'</span><div><div class="nm">'+it.name+'<small>'+it.v+(it.grade==='줄기'?'':' · '+it.grade)+'</small></div>'+
+      '<div class="pr"><span class="muted">오늘</span>'+won(up,it.disc?'warn':'')+'<span class="muted">/'+it.unit+'</span>'+(it.disc?'<span class="chip orange">오늘만 할인</span>':deltaHtml(deltaPct(it)))+'</div></div>'+ctl+'</div>'}).join('');
+  var lines=cartLines(), f=flowersTotal(lines), total=lines.length?f+MATERIALS+DESIGN:0, pct=Math.round(total/S.budget*100), over=total-S.budget;
+  document.getElementById('buildw').innerHTML=
+    (S.cartNote?'<div class="swapbox" style="padding:10px 12px"><p class="swap-p" style="color:var(--orange);font-weight:600">'+esc(S.cartNote)+'</p></div>':'')+
+    '<div class="cardbox" style="padding-block:4px">'+rows+'</div>'+
+    '<div class="cardbox tot"><div class="tot-row"><span class="muted">꽃값</span>'+won(f)+'</div><div class="tot-row"><span class="muted">부자재 · 디자인비</span>'+won(lines.length?MATERIALS+DESIGN:0)+'</div>'+
+    '<div class="tot-row big"><span>합계</span>'+won(total,over>0?'warn':'')+'</div>'+
+    '<div class="bar'+(over>0?' over':'')+'" role="img" aria-label="예산 대비 '+pct+'%"><i style="width:'+Math.min(100,pct)+'%"></i></div>'+
+    '<div class="tot-row" style="font-size:12.5px"><span class="muted">예산 '+fmt(S.budget)+'원</span><span class="'+(over>0?'warn':'muted')+'" style="font-weight:600">'+(over>0?'예산보다 '+fmt(over)+'원 많아요':pct+'%')+'</span></div>'+
+    (lines.length?'<div><button type="button" class="linkbtn" data-act="clear-cart" data-fid="clear-cart">꽃다발 비우기</button></div>':'')+'</div>';
+  document.getElementById('bq-build-cap').innerHTML=capChips(lines);
+  showBouquet('bq-build', lines);
+}
+
+// ---------- 남는 꽃 꽃다발 ----------
+function renderLeft(){
+  var L=S.left, pool=leftPool();
+  // 재고가 줄면 담은 수량도 맞춘다
+  S.items.forEach(function(it){var q=L.cart[it.id]||0,m=leftMax(it);if(q>m) L.cart[it.id]=m});
+  var lines=leftLines(), stems=lines.reduce(function(a,l){return a+l.qty},0), list=leftList(lines), sale=round100(list*(1-L.off/100));
+  var h='';
+  if(L.published){var P=L.published;
+    h+='<div class="swapbox ok"><div class="swap-h">'+ic(I.check,16,2)+' 손님에게 판매 중 · '+P.sets+'세트</div><p class="swap-p">손님 앱의 “남는 꽃” 탭에 아래처럼 보입니다. 팔리는 만큼 재고에서 빠집니다.</p>'+
+      '<div class="sum"><div class="sum-row"><span><b>오늘의 남는 꽃 꽃다발</b></span><span class="chip orange">−'+P.off+'%</span></div><div class="sum-row"><span class="muted">'+P.lines.map(function(l){return item(l.id).name+' '+l.qty}).join(' · ')+'</span></div>'+
+      '<div class="sum-row"><span class="muted">오늘 픽업 · 남은 '+P.sets+'세트</span><span><s class="muted num" style="font-size:12px;font-weight:500;margin-right:6px">'+fmt(P.list)+'</s>'+won(P.sale,'warn')+'</span></div></div>'+
+      '<div class="btn-row"><a class="btn sm" href="app.html">입찰 데모에서 직접 해 보기</a><button type="button" class="btn ghost sm" data-act="left-unpub" data-fid="left-unpub">판매 내리기</button></div></div>';
+  } else if(!pool.length){
+    h+='<div class="swapbox ok"><div class="swap-h">'+ic(I.check,16,2)+' 오늘은 남는 꽃이 없어요</div><p class="swap-p">신선기간이 2일 이하로 남은 꽃이 주문에 쓰고도 남으면 여기에 나타납니다.</p></div>';
+  } else {
+    var rows=pool.map(function(x){var it=x.it,q=L.cart[it.id]||0,m=leftMax(it);
+      return '<div class="b-row"><span class="ico">'+flowerSvg(it,28)+'</span><div><div class="nm">'+it.name+'<small>'+it.v+' · '+it.grade+'</small></div><div class="pr"><span class="num '+(it.fresh<=1?'warn':'')+'">'+it.fresh+'일</span><span class="muted">남음 · 남는 수량</span><span class="num">'+x.qty+'</span></div></div>'+
+        '<div class="qty"><button type="button" aria-label="'+esc(full(it))+' 빼기" data-act="left-sub" data-id="'+it.id+'" data-fid="left-sub-'+it.id+'"'+(q?'':' disabled')+'>'+ic(I.minus,16,2)+'</button><span class="num n">'+q+'</span><button type="button" aria-label="'+esc(full(it))+' 더 담기" aria-disabled="'+(q>=m)+'" data-act="left-add" data-id="'+it.id+'" data-fid="left-add-'+it.id+'">'+ic(I.plus,16,2)+'</button></div></div>'}).join('');
+    h+='<div class="cardbox" style="padding-block:4px">'+rows+'</div>'+
+      '<div class="btn-row"><button type="button" class="btn ghost sm" data-act="left-auto" data-fid="left-auto">자동 구성</button><button type="button" class="btn ghost sm" data-act="left-clear" data-fid="left-clear"'+(stems?'':' disabled')+'>비우기</button></div>'+
+      '<div class="cardbox tot"><div class="tot-row"><span class="muted">정가(시세 기준 + 부자재·디자인비)</span>'+won(list)+'</div>'+
+      '<div class="seg" role="group" aria-label="할인율" style="background:var(--soft);grid-template-columns:repeat(3,1fr)">'+[20,30,40].map(function(n){return '<button type="button" aria-pressed="'+(L.off===n)+'" data-act="left-off" data-v="'+n+'" data-fid="left-off-'+n+'">'+n+'% 할인</button>'}).join('')+'</div>'+
+      '<div class="tot-row"><span class="muted">세트 수(같은 구성)</span><div class="qty"><button type="button" aria-label="세트 줄이기" data-act="left-sets" data-v="-1" data-fid="left-sets-dec"'+(L.sets>1?'':' disabled')+'>'+ic(I.minus,16,2)+'</button><span class="num n">'+L.sets+'</span><button type="button" aria-label="세트 늘리기" data-act="left-sets" data-v="1" data-fid="left-sets-inc">'+ic(I.plus,16,2)+'</button></div></div>'+
+      '<div class="tot-row big"><span>판매가</span>'+won(sale,'warn')+'</div>'+
+      '<div class="tot-row" style="font-size:12.5px"><span class="muted">버려질 뻔한 꽃</span><span style="font-weight:600">'+stems*L.sets+'송이 · 예상 매출 '+fmt(sale*L.sets)+'원</span></div></div>'+
+      '<button type="button" class="btn" data-act="left-pub" data-fid="left-pub"'+(stems?'':' disabled')+'>손님에게 올리기</button>';
+  }
+  document.getElementById('leftw').innerHTML=h;
+  var show=L.published?L.published.lines:lines;
+  document.getElementById('bq-left-cap').innerHTML=capChips(show);
+  showBouquet('bq-left', show);
+}
+
+// ---------- FAQ ----------
+var FAQ=[
+  ['앱을 설치해야 하나요?','아니요. 웹앱이라 브라우저에서 바로 열립니다. 홈 화면에 추가하면 앱처럼 전체 화면으로 쓸 수 있습니다.'],
+  ['시세는 어디서 오고, 언제 바뀌나요?','aT 화훼공판장 경매 시세를 매일 05:00에 한 번 반영합니다. 그날 시세를 받지 못하면 어제 시세를 유지하고 “시세 기준” 날짜를 함께 보여줍니다.'],
+  ['손님이 스왑을 거절하면 어떻게 되나요?','원래 구성이 그대로 유지됩니다. 다른 꽃으로 다시 제안하거나, 손님과 통화해 구성을 조정합니다.'],
+  ['남는 꽃을 다른 꽃집에 넘길 수는 없나요?','일부러 넣지 않았습니다. 꽃집끼리 재고를 사고팔면 중간 유통 단계가 하나 더 생기기 때문입니다. 남는 꽃은 꽃다발로 만들어 손님에게 바로 할인해 팝니다.'],
+  ['스왑하면 손님이 내는 금액이 바뀌나요?','대체 꽃의 오늘 가격으로 합계를 다시 계산해 제안에 함께 보여줍니다. 예산을 넘으면 주황색으로 알려 드리지만, 보내는 것을 막지는 않습니다.'],
+  ['근조 알림은 아이폰에서도 오나요?','홈 화면에 추가한 뒤에는 웹 푸시로 받습니다. 그 전에는 카카오 알림톡으로 같은 주소를 보내 드립니다.']
+];
+document.getElementById('faqlist').innerHTML=FAQ.map(function(f){return '<details><summary>'+f[0]+ic(I.chev,20)+'</summary><p>'+f[1]+'</p></details>'}).join('');
+
+// ---------- 공통 ----------
+var toastT;
+function toast(msg){var el=document.getElementById('toast');el.textContent=msg;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){el.hidden=true},2600)}
+function renderAll(){
+  var a=document.activeElement, fid=a&&a.getAttribute?a.getAttribute('data-fid'):null;
+  renderBoard();renderTicker();renderSwap();renderSwapPreview();renderLeft();renderBuild();
+  if(fid){var el=document.querySelector('[data-fid="'+fid+'"]');if(el&&!el.disabled) el.focus({preventScroll:true})}
+}
+document.addEventListener('click',function(e){
+  var cta=e.target.closest('[data-cta]');
+  if(cta&&!APP_URL){toast('출시 준비 중이에요. 데모는 지금 바로 써볼 수 있어요.');return}
+  var b=e.target.closest('[data-act]');if(!b||b.disabled) return;
+  var act=b.getAttribute('data-act'), id=b.getAttribute('data-id'), it=id?item(id):null, o=S.order;
+  if(act==='noop'){}
+  else if(act==='mode'){o.mode=b.getAttribute('data-mode');o.view='proposal'}
+  else if(act==='view'){o.view=b.getAttribute('data-view')}
+  else if(act==='add'){
+    var cq=S.cart[id]||0;S.cartNote='';
+    if(cq>=it.stock){toast('오늘 재고 '+it.stock+it.unit);return}
+    S.cart[id]=cq+1;
+  }
+  else if(act==='sub'){S.cartNote='';S.cart[id]=Math.max(0,(S.cart[id]||0)-1)}
+  else if(act==='clear-cart'){S.cart={};S.cartNote=''}
+  else if(act==='pick'){o.pick=id;o.view='proposal'}
+  else if(act==='send'){
+    var t=targetLine();if(!t||!o.pick) return;
+    var q=swapQty(t);o.sent=item(t.id).v+' → '+item(o.pick).v+' '+q+item(t.id).unit;o.sentQty=q;o.sentFrom=t.id;o.status='sent';
+    toast('손님에게 승인 링크를 보냈어요');
+  }
+  else if(act==='approve'){
+    var ls=o.lines, idx=-1;for(var i=0;i<ls.length;i++) if(ls[i].id===o.sentFrom) idx=i;
+    if(idx>-1){
+      ls[idx].qty-=o.sentQty;
+      var ex=ls.filter(function(l){return l.id===o.pick})[0];
+      if(ex) ex.qty+=o.sentQty; else ls.splice(idx+1,0,{id:o.pick,qty:o.sentQty});
+      if(ls[idx].qty<=0) ls.splice(idx,1);
+    }
+    o.newId=o.pick;o.status='approved';toast('승인됨 · 주문 구성을 교체했어요');
+  }
+  else if(act==='reject'){o.status='rejected';o.pick=null;toast('손님이 원안을 유지했어요')}
+  else if(act==='swap-reset'){S.order=defaultOrder()}
+  else if(act==='left-add'){var lm=leftMax(it),lq=S.left.cart[id]||0;if(lq>=lm){toast('남는 수량은 '+lm+it.unit+'까지예요');return}S.left.cart[id]=lq+1}
+  else if(act==='left-sub'){S.left.cart[id]=Math.max(0,(S.left.cart[id]||0)-1)}
+  else if(act==='left-clear'){S.left.cart={}}
+  else if(act==='left-auto'){
+    var pl=leftPool(),n=0,moved=true;S.left.cart={};
+    while(n<12&&moved){moved=false;pl.forEach(function(x){if(n<12&&(S.left.cart[x.it.id]||0)<leftMax(x.it)){S.left.cart[x.it.id]=(S.left.cart[x.it.id]||0)+1;n++;moved=true}})}
+    toast('남는 꽃 '+n+'송이로 한 다발을 짰어요');
+  }
+  else if(act==='left-off'){S.left.off=+b.getAttribute('data-v')}
+  else if(act==='left-sets'){
+    var ns=Math.max(1,S.left.sets+(+b.getAttribute('data-v'))), fits=leftLines().every(function(l){var x=leftPool().filter(function(x){return x.it.id===l.id})[0];return x&&l.qty*ns<=x.qty});
+    if(!fits){toast('남는 꽃으로는 '+S.left.sets+'세트까지 만들 수 있어요');return} S.left.sets=ns;
+  }
+  else if(act==='left-pub'){var ll=leftLines(),li=leftList(ll);S.left.published={lines:ll,list:li,off:S.left.off,sale:round100(li*(1-S.left.off/100)),sets:S.left.sets};toast('손님 앱 “남는 꽃” 탭에 올렸어요')}
+  else if(act==='left-unpub'){S.left.published=null;toast('판매를 내렸어요')}
+  else if(act==='reset-all'){timers.forEach(clearTimeout);timers=[];S=defaults();toast('예시 데이터를 처음 상태로 돌렸어요')}
+  renderAll();
+});
+if(APP_URL){[].forEach.call(document.querySelectorAll('[data-cta]'),function(a){a.href=APP_URL})}
+renderAll();
+})();
+</script>
+</body>
+</html>

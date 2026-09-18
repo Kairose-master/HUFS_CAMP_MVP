@@ -1,0 +1,9 @@
+# 배포에는 landing/ 의 정적 파일만 필요하다
+/blender
+/design
+/docs
+/screenshots
+/tools
+/landing/_backup
+/landing/dist
+/landing/bundle.py
