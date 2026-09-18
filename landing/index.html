@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!--page-->
-<title>꽃집 운영 스왑·남는 꽃</title>
+<title>꽃다발 입찰 소개</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap">
 <style>
 :root{
@@ -63,7 +63,8 @@ button:disabled{cursor:not-allowed}
 @media (min-width:900px){.hero{padding-block:72px 56px}.hero .wrap{grid-template-columns:1.1fr .9fr;gap:56px}}
 .eyebrow{font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--green)}
 h1{font-size:clamp(32px,5.4vw,54px);line-height:1.18;letter-spacing:-0.03em;font-weight:700;text-wrap:balance;margin-top:12px}
-h1 em{font-style:normal;color:var(--green)}
+h1 em,.hero-second em{font-style:normal;color:var(--green)}
+.hero-second{margin-top:26px;font-size:clamp(21px,2.9vw,30px);line-height:1.3;letter-spacing:-0.025em;font-weight:700;text-wrap:balance}
 .lede{margin-top:18px;font-size:17px;color:#3F3A31;max-width:34em}
 .hero-cta{margin-top:28px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .reassure{margin-top:12px;font-size:13px;color:var(--muted)}
@@ -125,18 +126,7 @@ h2{font-size:clamp(24px,3.4vw,34px);line-height:1.25;letter-spacing:-0.025em;fon
 .cardbox{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
 .linkbtn{background:none;border:0;padding:8px 4px;font-size:13px;font-weight:600;color:var(--green);text-decoration:underline;text-underline-offset:3px}
 
-/* ---------- swap ---------- */
-.o-meta{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13.5px}
-.o-meta dt{color:var(--muted)}
-.o-meta dd{font-weight:500}
-.line{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
-.line:first-of-type{border-top:0}
-.line .nm{flex:1;min-width:0;font-size:14.5px;font-weight:600}
-.line .nm small{display:block;font-weight:400;color:var(--muted);font-size:12.5px;line-height:1.3}
-.line .q{font-size:18px}
-.line .st{font-variant-numeric:tabular-nums;font-size:12.5px;font-weight:700;min-width:96px;text-align:right}
-.line .st.ok{color:var(--green);font-weight:600}
-.line.new{background:var(--green-tint);margin-inline:-8px;padding-inline:8px;border-radius:10px;border-top-color:transparent}
+/* ---------- 알림 상자 · 요약 ---------- */
 .swapbox{display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:14px;background:var(--orange-tint)}
 .swapbox.ok{background:var(--green-tint)}
 .swapbox.wait{background:var(--soft)}
@@ -147,14 +137,6 @@ h2{font-size:clamp(24px,3.4vw,34px);line-height:1.25;letter-spacing:-0.025em;fon
 .seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:12px;background:rgba(255,253,249,.7)}
 .seg button{height:40px;border:0;border-radius:9px;background:transparent;font-size:13px;font-weight:600;color:#4A4439}
 .seg button[aria-pressed=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(30,27,22,.12)}
-.cands{display:flex;flex-direction:column;gap:8px}
-.cand{display:grid;grid-template-columns:36px 1fr auto;gap:2px 10px;align-items:center;text-align:left;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--card)}
-.cand[aria-pressed=true]{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}
-.cand:disabled{opacity:.55}
-.cand .ico{grid-row:1/3;width:36px;height:36px;border-radius:9px;background:var(--photo);display:flex;align-items:center;justify-content:center}
-.cand .c-nm{font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.cand .c-sub{grid-column:2;font-size:12px;color:var(--muted)}
-.cand .c-diff{grid-row:1/3;grid-column:3;text-align:right;font-size:14px}
 .sum{display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-radius:10px;background:var(--card);font-size:13.5px}
 .sum-row{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
 .sum-row .num{font-size:16px}
@@ -194,6 +176,13 @@ h2{font-size:clamp(24px,3.4vw,34px);line-height:1.25;letter-spacing:-0.025em;fon
 .qty .n{min-width:30px;text-align:center;font-size:16px}
 .addbtn{height:40px;padding:0 16px;border-radius:10px;border:0;background:var(--green);color:#fff;font-size:13.5px;font-weight:700}
 .addbtn:disabled{background:var(--off)}
+.bidrow{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.bidrow .av{width:36px;height:36px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+.bidrow .bn{font-size:14px;font-weight:600;line-height:1.3}
+.bidrow .bs{font-size:12px;color:var(--muted)}
+.bidrow .bp{text-align:right;font-size:17px}
+.bidrow .bd{font-size:11.5px;color:var(--muted);text-align:right}
+.stars{color:#C98A1B;letter-spacing:1px}
 .tot{display:flex;flex-direction:column;gap:6px;font-size:13.5px}
 .tot-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .tot-row.big{padding-top:8px;border-top:1px solid var(--line);font-weight:700;font-size:15px}
@@ -244,13 +233,12 @@ footer{padding-block:24px 32px;font-size:12.5px;color:var(--muted)}
       꽃집 운영
     </a>
     <nav class="nav" aria-label="섹션">
-      <a href="#swap">꽃 스왑</a>
+      <a href="#builder">꽃다발 입찰</a>
       <a href="#leftover">남는 꽃 꽃다발</a>
-      <a href="#builder">3D 꽃다발</a>
       <a href="app.html">입찰 데모</a>
       <a href="#faq">자주 묻는 질문</a>
     </nav>
-    <a class="btn sm" href="#swap">직접 만져보기</a>
+    <a class="btn sm" href="app.html">입찰 데모 열기</a>
   </div>
 </header>
 
@@ -258,17 +246,19 @@ footer{padding-block:24px 32px;font-size:12.5px;color:var(--muted)}
 <div class="hero">
   <div class="wrap">
     <div>
-      <p class="eyebrow">꽃집 사장님용 웹앱</p>
-      <h1>모자란 꽃은 <em>스왑 한 번</em>,<br>남는 꽃은 <em>손님에게 바로</em>.</h1>
-      <p class="lede">주문에 꽃이 모자라면 같은 등급의 대체 꽃이 먼저 골라져 있고, 손님은 링크에서 승인만 하면 됩니다. 신선기간이 임박해 남는 꽃은 꽃다발로 묶어 손님에게 바로 할인해 팝니다.</p>
+      <p class="eyebrow">손님과 꽃집을 바로 잇는 웹앱</p>
+      <h1>손님이 만든 꽃다발에,<br>꽃집이 <em>금액을 써 냅니다</em>.</h1>
+      <p class="lede">손님은 3D로 꽃다발을 만들어 올리고, 근처 플로리스트들이 금액과 준비 시각을 제안합니다. 손님은 작업 사진과 리뷰, 금액을 나란히 비교해 직접 고릅니다.</p>
+      <p class="hero-second">모자란 꽃도 남는 꽃도, <em>손님에게 바로 닿게</em>.</p>
+      <p class="lede" style="margin-top:8px">꽃집에 남는 꽃은 꽃다발이나 송이 단위로 손님에게 바로 팔고, 손님이 구하는 꽃은 “구해요”로 올리면 꽃집이 응합니다. 꽃집끼리 넘기는 중간 유통은 없습니다.</p>
       <div class="hero-cta">
-        <a class="btn" href="#swap">꽃 스왑 만져보기</a>
-        <a class="btn ghost" href="#leftover">남는 꽃 꽃다발 보기</a>
+        <a class="btn" href="app.html">입찰 데모 열기</a>
+        <a class="btn ghost" href="#builder">꽃다발 만들어 보기</a>
       </div>
-      <p class="reassure">설치·가입 없이 이 페이지에서 바로 동작합니다. 숫자는 모두 예시 데이터입니다.</p>
+      <p class="reassure">목업 계정 3개(소비자 1 · 플로리스트 2)로 역할을 바꿔 가며 써 볼 수 있습니다. 숫자는 모두 예시 데이터입니다.</p>
     </div>
-    <aside class="board" aria-label="데모 꽃집 현황">
-      <div class="board-head"><span>데모 꽃집 · 지금</span><span class="live"><i></i>아래 데모와 연결됨</span></div>
+    <aside class="board" aria-label="데모 현황">
+      <div class="board-head"><span>데모 · 지금</span><span class="live"><i></i>아래 데모와 연결됨</span></div>
       <div id="board"></div>
     </aside>
   </div>
@@ -278,51 +268,26 @@ footer{padding-block:24px 32px;font-size:12.5px;color:var(--muted)}
   <div class="ticker-track" id="ticker"></div>
 </div>
 
-<section id="why">
-  <div class="wrap">
-    <p class="eyebrow">왜 필요한가</p>
-    <h2>꽃은 시들고, 주문은 기다려 주지 않습니다.</h2>
-    <div class="ba">
-      <div class="ba-row">
-        <h3>주문 속 모자란 꽃</h3>
-        <p class="ba-before"><span class="ba-tag">지금</span>손님과 카톡으로 30분씩 상담합니다.</p>
-        <p class="ba-after"><span class="ba-tag">이 앱</span>추천 대체 꽃과 금액 차이가 먼저 계산돼 있고, 링크 한 번이면 손님이 승인합니다.</p>
-      </div>
-      <div class="ba-row">
-        <h3>팔다 남은 꽃</h3>
-        <p class="ba-before"><span class="ba-tag">지금</span>시들기 전에 못 팔면 그대로 버립니다.</p>
-        <p class="ba-after"><span class="ba-tag">이 앱</span>신선기간이 임박한 꽃만 모아 꽃다발로 구성하고, 손님에게 바로 할인해 팝니다. 꽃집끼리 넘기는 중간 단계는 없습니다.</p>
-      </div>
-      <div class="ba-row">
-        <h3>꽃집 고르기</h3>
-        <p class="ba-before"><span class="ba-tag">지금</span>손님은 여러 꽃집에 일일이 견적을 물어보고, 가격만 보고 고릅니다.</p>
-        <p class="ba-after"><span class="ba-tag">이 앱</span>손님이 3D로 만든 꽃다발에 꽃집들이 금액을 써 내고, 손님은 작업 사진과 리뷰를 비교해 직접 고릅니다.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="swap" class="alt">
+<section id="builder" class="alt">
   <div class="wrap demo">
     <div class="demo-copy">
-      <p class="eyebrow">꽃 스왑</p>
-      <h2>모자란 꽃, 고민 없이 바꿔 제안합니다.</h2>
-      <p class="sec-lede">주문 수량과 재고를 대조해 모자란 줄만 주황으로 표시합니다. 같은 품목·같은 등급에서 재고가 있는 색을 기본으로 추천합니다.</p>
+      <p class="eyebrow">꽃다발 입찰</p>
+      <h2>꽃다발을 만들면, 꽃집들이 금액을 써 냅니다.</h2>
+      <p class="sec-lede">손님은 송이 단위로 담아 3D로 돌려 보고 그대로 요청을 올립니다. 오른쪽에서 꽃을 더하고 빼면, 아래 입찰 예시가 같이 바뀝니다.</p>
       <ul class="points">
-        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>대체 꽃을 고르면 <b>3D 꽃다발이 바로 바뀝니다.</b> 원안과 제안을 번갈아 돌려 보세요.</span></li>
-        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span><b>부족분만</b> 바꿀지 <b>전부</b> 바꿀지 고르면 합계와 예산 대비가 바로 다시 계산됩니다.</span></li>
-        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>손님은 로그인 없이 링크에서 <b>승인 또는 거절</b>만 합니다. 거절하면 원안이 유지됩니다.</span></li>
-        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>배송 2시간 전까지 답이 없으면 “응답 없음 — 전화하기” 경고가 뜹니다.</span></li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span><b>가장 싼 곳이 자동으로 뽑히지 않습니다.</b> 손님이 작업 사진·리뷰·금액·준비 시각을 비교해 직접 고릅니다.</span></li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>입찰 금액은 <b>꽃집끼리 서로 보이지 않습니다.</b> 기준은 그날 경매 시세에서 나온 예상가입니다.</span></li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>꽃은 12종 22품목, 생일·감사·근조 같은 <b>용도별 추천 구성</b>으로 시작할 수 있습니다.</span></li>
       </ul>
     </div>
     <div class="widget">
       <div class="w-bar">
-        <div class="w-title">주문 #1043 · 생일<span>오늘 16:00 배송</span></div>
+        <div class="w-title">나만의 꽃다발<span>손님이 보는 화면 · 픽업</span></div>
         <div style="display:flex;align-items:center;gap:6px"><span class="chip">예시 데이터</span><button type="button" class="linkbtn" data-act="reset-all">처음 상태로</button></div>
       </div>
       <div class="w-body">
-        <div class="bq-card"><div class="bq" id="bq-swap"></div><div class="bq-tl" id="bq-swap-tl"></div><div class="bq-cap" id="bq-swap-cap"></div></div>
-        <div class="w-stack" id="swapw"></div>
+        <div class="bq-card tall"><div class="bq" id="bq-build"></div><div class="bq-tr"><span class="chip">끌어서 돌려 보세요</span></div><div class="bq-cap" id="bq-build-cap"></div></div>
+        <div class="w-stack" id="buildw"></div>
       </div>
     </div>
   </div>
@@ -354,55 +319,43 @@ footer{padding-block:24px 32px;font-size:12.5px;color:var(--muted)}
   </div>
 </section>
 
-<section id="builder" class="alt">
-  <div class="wrap demo">
-    <div class="demo-copy">
-      <p class="eyebrow">손님 화면 · 3D 꽃다발</p>
-      <h2>손님은 송이 단위로 담고, 3D로 돌려 봅니다.</h2>
-      <p class="sec-lede">가격은 그날 경매 시세에서 같은 공식으로 나오고, 담을 수 있는 수량은 꽃집의 오늘 재고까지입니다. 이렇게 만든 꽃다발이 그대로 입찰 요청이 됩니다.</p>
-      <ul class="points">
-        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>꽃집 재고보다 많이 담으려 하면 <b>“오늘 재고 n송이”</b>로 알려 주고, 재고가 0이면 “오늘 품절”로 보입니다.</span></li>
-        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>신선기간이 임박한 꽃은 <b>오늘만 할인</b> 가격으로 보입니다.</span></li>
-        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>꽃 6종은 Blender로 직접 만든 3D 모델입니다. 같은 품목의 다른 색은 꽃잎 색만 바꿔 추가합니다.</span></li>
-      </ul>
-    </div>
-    <div class="widget">
-      <div class="w-bar">
-        <div class="w-title">나만의 꽃다발<span>손님이 보는 화면 · 픽업</span></div>
-        <span class="chip">예시 데이터</span>
-      </div>
-      <div class="w-body">
-        <div class="bq-card tall"><div class="bq" id="bq-build"></div><div class="bq-tr"><span class="chip">끌어서 돌려 보세요</span></div><div class="bq-cap" id="bq-build-cap"></div></div>
-        <div class="w-stack" id="buildw"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="bid">
+<section id="why" class="alt">
   <div class="wrap">
-    <p class="eyebrow">새로 추가 · 입찰 데모</p>
-    <h2>손님이 만든 꽃다발에, 꽃집이 금액을 써 냅니다.</h2>
-    <p class="sec-lede">손님은 3D로 만든 꽃다발을 올리고, 근처 플로리스트들이 금액·준비 시각·대체 꽃을 제안합니다. 손님은 작업 사진과 리뷰, 금액을 나란히 비교해 직접 고릅니다. 꽃은 12종 22품목, 생일·감사·근조 같은 용도별 추천 구성으로 시작할 수 있습니다. 공급자 화면에서는 남는 꽃을 꽃다발이나 송이 단위로 손님에게 바로 팝니다.</p>
-    <div class="hero-cta"><a class="btn" href="app.html">입찰 데모 열기</a></div>
-    <p class="reassure">목업 계정 3개(소비자 1 · 플로리스트 2)로 역할을 바꿔 가며 써 볼 수 있습니다.</p>
+    <p class="eyebrow">왜 필요한가</p>
+    <h2>손님은 고르기 어렵고, 꽃은 기다려 주지 않습니다.</h2>
+    <div class="ba">
+      <div class="ba-row">
+        <h3>꽃집 고르기</h3>
+        <p class="ba-before"><span class="ba-tag">지금</span>손님은 여러 꽃집에 일일이 견적을 물어보고, 가격만 보고 고릅니다.</p>
+        <p class="ba-after"><span class="ba-tag">이 앱</span>손님이 3D로 만든 꽃다발에 꽃집들이 금액을 써 내고, 손님은 작업 사진과 리뷰를 비교해 직접 고릅니다.</p>
+      </div>
+      <div class="ba-row">
+        <h3>꽃값 설명</h3>
+        <p class="ba-before"><span class="ba-tag">지금</span>왜 그 가격인지 손님에게 설명하기 어렵습니다.</p>
+        <p class="ba-after"><span class="ba-tag">이 앱</span>그날 경매 시세에서 같은 공식으로 송이당 가격이 나와, 손님과 꽃집이 같은 숫자를 봅니다.</p>
+      </div>
+      <div class="ba-row">
+        <h3>팔다 남은 꽃</h3>
+        <p class="ba-before"><span class="ba-tag">지금</span>시들기 전에 못 팔면 그대로 버립니다.</p>
+        <p class="ba-after"><span class="ba-tag">이 앱</span>신선기간이 임박한 꽃만 모아 꽃다발로 구성하고, 손님에게 바로 할인해 팝니다. 꽃집끼리 넘기는 중간 단계는 없습니다.</p>
+      </div>
+    </div>
   </div>
 </section>
 
-<section id="day" class="alt">
+<section id="day">
   <div class="wrap">
     <p class="eyebrow">하루의 흐름</p>
     <h2>사장님이 누르는 건 하루에 몇 번뿐입니다.</h2>
     <ol class="day">
       <li><span class="num t">05:00</span><div><h3>시세가 알아서 들어옵니다</h3><p>aT 화훼공판장 경매 시세가 반영되고, 속 단가 ÷ 속당 송이수 × 마진계수로 송이 판매가가 다시 계산됩니다.</p></div></li>
       <li><span class="num t">주문 오면</span><div><h3>손님 꽃다발에 입찰</h3><p>손님이 3D로 만든 꽃다발이 뜨면 금액과 준비 시각을 써 냅니다. 손님은 작업 사진과 리뷰를 보고 직접 고릅니다.</p></div></li>
-      <li><span class="num t">영업 중</span><div><h3>모자란 주문은 스왑 제안</h3><p>주문 상세에 추천 대체 꽃이 이미 골라져 있습니다. 보내기만 누르면 손님에게 승인 링크가 갑니다.</p></div></li>
       <li><span class="num t">마감 전</span><div><h3>남는 꽃은 꽃다발로</h3><p>신선기간이 임박한 꽃을 자동 구성으로 묶어 할인가로 올립니다. 팔리는 만큼 버리는 꽃이 줄어듭니다.</p></div></li>
     </ol>
   </div>
 </section>
 
-<section id="faq">
+<section id="faq" class="alt">
   <div class="wrap">
     <p class="eyebrow">자주 묻는 질문</p>
     <h2>시작하기 전에 궁금한 것들</h2>
@@ -412,11 +365,11 @@ footer{padding-block:24px 32px;font-size:12.5px;color:var(--muted)}
 
 <section class="final">
   <div class="wrap">
-    <h2>모자란 꽃도 남는 꽃도, 손님에게 바로 닿게.</h2>
-    <p>스왑 제안, 남는 꽃 꽃다발, 꽃집 입찰이 같은 시세와 같은 숫자에서 나옵니다.</p>
+    <h2>꽃다발 하나로, 손님과 꽃집이 바로 만납니다.</h2>
+    <p>입찰도, 남는 꽃 꽃다발도, 송이 거래도 같은 시세와 같은 숫자에서 나옵니다.</p>
     <div class="hero-cta">
-      <a class="btn" href="#swap" data-cta>우리 가게로 시작하기</a>
-      <a class="btn ghost" href="#swap">데모 다시 해보기</a>
+      <a class="btn" href="app.html" data-cta>입찰 데모 열기</a>
+      <a class="btn ghost" href="#builder">꽃다발 만들어 보기</a>
     </div>
     <p class="reassure">앱 설치 없이 브라우저에서 열고, 홈 화면에 추가해 앱처럼 씁니다.</p>
   </div>
@@ -451,14 +404,9 @@ function defaults(){
       {id:'tulip', model:'tulip', c3:'#E9C24F',  name:'튤립',       v:'옐로우',     grade:'특', unit:'송이', box:8000,  per:10, margin:2.8, prev:7000,  stock:8,  fresh:2, disc:false, need:[], petal:'#E7C86A', center:'#B89A3E'},
       {id:'euca', model:'eucalyptus', c3:null, green:true,   name:'유칼립투스', v:'그린',       grade:'줄기', unit:'줄기', box:6000, per:10, margin:3.0, prev:null, stock:40, fresh:6, disc:false, need:[['확정',6]], euca:true}
     ],
-    order: defaultOrder(),
     cart: {mum:10, 'lisi-w':3, euca:2}, budget: 50000, cartNote: '',
     left: {cart:{}, off:30, sets:1, published:null}
   };
-}
-function defaultOrder(){
-  return {budget:105000, lines:[{id:'lisi-w',qty:20},{id:'rose',qty:5},{id:'euca',qty:3}],
-          mode:'short', pick:null, status:'idle', sent:null, newId:null, view:'proposal'};
 }
 var S = defaults();
 var timers = [];
@@ -473,16 +421,6 @@ function deltaPct(it){return it.prev ? Math.round((it.box-it.prev)/it.prev*100) 
 function needSum(it){return it.need.reduce(function(a,n){return a+n[1]},0)}
 function shortOf(it){return Math.max(0, needSum(it)-it.stock)}
 function flowersTotal(lines){return lines.reduce(function(a,l){return a+l.qty*unitPrice(item(l.id))},0)}
-function orderTotal(lines){var f=flowersTotal(lines);return f+MATERIALS+DESIGN+(f>=SHIP_FREE?0:SHIP)}
-function targetLine(){var ls=S.order.lines;for(var i=0;i<ls.length;i++) if(ls[i].qty>item(ls[i].id).stock) return ls[i];return null}
-function swapQty(t){var st=item(t.id).stock;return (S.order.mode==='all'||st===0)?t.qty:t.qty-st}
-function lineQty(id){var l=S.order.lines.filter(function(x){return x.id===id})[0];return l?l.qty:0}
-function candidates(t){
-  var base=item(t.id), q=swapQty(t);
-  return S.items.filter(function(c){return c.name===base.name&&c.id!==base.id&&c.grade===base.grade})
-    .map(function(c){var free=c.stock-lineQty(c.id);return {it:c,free:free,ok:free>=q,diff:(unitPrice(c)-unitPrice(base))*q}})
-    .sort(function(a,b){return (b.ok-a.ok)||(Math.abs(a.diff)-Math.abs(b.diff))||(b.free-a.free)});
-}
 // 남는 꽃 = 신선기간 2일 이하이면서 내일 필요 수량을 채우고도 남는 수량
 function leftPool(){return S.items.filter(function(it){return it.fresh<=2}).map(function(it){return {it:it,qty:Math.max(0,it.stock-needSum(it))}}).filter(function(x){return x.qty>0})}
 function leftMax(it){var x=leftPool().filter(function(x){return x.it.id===it.id})[0];return x?Math.floor(x.qty/S.left.sets):0}
@@ -506,68 +444,16 @@ function full(it){return it.name+' '+it.v+(it.grade==='줄기'?'':' '+it.grade)}
 
 // ---------- 히어로 보드 · 티커 ----------
 function renderBoard(){
-  var t=targetLine(), o=S.order, cl=cartLines(), cs=cl.reduce(function(a,l){return a+l.qty},0), lp=leftPool().reduce(function(a,x){return a+x.qty},0), pub=S.left.published;
-  var swapN=(t&&o.status!=='approved')?1:0;
-  var swapSub = o.status==='approved' ? '주문 #1043 · 스왑 승인됨 · 바로 제작 가능'
-    : !t ? '주문 #1043 · 재고로 바로 제작 가능'
-    : o.status==='sent' ? '주문 #1043 · 손님 승인 대기 중'
-    : '주문 #1043 · '+full(item(t.id))+' '+(t.qty-item(t.id).stock)+item(t.id).unit+' 부족';
+  var cl=cartLines(), cs=cl.reduce(function(a,l){return a+l.qty},0), lp=leftPool().reduce(function(a,x){return a+x.qty},0), pub=S.left.published;
   document.getElementById('board').innerHTML =
-    '<a href="#swap" class="'+(swapN?'':'b-ok')+'"><span class="b-label">스왑이 필요한 주문</span><span class="num b-val '+(swapN?'warn':'')+'">'+swapN+'<span class="unit">건</span></span><span class="b-sub">'+swapSub+'</span></a>'+
-    '<a href="#leftover" class="'+(lp?'':'b-ok')+'"><span class="b-label">남는 꽃(신선기간 임박)</span><span class="num b-val '+(lp?'warn':'')+'">'+lp+'<span class="unit">송이</span></span><span class="b-sub">'+(pub?'꽃다발 '+pub.sets+'세트를 손님에게 판매 중':lp?'꽃다발로 묶어 손님에게 바로 팔 수 있어요':'버려질 꽃이 없습니다')+'</span></a>'+
-    '<a href="#builder" class="b-ok"><span class="b-label">손님이 담는 꽃다발</span><span class="num b-val">'+cs+'<span class="unit">송이</span></span><span class="b-sub">'+(cs?'시세 기준 '+fmt(flowersTotal(cl)+MATERIALS+DESIGN)+'원 · 3D로 돌려 보기':'아직 담은 꽃이 없어요')+'</span></a>';
+    '<a href="#builder" class="b-ok"><span class="b-label">손님이 담는 꽃다발</span><span class="num b-val">'+cs+'<span class="unit">송이</span></span><span class="b-sub">'+(cs?'시세 기준 '+fmt(flowersTotal(cl)+MATERIALS+DESIGN)+'원 · 3D로 돌려 보기':'아직 담은 꽃이 없어요')+'</span></a>'+
+    '<a href="#builder" class="b-ok"><span class="b-label">이 꽃다발에 들어온 입찰(예시)</span><span class="num b-val">'+(cs?bidsFor(cl).length:0)+'<span class="unit">건</span></span><span class="b-sub">'+(cs?'최저 '+fmt(Math.min.apply(null,bidsFor(cl).map(function(b){return b.price})))+'원 · 손님이 사진·리뷰를 보고 직접 선택':'꽃을 담으면 입찰 예시가 나타납니다')+'</span></a>'+
+    '<a href="#leftover" class="'+(lp?'':'b-ok')+'"><span class="b-label">남는 꽃(신선기간 임박)</span><span class="num b-val '+(lp?'warn':'')+'">'+lp+'<span class="unit">송이</span></span><span class="b-sub">'+(pub?'꽃다발 '+pub.sets+'세트를 손님에게 판매 중':lp?'꽃다발로 묶어 손님에게 바로 팔 수 있어요':'버려질 꽃이 없습니다')+'</span></a>';
 }
 function renderTicker(){
   var h=S.items.map(function(it){var lp=listPrice(it),up=unitPrice(it);
     return '<span class="ticker-item"><span>'+it.name+' '+it.v+'</span>'+won(up,it.disc?'warn':'')+(it.disc?'<s class="muted num" style="font-size:12px;font-weight:500">'+fmt(lp)+'</s>':'')+deltaHtml(deltaPct(it))+'</span>'}).join('');
   document.getElementById('ticker').innerHTML=h+'<span aria-hidden="true" style="display:contents">'+h+'</span>';
-}
-
-// ---------- 스왑 ----------
-function renderSwap(){
-  var o=S.order, t=targetLine(), total=orderTotal(o.lines);
-  var lines=o.lines.map(function(l){var it=item(l.id), sh=Math.max(0,l.qty-it.stock);
-    return '<div class="line'+(o.status==='approved'&&l.id===o.newId?' new':'')+'"><span class="nm">'+it.name+'<small>'+it.v+(it.grade==='줄기'?'':' · '+it.grade)+'</small></span>'+
-      '<span class="num q">'+l.qty+'<span class="unit">'+it.unit+'</span></span>'+
-      (sh?'<span class="st warn">재고 '+it.stock+' · 부족 '+sh+'</span>':'<span class="st ok">재고 '+it.stock+' ✓</span>')+'</div>'}).join('');
-  var head='<div class="cardbox"><dl class="o-meta"><dt>받는 분</dt><dd>어머니 · 송파구 잠실동 (배송)</dd><dt>예산</dt><dd>'+won(o.budget)+' <span class="muted" style="font-weight:400;font-size:12.5px">· 현재 합계 '+fmt(total)+'원</span></dd></dl></div>'+
-    '<div class="cardbox" style="padding-block:6px"><div style="font-size:13px;font-weight:700;padding:8px 0 2px">꽃 구성 · 재고 대조</div>'+lines+'</div>';
-  var box='';
-  if(o.status==='approved'){
-    box='<div class="swapbox ok"><div class="swap-h">'+ic(I.check,16,2)+' 손님이 승인했어요 · 구성이 교체됐습니다</div><p class="swap-p">모든 줄이 재고 안에 들어왔습니다. 이제 바로 제작을 시작할 수 있어요.</p><div class="btn-row"><button type="button" class="btn ghost sm" data-act="swap-reset" data-fid="swap-reset">처음부터 다시 해보기</button></div></div>';
-  } else if(o.status==='sent'){
-    box='<div class="swapbox wait"><div class="swap-h">'+ic(I.clock,16)+' 손님 승인 대기 중</div><p class="swap-p">'+esc(o.sent)+' 제안을 링크로 보냈습니다. 손님이 답하면 이 화면이 바로 바뀝니다.</p>'+
-      '<div class="btn-row"><button type="button" class="btn sm" data-act="approve" data-fid="approve">손님이 승인 (데모)</button><button type="button" class="btn ghost sm" data-act="reject" data-fid="reject">손님이 거절 (데모)</button></div></div>';
-  } else if(!t){
-    box='<div class="swapbox ok"><div class="swap-h">'+ic(I.check,16,2)+' 재고 충분 — 스왑 없이 제작할 수 있어요</div><p class="swap-p">주문한 꽃이 모두 재고 안에 있습니다.</p><div class="btn-row"><button type="button" class="btn ghost sm" data-act="swap-reset" data-fid="swap-reset">주문을 처음 상태로</button></div></div>';
-  } else {
-    var base=item(t.id), q=swapQty(t), cs=candidates(t), keep=t.qty-q;
-    if(!cs.length){
-      box='<div class="swapbox"><div class="swap-h">'+full(base)+' '+(t.qty-base.stock)+base.unit+' 부족</div><p class="swap-p">같은 품목·같은 등급의 다른 색이 없습니다. 손님과 다른 꽃으로 상의해 주세요.</p></div>';
-    } else {
-      var picked=cs.filter(function(c){return c.it.id===o.pick&&c.ok})[0];
-      if(!picked){picked=cs.filter(function(c){return c.ok})[0]||null;o.pick=picked?picked.it.id:null}
-      var rejected=o.status==='rejected';
-      var cards=cs.map(function(c,i){
-        var rec=(i===0&&c.ok);
-        var d=c.diff===0?'<span class="flat" style="font-size:13px;font-weight:600">같은 가격</span>':'<span class="num '+(c.diff>0?'warn':'down')+'">'+(c.diff>0?'+':'−')+fmt(Math.abs(c.diff))+'<span class="unit">원</span></span>';
-        return '<button type="button" class="cand" aria-pressed="'+(picked&&picked.it.id===c.it.id)+'" data-act="pick" data-id="'+c.it.id+'" data-fid="pick-'+c.it.id+'"'+(c.ok?'':' disabled')+'>'+
-          '<span class="ico">'+flowerSvg(c.it,28)+'</span><span class="c-nm">'+c.it.v+(rec?'<span class="chip green">추천</span>':'')+'</span>'+
-          '<span class="c-sub">'+(c.ok?'재고 '+c.free+c.it.unit+' · 송이당 '+fmt(unitPrice(c.it))+'원':'재고 '+c.free+c.it.unit+' — '+q+c.it.unit+'에는 모자라요')+'</span><span class="c-diff">'+d+'</span></button>'}).join('');
-      var sum='';
-      if(picked){
-        var nt=total+picked.diff, over=nt-o.budget;
-        sum='<div class="sum"><div class="sum-row"><span>'+base.v+' '+t.qty+' → '+(keep?base.v+' '+keep+' + ':'')+picked.it.v+' '+q+'</span></div>'+
-          '<div class="sum-row"><span class="muted">바뀐 합계</span><span>'+(picked.diff?'<s class="muted num" style="font-size:12px;font-weight:500;margin-right:6px">'+fmt(total)+'</s>':'')+won(nt,over>0?'warn':'')+'</span></div>'+
-          '<div class="sum-row"><span class="muted">예산 '+fmt(o.budget)+'원 대비</span><span class="'+(over>0?'warn':'down')+'" style="font-size:12.5px;font-weight:600">'+(over>0?'예산보다 '+fmt(over)+'원 많아요':'예산 안 · '+fmt(-over)+'원 여유')+'</span></div></div>';
-      }
-      box='<div class="swapbox"><div class="swap-h">'+(rejected?'손님이 원안을 유지했어요 · 다른 꽃으로 다시 제안할 수 있습니다':full(base)+' '+(t.qty-base.stock)+base.unit+' 부족 · 대체 제안')+'</div>'+
-        (base.stock>0?'<div class="seg" role="group" aria-label="바꿀 범위"><button type="button" aria-pressed="'+(o.mode==='short')+'" data-act="mode" data-mode="short" data-fid="mode-short">부족분만 '+(t.qty-base.stock)+base.unit+'</button><button type="button" aria-pressed="'+(o.mode==='all')+'" data-act="mode" data-mode="all" data-fid="mode-all">전부 '+t.qty+base.unit+'</button></div>':'')+
-        '<div class="cands">'+cards+'</div>'+sum+
-        '<div class="btn-row"><button type="button" class="btn orange" data-act="send" data-fid="send"'+(picked?'':' disabled')+'>'+ic(I.send,18)+'대체 제안 보내기</button>'+'</div></div>';
-    }
-  }
-  document.getElementById('swapw').innerHTML=head+box;
 }
 
 // ---------- 3D 프리뷰 ----------
@@ -594,23 +480,15 @@ function showBouquet(id, lines){
 function capChips(lines){
   return lines.filter(function(l){return l.qty>0}).map(function(l){var it=item(l.id);return '<span class="chip">'+it.name+(it.name==='리시안셔스'?' '+it.v:'')+' '+l.qty+'</span>'}).join('');
 }
-function proposedLines(){
-  var o=S.order, t=targetLine();
-  if(!t||!o.pick||o.status==='approved') return null;
-  var q=o.status==='sent'?o.sentQty:swapQty(t), out=[];
-  o.lines.forEach(function(l){
-    if(l.id===t.id){ if(l.qty-q>0) out.push({id:l.id,qty:l.qty-q}); out.push({id:o.pick,qty:q+lineQty(o.pick)}) }
-    else if(l.id!==o.pick) out.push({id:l.id,qty:l.qty});
-  });
-  return out;
-}
-function renderSwapPreview(){
-  var o=S.order, prop=proposedLines(), showProp=prop&&o.view==='proposal', lines=showProp?prop:o.lines;
-  document.getElementById('bq-swap-tl').innerHTML = prop
-    ? '<div class="miniseg" role="group" aria-label="미리보기"><button type="button" aria-pressed="'+(!showProp)+'" data-act="view" data-view="original" data-fid="view-o">원안</button><button type="button" aria-pressed="'+(!!showProp)+'" data-act="view" data-view="proposal" data-fid="view-p">제안</button></div>'
-    : '<span class="chip">'+(o.status==='approved'?'교체된 구성':'손님이 만든 구성')+'</span>';
-  document.getElementById('bq-swap-cap').innerHTML=capChips(lines);
-  showBouquet('bq-swap', lines);
+// ---------- 입찰 예시: 담은 꽃다발의 예상가에서 꽃집별 금액을 만든다 ----------
+var FLORISTS=[{n:'반포꽃집',i:'반',r:4.5,rv:2,km:1.4,ready:'내일 오전',k:0.95},{n:'화양플라워',i:'화',r:4.7,rv:3,km:0.8,ready:'오늘 18:00',k:0.99},{n:'서초플라워',i:'서',r:3.5,rv:2,km:2.6,ready:'내일 오후',k:1.06}];
+function bidsFor(lines){var est=flowersTotal(lines)+MATERIALS+DESIGN;return FLORISTS.map(function(f){return {f:f,price:Math.round(est*f.k/1000)*1000,est:est}}).sort(function(a,b){return a.price-b.price})}
+function bidsHtml(lines){
+  if(!lines.length) return '<div class="cardbox"><b style="font-size:15px">꽃집 입찰</b><p class="muted" style="font-size:13px;margin-top:4px">꽃을 담으면 꽃집들의 입찰 예시가 여기에 나타납니다.</p></div>';
+  var bs=bidsFor(lines);
+  return '<div class="cardbox" style="padding-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:2px"><b style="font-size:15px">이 꽃다발에 들어온 입찰 '+bs.length+'건</b><span class="chip">예시</span></div>'+
+    bs.map(function(b,n){var d=Math.round((b.price-b.est)/b.est*100);return '<div class="bidrow"'+(n?'':' style="border-top:0"')+'><span class="av">'+b.f.i+'</span><div><div class="bn">'+b.f.n+(n?'':' <span class="chip green">최저가</span>')+'</div><div class="bs"><span class="stars">★</span> '+b.f.r+' · 리뷰 '+b.f.rv+' · '+b.f.km.toFixed(1)+'km · '+b.f.ready+'</div></div><div><div class="num bp">'+fmt(b.price)+'<span class="unit">원</span></div><div class="bd">예상가 대비 '+(d===0?'같음':'<b class="'+(d>0?'up':'down')+'">'+(d>0?'▲':'▼')+Math.abs(d)+'%</b>')+'</div></div></div>'}).join('')+
+    '<p class="muted" style="font-size:12.5px;margin:6px 0 10px">금액은 꽃집끼리 서로 보이지 않습니다. 손님이 사진과 리뷰를 보고 직접 고릅니다.</p><a class="btn sm" href="app.html" style="width:100%">입찰 데모에서 직접 골라 보기</a></div>';
 }
 
 // ---------- 손님 빌더 ----------
@@ -634,7 +512,7 @@ function renderBuild(){
     '<div class="tot-row big"><span>합계</span>'+won(total,over>0?'warn':'')+'</div>'+
     '<div class="bar'+(over>0?' over':'')+'" role="img" aria-label="예산 대비 '+pct+'%"><i style="width:'+Math.min(100,pct)+'%"></i></div>'+
     '<div class="tot-row" style="font-size:12.5px"><span class="muted">예산 '+fmt(S.budget)+'원</span><span class="'+(over>0?'warn':'muted')+'" style="font-weight:600">'+(over>0?'예산보다 '+fmt(over)+'원 많아요':pct+'%')+'</span></div>'+
-    (lines.length?'<div><button type="button" class="linkbtn" data-act="clear-cart" data-fid="clear-cart">꽃다발 비우기</button></div>':'')+'</div>';
+    (lines.length?'<div><button type="button" class="linkbtn" data-act="clear-cart" data-fid="clear-cart">꽃다발 비우기</button></div>':'')+'</div>'+bidsHtml(lines);
   document.getElementById('bq-build-cap').innerHTML=capChips(lines);
   showBouquet('bq-build', lines);
 }
@@ -676,10 +554,11 @@ function renderLeft(){
 var FAQ=[
   ['앱을 설치해야 하나요?','아니요. 웹앱이라 브라우저에서 바로 열립니다. 홈 화면에 추가하면 앱처럼 전체 화면으로 쓸 수 있습니다.'],
   ['시세는 어디서 오고, 언제 바뀌나요?','aT 화훼공판장 경매 시세를 매일 05:00에 한 번 반영합니다. 그날 시세를 받지 못하면 어제 시세를 유지하고 “시세 기준” 날짜를 함께 보여줍니다.'],
-  ['손님이 스왑을 거절하면 어떻게 되나요?','원래 구성이 그대로 유지됩니다. 다른 꽃으로 다시 제안하거나, 손님과 통화해 구성을 조정합니다.'],
+  ['가장 싼 꽃집이 자동으로 뽑히나요?','아니요. 입찰이 들어오면 손님이 작업 사진과 리뷰, 금액, 준비 시각, 거리를 나란히 비교해 직접 고릅니다.'],
+  ['꽃집은 다른 꽃집의 입찰 금액을 볼 수 있나요?','볼 수 없습니다. 몇 건이 들어왔는지만 보이고 금액은 서로 공개되지 않습니다.'],
+  ['손님이 찾는 꽃이 꽃집에 없으면 어떻게 하나요?','손님이 “구해요”에 꽃과 수량, 희망가를 올리면 그 꽃이 남는 꽃집이 그 가격에 응합니다.'],
   ['남는 꽃을 다른 꽃집에 넘길 수는 없나요?','일부러 넣지 않았습니다. 꽃집끼리 재고를 사고팔면 중간 유통 단계가 하나 더 생기기 때문입니다. 남는 꽃은 꽃다발로 만들어 손님에게 바로 할인해 팝니다.'],
-  ['스왑하면 손님이 내는 금액이 바뀌나요?','대체 꽃의 오늘 가격으로 합계를 다시 계산해 제안에 함께 보여줍니다. 예산을 넘으면 주황색으로 알려 드리지만, 보내는 것을 막지는 않습니다.'],
-  ['근조 알림은 아이폰에서도 오나요?','홈 화면에 추가한 뒤에는 웹 푸시로 받습니다. 그 전에는 카카오 알림톡으로 같은 주소를 보내 드립니다.']
+  ['주문 알림은 아이폰에서도 오나요?','홈 화면에 추가한 뒤에는 웹 푸시로 받습니다. 그 전에는 카카오 알림톡으로 같은 주소를 보내 드립니다.']
 ];
 document.getElementById('faqlist').innerHTML=FAQ.map(function(f){return '<details><summary>'+f[0]+ic(I.chev,20)+'</summary><p>'+f[1]+'</p></details>'}).join('');
 
@@ -688,17 +567,15 @@ var toastT;
 function toast(msg){var el=document.getElementById('toast');el.textContent=msg;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){el.hidden=true},2600)}
 function renderAll(){
   var a=document.activeElement, fid=a&&a.getAttribute?a.getAttribute('data-fid'):null;
-  renderBoard();renderTicker();renderSwap();renderSwapPreview();renderLeft();renderBuild();
+  renderBoard();renderTicker();renderBuild();renderLeft();
   if(fid){var el=document.querySelector('[data-fid="'+fid+'"]');if(el&&!el.disabled) el.focus({preventScroll:true})}
 }
 document.addEventListener('click',function(e){
   var cta=e.target.closest('[data-cta]');
   if(cta&&!APP_URL){toast('출시 준비 중이에요. 데모는 지금 바로 써볼 수 있어요.');return}
   var b=e.target.closest('[data-act]');if(!b||b.disabled) return;
-  var act=b.getAttribute('data-act'), id=b.getAttribute('data-id'), it=id?item(id):null, o=S.order;
+  var act=b.getAttribute('data-act'), id=b.getAttribute('data-id'), it=id?item(id):null;
   if(act==='noop'){}
-  else if(act==='mode'){o.mode=b.getAttribute('data-mode');o.view='proposal'}
-  else if(act==='view'){o.view=b.getAttribute('data-view')}
   else if(act==='add'){
     var cq=S.cart[id]||0;S.cartNote='';
     if(cq>=it.stock){toast('오늘 재고 '+it.stock+it.unit);return}
@@ -706,24 +583,6 @@ document.addEventListener('click',function(e){
   }
   else if(act==='sub'){S.cartNote='';S.cart[id]=Math.max(0,(S.cart[id]||0)-1)}
   else if(act==='clear-cart'){S.cart={};S.cartNote=''}
-  else if(act==='pick'){o.pick=id;o.view='proposal'}
-  else if(act==='send'){
-    var t=targetLine();if(!t||!o.pick) return;
-    var q=swapQty(t);o.sent=item(t.id).v+' → '+item(o.pick).v+' '+q+item(t.id).unit;o.sentQty=q;o.sentFrom=t.id;o.status='sent';
-    toast('손님에게 승인 링크를 보냈어요');
-  }
-  else if(act==='approve'){
-    var ls=o.lines, idx=-1;for(var i=0;i<ls.length;i++) if(ls[i].id===o.sentFrom) idx=i;
-    if(idx>-1){
-      ls[idx].qty-=o.sentQty;
-      var ex=ls.filter(function(l){return l.id===o.pick})[0];
-      if(ex) ex.qty+=o.sentQty; else ls.splice(idx+1,0,{id:o.pick,qty:o.sentQty});
-      if(ls[idx].qty<=0) ls.splice(idx,1);
-    }
-    o.newId=o.pick;o.status='approved';toast('승인됨 · 주문 구성을 교체했어요');
-  }
-  else if(act==='reject'){o.status='rejected';o.pick=null;toast('손님이 원안을 유지했어요')}
-  else if(act==='swap-reset'){S.order=defaultOrder()}
   else if(act==='left-add'){var lm=leftMax(it),lq=S.left.cart[id]||0;if(lq>=lm){toast('남는 수량은 '+lm+it.unit+'까지예요');return}S.left.cart[id]=lq+1}
   else if(act==='left-sub'){S.left.cart[id]=Math.max(0,(S.left.cart[id]||0)-1)}
   else if(act==='left-clear'){S.left.cart={}}

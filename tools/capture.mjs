@@ -71,8 +71,8 @@ async function shoot(c, name, width, mobile, sections) {
 try {
   const c = client(await connect()); await c.ready;
   await c.send('Page.enable'); await c.send('Runtime.enable');
-  await shoot(c, 'desktop', 1280, false, [['01-hero', '.top,.hero,.ticker'], ['02-why', '#why'], ['03-swap', '#swap'], ['04-leftover', '#leftover'],
-    ['05-builder', '#builder'], ['06-bid', '#bid'], ['07-day', '#day'], ['08-faq', '#faq'], ['09-final', '.final,footer']]);
+  await shoot(c, 'desktop', 1280, false, [['01-hero', '.top,.hero,.ticker'], ['02-bid', '#builder'], ['03-leftover', '#leftover'], ['04-why', '#why'],
+    ['05-day', '#day'], ['06-faq', '#faq'], ['07-final', '.final,footer']]);
   await shoot(c, 'mobile', 390, true, null);
   done(0);
 } catch (e) { console.error('실패:', e.message); done(1); }
